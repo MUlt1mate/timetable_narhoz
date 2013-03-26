@@ -8,13 +8,13 @@
 class DB_Connect
 {
 
-    public function __construct($host, $db)
+    public function __construct($host, $db,$user,$password)
     {
         $cfg = ActiveRecord\Config::instance();
         $cfg->set_model_directory(__DIR__ . '/AppModels');
         $cfg->set_connections(
             array(
-                'development' => 'sqlsrv://:@' . $host . '/' . $db,
+                'development' => 'sqlsrv://'.$user.':'.$password.'@' . $host . '/' . $db,
             )
         );
     }

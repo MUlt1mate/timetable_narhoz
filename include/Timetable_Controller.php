@@ -30,7 +30,9 @@ class Timetable_Controller
 
         new DB_Connect(
             $this->config['connection']['host'],
-            $this->config['connection']['db']
+            $this->config['connection']['db'],
+            $this->config['connection']['user'],
+            $this->config['connection']['password']
         );
 
         if (isset($_GET['mode'])) {
@@ -128,7 +130,7 @@ class Timetable_Controller
             switch ($this->mode) {
                 case 'week':
                     $timetable = Timetable::build_week($this->TimeDate->get_date_begin(), $lessons, $lessons_remove);
-                    $last_time = intval(substr($timetable['latest_time'], 0, 2) * 60) + intval(substr($timetable['latest_time'], 3, 2));
+                    $last_time = intval(substr($timetable['latest_time'], 0, 2)*60) + intval(substr($timetable['latest_time'], 3, 2));
                     $last_hour = ceil($last_time / 60);
                     $current_weekday = ($this->TimeDate->is_current_interval()) ? $this->TimeDate->get_today_weekday_id() : -1;
                     $this->view->screen('grid_week', array(

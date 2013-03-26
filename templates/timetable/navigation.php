@@ -28,10 +28,10 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
                     <tr>
                         <td>
                             <div class="btn-group">
-                                <button id="GoLeft" class="btn btn-primary" style="width:50px;"><i
+                                <button id="GoLeft" class="btn btn-primary" style="width:50px;"href="#MainTable" data-slide="prev"><i
                                         class="icon-arrow-left icon-white"></i>
                                 </button>
-                                <button id="GoRight" class="btn btn-primary" style="width:50px;">
+                                <button id="GoRight" class="btn btn-primary" style="width:50px;" href="#MainTable" data-slide="next">
                                     <i class="icon-arrow-right icon-white"></i>
                                 </button>
                             </div>
@@ -49,7 +49,12 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
         <input type="hidden" id="week_id" value="<?= $week ?>">
         <input type="hidden" id="month_id" value="<?= $month ?>">
 
-        <div id="MainTable"></div>
+        <div id="MainTable" class="carousel slide" data-interval="0">
+            <div class="carousel-inner" id="grid_carousel">
+                <div class="item active" original><div id="grid0" interval="0"></div></div>
+            </div>
+        </div>
+
         <div class="clearfix"></div>
         <div id="footer">
             <div class="pull-right" id="export">
