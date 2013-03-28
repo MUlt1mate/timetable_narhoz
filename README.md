@@ -1,7 +1,7 @@
 narhoz_timetable
 ================
 
-## Система электронного расписания ЧИ БГУЭП ![Система электронного расписания ЧИ БГУЭП](http://timetable.narhoz-chita.ru/favicon.png)
+## ![Система электронного расписания ЧИ БГУЭП](http://timetable.narhoz-chita.ru/favicon.png) Система электронного расписания ЧИ БГУЭП
 
 ### Необходимые компоненты:
 * [iCalcreator v2.12](http://kigkonsult.se/iCalcreator/index.php)

@@ -106,8 +106,7 @@ $this->screen('header');?>
                     <div class="alert alert-info">
                         Группы, выделенные серым цветом, не содержат ни одного добавленного занятия.
                     </div>
-                    <?if ($show_alert): ?>
-                    <div class="alert alert-error">
+                    <div class="alert alert-error" id="disclaimer">
                         <button id="disclaimer_close" type="button" class="close" data-dismiss="alert">&times;</button>
                         <h4 class="alert-heading">Внимание!</h4>
                         Система находится в режиме рабочего тестирования. Предоставленная информация может не
@@ -119,7 +118,6 @@ $this->screen('header');?>
                     </div>
                 </div>
             </div>
-            <? endif;?>
         </div>
     </div>
 <? $this->screen('footer');

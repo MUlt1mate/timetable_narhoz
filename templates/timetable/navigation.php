@@ -28,10 +28,12 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
                     <tr>
                         <td>
                             <div class="btn-group">
-                                <button id="GoLeft" class="btn btn-primary" style="width:50px;"href="#MainTable" data-slide="prev"><i
+                                <button id="GoLeft" class="btn btn-primary" style="width:50px;" href="#MainTable"
+                                        data-slide="prev"><i
                                         class="icon-arrow-left icon-white"></i>
                                 </button>
-                                <button id="GoRight" class="btn btn-primary" style="width:50px;" href="#MainTable" data-slide="next">
+                                <button id="GoRight" class="btn btn-primary" style="width:50px;" href="#MainTable"
+                                        data-slide="next">
                                     <i class="icon-arrow-right icon-white"></i>
                                 </button>
                             </div>
@@ -42,8 +44,8 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
                     </tr>
                 </table>
             </div>
-            <div class="intop" style="float:right;"><p class="title" id="date_interval"><?=$start_date?>
-                    - <?=$finish_date?></p>
+            <div class="intop" style="float:right;">
+                <p class="title" id="date_interval"><?=$start_date?> - <?=$finish_date?></p>
             </div>
         </div>
         <input type="hidden" id="week_id" value="<?= $week ?>">
@@ -51,16 +53,22 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
 
         <div id="MainTable" class="carousel slide" data-interval="0">
             <div class="carousel-inner" id="grid_carousel">
-                <div class="item active" original><div id="grid0" interval="0"></div></div>
+                <div class="item active" original>
+                    <div id="grid0" interval="0"></div>
+                </div>
             </div>
         </div>
 
         <div class="clearfix"></div>
         <div id="footer">
+            <div class="pull-left">
+                <a class="btn" data-toggle="modal" href="#about">О программе</a>
+            </div>
             <div class="pull-right" id="export">
-                <a class="btn" data-toggle="modal" href="#ExportModal" id="GetExport">Экспорт</a>
+                <a class="btn btn-primary" data-toggle="modal" href="#ExportModal" id="GetExport">Экспорт</a>
             </div>
         </div>
-        <?$this->screen('export_modal')?>
+        <?$this->screen(View::TT_EXPORT_MODAL)?>
+        <?$this->screen(View::TT_ABOUT)?>
     </div>
 <? $this->screen('footer');

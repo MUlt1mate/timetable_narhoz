@@ -22,8 +22,12 @@ class Timetable_Controller
     const CONFIG_INI = '../config.ini';
     const TEMPLATE_FOLDER = 'timetable';
 
+    const ERROR_IE6 = 'IE6';
+    const ERROR_IE7 = 'IE7';
+
     public function __construct()
     {
+        $this->browser_version_control();
         $this->config = parse_ini_file(self::CONFIG_INI, TRUE);
         date_default_timezone_set(TimeDate::TIMEZONE);
         $this->view = new View(self::TEMPLATE_FOLDER);
@@ -70,6 +74,25 @@ class Timetable_Controller
         die('page not found');
     }
 
+    private function browser_version_control()
+    {
+        if ((isset($_SERVER['HTTP_USER_AGENT'])) && (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0'))) {
+            header('location: /?action=status&error=' . self::ERROR_IE6);
+            exit;
+        }
+        if ((isset($_SERVER['HTTP_USER_AGENT'])) && (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 7.0'))) {
+            header('location: /?action=status&error=' . self::ERROR_IE7);
+            exit;
+        }
+    }
+
+    private function action_status()
+    {
+        if (isset($_GET['error'])) {
+            $this->view->screen(View::TT_STATUS, array('error' => $_GET['error']));
+        }
+    }
+
     private function action_default()
     {
         if (0 == count($this->type)) {
@@ -77,17 +100,15 @@ class Timetable_Controller
             $all_groups = $groups['groups'];
             $group_years = $groups['group_years'];
             $teachers = Teachers::get_list();
-            $show_alert = !(isset($_COOKIE['hide_alert']) && (1 == $_COOKIE['hide_alert']));
-            $this->view->screen('index', array(
+            $this->view->screen(View::TT_INDEX, array(
                 'groups_all' => $all_groups,
                 'teachers' => $teachers,
                 'forms_study' => $this->forms_study,
                 'group_years' => $group_years,
-                'show_alert' => $show_alert,
                 'announce' => Announce::group_by_cod_form_study(),
             ));
         } else {
-            $this->view->screen('navigation', array(
+            $this->view->screen(View::TT_NAVIGATION, array(
                 'mode' => $this->mode,
                 'start_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_begin()),
                 'finish_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_end()),
@@ -104,7 +125,7 @@ class Timetable_Controller
     {
         $month = (isset($_GET['month'])) ? (int)$_GET['month'] : $this->TimeDate->get_month_id();
         $week = (isset($_GET['week'])) ? (int)$_GET['week'] : $this->TimeDate->get_week_id();
-        $this->view->screen('current_date', array(
+        $this->view->screen(View::TT_CURRENT_DATE, array(
             'data' => $this->TimeDate,
             'week' => $week,
             'month' => $month,
@@ -123,17 +144,17 @@ class Timetable_Controller
             $is_all_subgroup = true;
             if (!isset($this->type['group'])OR(isset($this->type['subgroup']) && ($this->type['subgroup'] > 0)))
                 $is_all_subgroup = false;
-            $this->view->screen('grid_params', array(
+            $this->view->screen(View::TT_GRID_PARAMS, array(
                 'start_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_begin()),
                 'finish_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_end()),
             ));
             switch ($this->mode) {
                 case 'week':
                     $timetable = Timetable::build_week($this->TimeDate->get_date_begin(), $lessons, $lessons_remove);
-                    $last_time = intval(substr($timetable['latest_time'], 0, 2)*60) + intval(substr($timetable['latest_time'], 3, 2));
+                    $last_time = intval(substr($timetable['latest_time'], 0, 2) * 60) + intval(substr($timetable['latest_time'], 3, 2));
                     $last_hour = ceil($last_time / 60);
                     $current_weekday = ($this->TimeDate->is_current_interval()) ? $this->TimeDate->get_today_weekday_id() : -1;
-                    $this->view->screen('grid_week', array(
+                    $this->view->screen(View::TT_GRID_WEEK, array(
                         'grid' => $timetable['grid'],
                         'days_name' => TimeDate::$weekdays,
                         'days_date' => $this->TimeDate->get_dates(),
@@ -149,11 +170,11 @@ class Timetable_Controller
                     break;
                 case 'month':
                     $timetable = Timetable::build_month($this->TimeDate->get_date_begin(), $lessons, $lessons_remove, $this->TimeDate->get_week_count());
-                    $this->view->screen('grid_month', array(
+                    $this->view->screen(View::TT_GRID_MONTH, array(
                         'grid' => $timetable['grid'],
                         'days_name' => TimeDate::$weekdays,
                         'days_date' => $this->TimeDate->get_dates(),
-                        'today_date' => $this->TimeDate->get_today_weekday_id(),
+                        'today_date' => TimeDate::get_current_day_ts(),
                         'days_count' => $timetable['days_count'],
                         'current_hour' => TimeDate::get_hour(),
                         'current_minutes' => TimeDate::get_minutes(),
@@ -167,7 +188,7 @@ class Timetable_Controller
                     break;
                 case 'agenda':
                     $timetable = Timetable::build_agenda($this->TimeDate->get_date_begin(), $lessons, $lessons_remove);
-                    $this->view->screen('grid_agenda', array(
+                    $this->view->screen(View::TT_GRID_AGENDA, array(
                         'grid' => $timetable['grid'],
                         'days_name' => TimeDate::$weekdays,
                         'days_date' => $this->TimeDate->get_dates(),
@@ -206,12 +227,13 @@ class Timetable_Controller
     {
         if (isset($_GET['id']) && (0 < $_GET['id'])) {
             $lesson = Timetable::find($_GET['id']);
-            $this->view->screen('lesson_info', array('lesson' => $lesson));
+            $this->view->screen(View::TT_LESSON_INFO, array('lesson' => $lesson));
         }
     }
 
     private function get_timetable_title()
     {
+        //@todo не выводить инфу, если нет пар
         if (isset($this->type['group'])) {
             $info = Group::get_info($this->type['group']);
             if (0 < $info->subgroup)

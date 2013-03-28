@@ -20,9 +20,10 @@
             <? for ($j = 1; $j <= $days_count; $j++):
                 $day_label_style = ($month == date('m', $current_date)) ? 'label-info ' : '';
                 ?>
-                <td style="padding:0px; <?
-                //                if ($current_day) echo 'background:#ddf;';
-                ?>">
+                <td class="month_table_td" weekday_id="<?=$j?>" <?
+                if (TimeDate::ts_to_screen($today_date) == TimeDate::ts_to_screen($current_date))
+                    echo 'style="background: #ddf;"'
+                ?>>
                     <div class="month_day">
                         <div class="label <?= $day_label_style ?>month_label"><?=date('d', $current_date)?></div>
                         <?if (isset($grid[$j][$i]) && is_array($grid[$j][$i]))

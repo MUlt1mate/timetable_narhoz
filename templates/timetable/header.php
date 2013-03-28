@@ -12,6 +12,7 @@
     <script src="/js/jquery.cookie.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/navigation.js"></script>
+    <?$this->screen(View::TT_ANALYTICS);?>
 </head>
 <body data-spy="scroll" data-target=".teachers-list" data-offset="85">
 <div class="navbar navbar-fixed-top">

@@ -10,6 +10,9 @@ require_once('iCalcreator.class.php');
 class iCal_Generator
 {
     const ICAL_DIRECTORY = '/ical';
+    //@todo пакетное обновление ical
+    //@todo ical подгруппы
+    //@todo ical воскресенье
 
     static public function iCalGener($timetable, $remove, $cal_name, $cal_title, $for_group)
     {

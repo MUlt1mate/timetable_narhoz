@@ -426,4 +426,9 @@ class TimeDate
         return date('z', $ts);
     }
 
+    static public function get_current_day_ts()
+    {
+        return mktime(0, 0, 0);
+    }
+
 }

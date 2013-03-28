@@ -13,7 +13,7 @@
     <div class="modal-body">
         <p style="font-weight: bold;">Расписание может быть экспортировано, как для всей группы, так и для подгрупп.</p>
 
-        <p>Ссылка на расписание</p>
+        <p>Ссылка на расписание:</p>
         <input class="input span5 focused" id="ExportLinkInput" type="text" value=""/>
         <ul id="ExportList" class="nav nav-tabs">
             <li class="active"><a href="#ex1" data-toggle="tab">Google Calendar</a></li>
