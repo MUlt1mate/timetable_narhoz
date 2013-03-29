@@ -1,11 +1,12 @@
 <?php
 /**
+ * Занятие в режиме "Месяц"
  * @author: MUlt1mate
  * Date: 20.03.13
  * Time: 11:07
  */
 ?>
-<div class="month_lesson" style="background:#<?= $lesson->subcolor ?>;" lesson_id="<?= $lesson->id ?>">
+<div class="month_lesson" style="background:#<?=$lesson->subcolor ?>;" lesson_id="<?=$lesson->id?>">
     <div style="display:inline;">
         <?=substr($lesson->time_begin, 0, 5)?>
     </div>

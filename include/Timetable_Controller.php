@@ -1,5 +1,6 @@
 <?php
 /**
+ * Контроллер клиентской части приложения
  * @author: MUlt1mate
  * Date: 16.03.13
  * Time: 9:59
@@ -69,11 +70,17 @@ class Timetable_Controller
             $this->show_404();
     }
 
+    /**
+     * Страница не найдена
+     */
     private function show_404()
     {
         die('page not found');
     }
 
+    /**
+     * Проверка совместимости браузеров
+     */
     private function browser_version_control()
     {
         if ((isset($_SERVER['HTTP_USER_AGENT'])) && (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0'))) {
@@ -86,6 +93,9 @@ class Timetable_Controller
         }
     }
 
+    /**
+     * Вывод информации о состоянии и ошибках
+     */
     private function action_status()
     {
         if (isset($_GET['error'])) {
@@ -93,6 +103,9 @@ class Timetable_Controller
         }
     }
 
+    /**
+     * Вывод списка групп, либо сетки расписания
+     */
     private function action_default()
     {
         if (0 == count($this->type)) {
@@ -121,6 +134,9 @@ class Timetable_Controller
         }
     }
 
+    /**
+     * Информация о текущей дате
+     */
     private function action_current_date()
     {
         $month = (isset($_GET['month'])) ? (int)$_GET['month'] : $this->TimeDate->get_month_id();
@@ -133,6 +149,10 @@ class Timetable_Controller
         ));
     }
 
+    /**
+     * AJAX
+     * Вывод расписания
+     */
     private function action_main_table()
     {
         if (0 < count($this->type)) {
@@ -208,6 +228,10 @@ class Timetable_Controller
             die('type not define');
     }
 
+    /**
+     * AJAX
+     * Экспорт расписания
+     */
     private function action_export()
     {
         if (0 < count($this->type)) {
@@ -223,6 +247,10 @@ class Timetable_Controller
             die('type not define');
     }
 
+    /**
+     * AJAX
+     * Информация о занятии
+     */
     private function action_lesson_info()
     {
         if (isset($_GET['id']) && (0 < $_GET['id'])) {
@@ -231,6 +259,9 @@ class Timetable_Controller
         }
     }
 
+    /**
+     * Определение названия и заголовка расписания
+     */
     private function get_timetable_title()
     {
         //@todo не выводить инфу, если нет пар

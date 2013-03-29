@@ -1,5 +1,6 @@
 <?php
 /**
+ * Работа с литералами
  * @author: MUlt1mate
  * Date: 24.03.13
  * Time: 2:59

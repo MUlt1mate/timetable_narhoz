@@ -1,5 +1,6 @@
 <?php
 /**
+ * Сетка расаписания
  * @author: MUlt1mate
  * Date: 18.03.13
  * Time: 2:41

@@ -1,5 +1,10 @@
 <?
-//echo $last_hour;
+/**
+ * Расписание в режиме "Неделя"
+ * @author: MUlt1mate
+ * Date: 20.03.13
+ * Time: 10:19
+ */
 if ($last_hour < 15)
     $last_hour = 15;
 $down_border_height = ($last_hour - 8) * 60;
@@ -36,7 +41,7 @@ if ($current_hour * 60 + $current_minutes < $last_hour)
                     if ($current_weekday == $day)
                         $day_class = 'current_day';
                     ?>
-                    <td class="<?= $day_class ?>" weekday_id="<?= $day ?>">
+                    <td class="<?= $day_class ?>" weekday_id="<?=$day?>">
                         <div class="day">
                             <?if ($current_weekday == $day): ?>
                                 <div id="current_hour" style=" top:<?= (($current_hour - 8) * 60) ?>px;"></div>

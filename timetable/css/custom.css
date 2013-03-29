@@ -175,6 +175,10 @@ body {
     height: 100px;
 }
 
+.month_table_td{
+    padding: 2px !important;
+}
+
 .month_day {
     position: relative;
     height: 100%;
@@ -252,4 +256,8 @@ section {
 .popover {
     width: 400px !important;
     max-width: 400px !important;
+}
+
+#grid_carousel{
+    /*overflow: visible !important;*/
 }

@@ -9,11 +9,21 @@ require_once('iCalcreator.class.php');
 
 class iCal_Generator
 {
-    const ICAL_DIRECTORY = '/ical';
+    const ICAL_DIRECTORY = 'ical';
+
     //@todo пакетное обновление ical
     //@todo ical подгруппы
     //@todo ical воскресенье
 
+    /**
+     * Создаёт файл формата .ics
+     * @param array $timetable
+     * @param array $remove
+     * @param string $cal_name
+     * @param string $cal_title
+     * @param bool $for_group
+     * @return bool
+     */
     static public function iCalGener($timetable, $remove, $cal_name, $cal_title, $for_group)
     {
         $cal = new vcalendar(array('unique_id' => 'narhoz_timetable_' . $cal_name));
@@ -50,8 +60,8 @@ class iCal_Generator
         $cal->setConfig('directory', self::ICAL_DIRECTORY);
 
         //вывод на экран
-//        echo  $cal->createCalendar();
-        echo $_SERVER['SERVER_NAME'] . self::ICAL_DIRECTORY . '/' . $cal_name . '.ics';
+        //echo  $cal->createCalendar();
+        echo 'http://' . $_SERVER['SERVER_NAME'] . '/' . self::ICAL_DIRECTORY . '/' . $cal_name . '.ics';
         //сохранение на сайт
         return $cal->saveCalendar();
 

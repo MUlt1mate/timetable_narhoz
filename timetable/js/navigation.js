@@ -5,6 +5,10 @@ $(function () {
             mode_change($.cookie('mode'));
         $('#FormStudyTab a:first').tab('show');
         $.params = get_params();
+        if ($.cookie('hide_alert') == 1) {
+            $('#disclaimer').css('display', 'none');
+        }
+
 
         if ($('#MainTable').length) {
             $('#MainTable').carousel({
@@ -30,7 +34,8 @@ $(function () {
             $('#MainTable').carousel($('.item').index($('.item[original]')));
             $('.item:not([original])').remove();
             LoadTimeTable(0, true);
-
+            $.week = $('#week_id').val() - 0;
+            $.month = $('#month_id').val() - 0;
             if ('agenda' != $.mode) {
                 $.grid_num_right = 1;
                 addGrid($.grid_num_right, 'right');
@@ -84,22 +89,28 @@ $(function () {
         });
 
         $('#GoRight').click(function () {
-            if (('agenda' != $.mode) && ($('.item').index($('.item:last')) ==
-                $('.item').index($('.item.active')) + 1)) {
+            if ('agenda' == $.mode)
+                return false;
+            if ($('.item').index($('.item:last')) ==
+                $('.item').index($('.item.active')) + 1) {
                 ++$.grid_num_right;
                 addGrid($.grid_num_right, 'right');
             }
         });
 
         $('#GoLeft').click(function () {
-            if (('agenda' != $.mode) && ($('.item').index($('.item:first')) ==
-                $('.item').index($('.item.active')) - 1)) {
+            if ('agenda' == $.mode)
+                return false;
+            if ($('.item').index($('.item:first')) ==
+                $('.item').index($('.item.active')) - 1) {
                 --$.grid_num_left;
                 addGrid($.grid_num_left, 'left');
             }
         });
 
         $('#LoadCurrent').click(function () {
+            if ('agenda' == $.mode)
+                return false;
             $('#MainTable').carousel($('.item').index($('.item[original]')));
         });
 
@@ -143,7 +154,7 @@ $(function () {
         $('#MainTable').on('click', '.lesson, .agenda_lesson, .month_lesson', function () {
             if ($.lesson)
                 $.lesson.popover('destroy');
-            $.q = $(this).parent(2).attr('weekday_id');
+            $.q = $(this).parent().parent().attr('weekday_id');
             var pl;
             if (3 < $.q)
                 pl = 'left';

@@ -327,6 +327,11 @@ class TimeDate
         return date('d.m.y', $ts);
     }
 
+    /**
+     * Форматирует дату БД для вывода на экран
+     * @param string $db_date
+     * @return string
+     */
     static public function db_to_screen($db_date)
     {
         return self::ts_to_screen(self::db_to_ts($db_date));
@@ -426,6 +431,10 @@ class TimeDate
         return date('z', $ts);
     }
 
+    /**
+     * Получение штампа текущего дня
+     * @return int
+     */
     static public function get_current_day_ts()
     {
         return mktime(0, 0, 0);

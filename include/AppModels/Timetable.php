@@ -113,8 +113,7 @@ class Timetable extends ActiveRecord\Model
                 $lesson_date_begin = TimeDate::db_to_ts($row['date_begin']);
                 $lesson_date_end = TimeDate::db_to_ts($row['date_end']);
                 if (($lesson_date_begin <= $this_date) && ($this_date <= $lesson_date_end) &&
-                    (($row['week'] == 0) || ($row['week'] == ((($k + TimeDate::odd_week($k)) % 2) + 1)))
-                ) {
+                    (($row['week'] == 0) || ($row['week'] == (3-(TimeDate::odd_week($k)+1)))) ) {
 
                     if (isset($remove[$row['id']])) {
                         foreach ($remove[$row['id']] as $r) {
@@ -209,12 +208,4 @@ class Timetable extends ActiveRecord\Model
             $title,
             $for_group);
     }
-
-    public function __toString()
-    {
-        $string = 'Группа :' . $this->grupflowname;
-        $string .= print_r($this, 1);
-        return $string;
-    }
-
 }

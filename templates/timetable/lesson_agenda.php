@@ -1,11 +1,12 @@
 <?php
 /**
+ * Занятие в режиме "Ближайшие"
  * @author: MUlt1mate
  * Date: 20.03.13
  * Time: 23:13
  */
 ?>
-<tr style="background:#<?= $lesson->SubColor ?>" class="agenda_lesson" lesson_id="<?= $lesson->id ?>">
+<tr style="background:#<?= $lesson->SubColor ?>" class="agenda_lesson" lesson_id="<?=$lesson->id?>">
     <td class="agenda_time">
         <?=$lesson->get_time_begin()?> - <?=$lesson->get_time_end()?>
     </td>

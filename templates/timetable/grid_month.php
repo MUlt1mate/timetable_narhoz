@@ -1,5 +1,6 @@
 <?php
 /**
+ * Расписание в режиме "Месяц"
  * @author: MUlt1mate
  * Date: 20.03.13
  * Time: 10:19
@@ -25,7 +26,7 @@
                     echo 'style="background: #ddf;"'
                 ?>>
                     <div class="month_day">
-                        <div class="label <?= $day_label_style ?>month_label"><?=date('d', $current_date)?></div>
+                        <div class="label <?= $day_label_style ?>month_label"><?=date('d.m', $current_date)?></div>
                         <?if (isset($grid[$j][$i]) && is_array($grid[$j][$i]))
                             foreach ($grid[$j][$i] as $lesson)
                                 $this->screen('lesson_month', array(

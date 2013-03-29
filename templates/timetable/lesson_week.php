@@ -1,5 +1,6 @@
 <?
 /**
+ * Занятие в режиме "Неделя"
  * @author: MUlt1mate
  * Date: 19.03.13
  * Time: 22:53
@@ -19,18 +20,18 @@ if ($is_all_subgroup) {
     }
 }
 ?>
-<div class="lesson" lesson_id="<?= $lesson->id ?>" style="
+<div class="lesson" lesson_id="<?=$lesson->id?>" style="
     top: <?= $lesson->TimeOffset() ?>px;
     width:<?= $width ?>%;
     left:<?= $left ?>%;
     height:<?= ($lesson->duration - 2) ?>px;
     background:#<?= $lesson->SubColor ?>
-    " onmouseover="FullWidth(this);" onmouseout="NormalWidth(this);"
+    "  onmouseover="FullWidth(this);" onmouseout="NormalWidth(this);"
      data-toggle="popover"
     >
     <div class="roof">
         <div class="time">
-            <?=$lesson->get_time_begin()?> - <?=$lesson->get_time_end()?>
+                <?=$lesson->get_time_begin()?> - <?=$lesson->get_time_end()?>
         </div>
         <div class="lesson_type">
             <?=$lesson->TypeLessonAbbr?>

@@ -1,5 +1,6 @@
 <?php
 /**
+ * Академические группы
  * @author: MUlt1mate
  * Date: 18.03.13
  * Time: 22:18
@@ -11,7 +12,13 @@ class Group extends ActiveRecord\Model
     static public $primary_key = 'codgrup';
     static private $proc_name = 'sh_GroupList';
 
-    static private function get_list($study_year, $form_study_id = null)
+    /**
+     * Получение списка групп для заданного учебного года и формы обучения
+     * @param int $study_year
+     * @param null|int $form_study_id
+     * @return mixed
+     */
+    static private function get_list($study_year,$form_study_id = null)
     {
         $form_study_id = ($form_study_id == null) ? 'null' : (int)$form_study_id;
         $sql = self::$proc_name . ' @CodFormStudy=' . $form_study_id . ', @ThisYear=' . (int)$study_year;
@@ -19,6 +26,11 @@ class Group extends ActiveRecord\Model
         return $query->fetchAll();
     }
 
+    /**
+     * Получение информации об учебной группе
+     * @param int $group_id
+     * @return \ActiveRecord\Model
+     */
     static public function get_info($group_id)
     {
         $params = array(
@@ -31,6 +43,13 @@ class Group extends ActiveRecord\Model
         return self::find_by_pk($group_id, $params);
     }
 
+    /**
+     * Получение массива с группами, групированных по форме обучение, курсу и факультету
+     * @param array $hide_groups группы, которое не нужно отображать
+     * @param int $forms_study
+     * @param int $study_year
+     * @return array
+     */
     static public function get_group_list($hide_groups, $forms_study, $study_year)
     {
         $groups = self::get_list($study_year);

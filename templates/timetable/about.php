@@ -1,5 +1,6 @@
 <?php
 /**
+ * О программе
  * @author: MUlt1mate
  * Date: 28.03.13
  * Time: 2:21
