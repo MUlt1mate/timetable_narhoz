@@ -16,6 +16,44 @@ class Timetable extends ActiveRecord\Model
     const AGENDA_DAYS = 30;
     const AGENDA_LESSONS = 50;
 
+    private $show_subgroups = false;
+    private $timetable_title;
+
+    /**
+     * Определение названия и заголовка расписания
+     */
+    public function __construct($types)
+    {
+        //@todo не выводить инфу, если нет пар
+        if (isset($types['group'])) {
+            $info = Group::get_info($types['group']);
+            if (0 < $info->subgroup)
+                $this->show_subgroups = true;
+            $this->timetable_title = 'Группа: ' . $info->namegrup;
+            return;
+        }
+        if (isset($types['teacher'])) {
+            $info = Teachers::find($types['teacher']);
+            $this->timetable_title = $info->fio;
+            return;
+        }
+        if (isset($types['room'])) {
+            $info = Rooms::find($types['room']);
+            $this->timetable_title = 'Аудитория: ' . $info->number;
+            return;
+        }
+    }
+
+    public function getShowSubgroups()
+    {
+        return $this->show_subgroups;
+    }
+
+    public function getTimetableTitle()
+    {
+        return $this->timetable_title;
+    }
+
     static private function  escape($string)
     {
         return self::connection()->escape($string);
@@ -32,6 +70,8 @@ class Timetable extends ActiveRecord\Model
     static public function get_timetable($date_begin, $date_end, $parameters, $remove = false)
     {
         $sql = ($remove) ? self::TIMETABLE_REMOVE : self::TIMETABLE_VIEW;
+        if (!$remove)
+            $sql .= ' @status=' . (int)Shedules::SHEDULES_STATUS_READY . ', ';
         $sql .= ' @begin=' . self::escape(TimeDate::ts_to_db($date_begin)) . ' ,
         @end=' . self::escape(TimeDate::ts_to_db($date_end));
         foreach (self::$all_types as $type)
@@ -113,8 +153,8 @@ class Timetable extends ActiveRecord\Model
                 $lesson_date_begin = TimeDate::db_to_ts($row['date_begin']);
                 $lesson_date_end = TimeDate::db_to_ts($row['date_end']);
                 if (($lesson_date_begin <= $this_date) && ($this_date <= $lesson_date_end) &&
-                    (($row['week'] == 0) || ($row['week'] == (3-(TimeDate::odd_week($k)+1)))) ) {
-
+                    (($row['week'] == 0) || ($row['week'] == (3 - (TimeDate::odd_week($k) + 1))))
+                ) {
                     if (isset($remove[$row['id']])) {
                         foreach ($remove[$row['id']] as $r) {
                             if (TimeDate::db_to_ts($r) == $this_date)
@@ -181,14 +221,15 @@ class Timetable extends ActiveRecord\Model
 
     /**
      * Определяет имя файла экспорта и запускает экспорт
-     * @param $timetable
-     * @param $remove
-     * @param $type
-     * @param $title название расписания
+     * @param array $timetable
+     * @param array $remove
+     * @param array $type
+     * @param string $title название расписания
+     * @param bool $rewrite
      * @return bool
      * @throws Exception
      */
-    static public function build_export($timetable, $remove, $type, $title)
+    static public function build_export($timetable, $remove, $type, $title, $rewrite = false)
     {
         $for_group = (array_key_exists('group', $type)) ? true : false;
         if (array_key_exists('teacher', $type)) {
@@ -206,6 +247,8 @@ class Timetable extends ActiveRecord\Model
             $remove,
             $cal_name,
             $title,
-            $for_group);
+            $for_group,
+            $rewrite
+        );
     }
 }

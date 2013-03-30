@@ -60,7 +60,7 @@ class TimeDate
      */
     private $week_correct_end = 0;
 
-    function __construct($mode)
+    function __construct($mode = 'week')
     {
         $this->current_date = $this->define_date($mode);
         $this->month_id = date('m', $this->current_date);

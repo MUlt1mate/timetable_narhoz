@@ -6,6 +6,7 @@
  * Time: 9:43
  */
 
-class Shedules extends ActiveRecord\Model{
-
+class Shedules extends ActiveRecord\Model
+{
+    const SHEDULES_STATUS_READY = 1;
 }

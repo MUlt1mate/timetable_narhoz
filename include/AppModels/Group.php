@@ -18,7 +18,7 @@ class Group extends ActiveRecord\Model
      * @param null|int $form_study_id
      * @return mixed
      */
-    static private function get_list($study_year,$form_study_id = null)
+    static public function get_list($study_year, $form_study_id = null)
     {
         $form_study_id = ($form_study_id == null) ? 'null' : (int)$form_study_id;
         $sql = self::$proc_name . ' @CodFormStudy=' . $form_study_id . ', @ThisYear=' . (int)$study_year;
@@ -46,7 +46,7 @@ class Group extends ActiveRecord\Model
     /**
      * Получение массива с группами, групированных по форме обучение, курсу и факультету
      * @param array $hide_groups группы, которое не нужно отображать
-     * @param int $forms_study
+     * @param array $forms_study
      * @param int $study_year
      * @return array
      */
