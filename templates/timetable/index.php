@@ -5,7 +5,7 @@
  * Date: 20.03.13
  * Time: 1:10
  */
-$this->screen('header');?>
+$this->screen(self::TT_HEADER);?>
     <div class="row-fluid">
         <div class="span10 offset1" style="margin-top:-20px;">
             <ul id="FormStudyTab" class="nav nav-tabs">
@@ -20,7 +20,13 @@ $this->screen('header');?>
                 foreach ($forms_study as $fs_id):?>
                     <div class="tab-pane fade in<? if ($fs_id == 30) echo ' active'; ?>" id="cf<?= $fs_id ?>">
                         <div class="row-fluid">
-                            <div class="span8">
+                            <div class="span8" style="min-width: 350px;">
+                                <?if (0 != $fs_id): ?>
+                                    <div class="alert">
+                                        <a href="http://narhoz-chita.ru/students/rasp">Расписание находится на основном
+                                            сайте </a>
+                                    </div>
+                                <? endif?>
                                 <table class="table table-condensed">
                                     <tr>
                                         <? for ($year = 1; $year <= 6; $year++) : ?>
@@ -121,4 +127,4 @@ $this->screen('header');?>
             </div>
         </div>
     </div>
-<? $this->screen('footer');
+<? $this->screen(self::TT_FOOTER);

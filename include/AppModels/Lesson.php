@@ -242,6 +242,6 @@ class Lesson
      */
     public function iCalUID()
     {
-        return $this->iCalDate($this->iCalLessonDateBegin()) . 'T000000YAKT-0000' . substr(md5($this->id), 0, 6) . '@narhoz_timetable';
+        return $this->iCalDate($this->iCalLessonDateBegin()) . 'T000000YAKT-0000' . substr(md5($this->id), 0, 8) . '@narhoz_timetable';
     }
 }

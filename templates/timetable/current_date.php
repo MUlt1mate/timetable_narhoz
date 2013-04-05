@@ -5,7 +5,7 @@
  * Date: 16.03.13
  * Time: 12:35
  */
-$this->screen('header', array('mode' => $mode));?>
+$this->screen(self::TT_HEADER, array('mode' => $mode));?>
     <div class="span6">
         <form method="get" class="">
             <table class="table">
@@ -39,4 +39,4 @@ $this->screen('header', array('mode' => $mode));?>
     </div>
     <div class="clearfix"></div>
     <pre><?=$data?></pre>
-<? $this->screen('footer');
+<? $this->screen(self::TT_FOOTER);

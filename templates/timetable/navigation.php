@@ -5,7 +5,7 @@
  * Date: 18.03.13
  * Time: 2:41
  */
-$this->screen('header', array('mode' => $mode, 'title' => $title));?>
+$this->screen(self::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
     <div class="content">
         <div class="control">
             <div class="intop"><p class="title"><?=$body_title?></p></div>
@@ -72,4 +72,4 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
         <?$this->screen(View::TT_EXPORT_MODAL)?>
         <?$this->screen(View::TT_ABOUT)?>
     </div>
-<? $this->screen('footer');
+<? $this->screen(self::TT_FOOTER);

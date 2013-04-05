@@ -22,6 +22,20 @@ class View
     const TT_STATUS = 'status';
     const TT_ABOUT = 'about';
     const TT_EXPORT_MODAL = 'export_modal';
+    const TT_HEADER = 'header';
+    const TT_FOOTER = 'footer';
+
+    const A_HEADER = 'header';
+    const A_FOOTER = 'footer';
+    const A_SHEDULES = 'shedules';
+    const A_LOGIN = 'login';
+    const A_LESSONS = 'lessons';
+    const A_TIMES = 'times';
+    const A_TEACHERS = 'teachers';
+    const A_CURRENT = 'current';
+    const A_TIMETABLE = 'timetable';
+    const A_ROOMS = 'rooms';
+    const A_TEACHER_PRINT = 'teacher_print';
 
     private $folder;
 

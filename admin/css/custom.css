@@ -1,0 +1,18 @@
+body {
+    padding: 45px 10px 0;
+}
+
+#login {
+
+}
+
+.room {
+    display: inline-block;
+    height: 50px;
+    width: 140px;
+    padding: 6px;
+    line-height: 16px;
+    border: 1px #888 solid;
+    margin: 2px 0;
+    cursor: pointer;
+}

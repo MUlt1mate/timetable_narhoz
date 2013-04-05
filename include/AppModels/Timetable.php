@@ -22,7 +22,7 @@ class Timetable extends ActiveRecord\Model
     /**
      * Определение названия и заголовка расписания
      */
-    public function __construct($types)
+    public function init($types)
     {
         //@todo не выводить инфу, если нет пар
         if (isset($types['group'])) {
@@ -250,5 +250,25 @@ class Timetable extends ActiveRecord\Model
             $for_group,
             $rewrite
         );
+    }
+
+    static public function build_all_by_weekdays($lessons)
+    {
+        $by_weekday = array();
+        foreach ($lessons as $l) {
+            switch ($l['week']) {
+                case 1:
+                    $l['weekday_name'] = 'Верхняя';
+                    break;
+                case 2:
+                    $l['weekday_name'] = 'Нижняя';
+                    break;
+                default:
+                    $l['weekday_name'] = '';
+            }
+            $by_weekday[$l['weekday_id']][] = $l;
+        }
+
+        return $by_weekday;
     }
 }

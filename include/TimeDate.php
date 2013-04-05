@@ -317,6 +317,20 @@ class TimeDate
         return mktime($hour, $minutes, 0, $date_array['month'], $date_array['day'], $date_array['year']);
     }
 
+    static public function db_timedate_to_ts($db_timedate)
+    {
+        $ts_array = date_parse_from_format('Y-m-d H:i:s', $db_timedate);
+        if ($ts_array['year'] <= 1970)
+            $ts_array['year'] = 2000;
+        return mktime($ts_array['hour'], $ts_array['minute'], $ts_array['second'], $ts_array['month'], $ts_array['day'], $ts_array['year']);
+    }
+
+    static public function db_timedate_to_screen_time($db_timedate)
+    {
+        $ts = self::db_timedate_to_ts($db_timedate);
+        return date('H:i', $ts);
+    }
+
     /**
      * Форматирует дату для вывода на экран
      * @param int $ts количество секунд

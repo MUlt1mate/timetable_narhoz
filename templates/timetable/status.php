@@ -5,7 +5,7 @@
  * Date: 28.03.13
  * Time: 1:02
  */
-$this->screen('header');?>
+$this->screen(self::TT_HEADER);?>
     <div class="row-fluid">
         <div class="span6 offset3">
             <div class="alert alert-danger">
@@ -29,4 +29,4 @@ $this->screen('header');?>
             </div>
         </div>
     </div>
-<? $this->screen('footer');
+<? $this->screen(self::TT_FOOTER);

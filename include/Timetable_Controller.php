@@ -41,7 +41,8 @@ class Timetable_Controller extends Main_controller
         if ((count($this->type) == 1) && isset($this->type['subgroup']))
             $this->type = array();
 
-        $this->timetable = new Timetable($this->type);
+        $this->timetable = new Timetable();
+        $this->timetable->init($this->type);
 
         $this->choose_action();
     }
@@ -222,7 +223,7 @@ class Timetable_Controller extends Main_controller
     protected function action_lesson_info()
     {
         if (isset($_GET['id']) && (0 < $_GET['id'])) {
-            $lesson = Timetable::find($_GET['id']);
+            $lesson = Timetable::find((int)$_GET['id']);
             $this->view->screen(View::TT_LESSON_INFO, array('lesson' => $lesson));
         }
     }
