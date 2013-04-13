@@ -24,7 +24,7 @@ $menu = array(
     <script src="/js/jquery.js"></script>
     <script src="/js/jquery.cookie.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/navigation.js"></script>
+    <script type="text/javascript" src="/js/admin_interface.js"></script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
@@ -35,7 +35,7 @@ $menu = array(
         <a class="brand" href="/">АРМ Расписание</a>
         <ul class="nav">
             <li<?if ($_SERVER['REQUEST_URI'] == '/') echo ' class="active"'?>>
-                <a href="/">Администрирование</a>
+                <a href="/">Расписания</a>
             </li>
             <? foreach ($menu as $link => $title): ?>
                 <li<?if (isset($_GET['action']) && ($_GET['action'] == $link)) echo ' class="active"'?>>

@@ -5,7 +5,7 @@
  * Time: 15:04
  */
 
-class Main_controller
+abstract class Main_controller
 {
     const CONFIG_INI = '../config.ini';
     protected $config = array();
@@ -19,7 +19,7 @@ class Main_controller
         date_default_timezone_set(TimeDate::TIMEZONE);
         $this->view = new View(static::TEMPLATE_FOLDER);
 
-        new DB_Connect(
+        DB::connect(
             $this->config['connection']['host'],
             $this->config['connection']['db'],
             $this->config['connection']['user'],
@@ -43,6 +43,7 @@ class Main_controller
      */
     protected function show_404()
     {
-        die('page not found');
+        $this->view->screen('404');
+        die();
     }
 }

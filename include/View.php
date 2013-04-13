@@ -36,6 +36,11 @@ class View
     const A_TIMETABLE = 'timetable';
     const A_ROOMS = 'rooms';
     const A_TEACHER_PRINT = 'teacher_print';
+    const A_TT_EDIT = 'tt_edit';
+    const A_TABLE_ROOMS = 'rooms_table';
+    const A_TABLE_BUSY_LESSONS = 'busy_table';
+    const A_TABLE_PLAN_WORK = 'plan_table';
+    const A_TABLE_LESSONS = 'time_table';
 
     private $folder;
 

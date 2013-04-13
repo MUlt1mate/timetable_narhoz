@@ -6,7 +6,7 @@
  * Time: 10:35
  */
 
-class DB_Connect
+class DB
 {
 
     /**
@@ -15,15 +15,20 @@ class DB_Connect
      * @param string $user
      * @param string $password
      */
-    public function __construct($host, $db,$user,$password)
+    static public function connect($host, $db, $user, $password)
     {
         $cfg = ActiveRecord\Config::instance();
         $cfg->set_model_directory(__DIR__ . '/AppModels');
         $cfg->set_connections(
             array(
-                'development' => 'sqlsrv://'.$user.':'.$password.'@' . $host . '/' . $db,
+                'development' => 'sqlsrv://' . $user . ':' . $password . '@' . $host . '/' . $db,
             )
         );
+    }
+
+    static public function query($sql, $values = null)
+    {
+        return ActiveRecord\Connection::instance()->query($sql, $values);
     }
 
 }

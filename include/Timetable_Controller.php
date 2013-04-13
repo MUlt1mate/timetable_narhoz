@@ -41,9 +41,11 @@ class Timetable_Controller extends Main_controller
         if ((count($this->type) == 1) && isset($this->type['subgroup']))
             $this->type = array();
 
-        $this->timetable = new Timetable();
-        $this->timetable->init($this->type);
-
+        if (0 < count($this->type)) {
+            $this->timetable = new Timetable();
+            if (!$this->timetable->init($this->type))
+                $this->show_404();
+        }
         $this->choose_action();
     }
 
@@ -52,13 +54,15 @@ class Timetable_Controller extends Main_controller
      */
     private function browser_version_control()
     {
-        if ((isset($_SERVER['HTTP_USER_AGENT'])) && (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0'))) {
-            header('location: /?action=status&error=' . self::ERROR_IE6);
-            exit;
-        }
-        if ((isset($_SERVER['HTTP_USER_AGENT'])) && (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 7.0'))) {
-            header('location: /?action=status&error=' . self::ERROR_IE7);
-            exit;
+        if ((isset($_GET['action']) && ('status' != $_GET['action'])) OR (!isset($_GET['action']))) {
+            if ((isset($_SERVER['HTTP_USER_AGENT'])) && (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0'))) {
+                header('location: /?action=status&error=' . self::ERROR_IE6);
+                exit;
+            }
+            if ((isset($_SERVER['HTTP_USER_AGENT'])) && (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 7.0'))) {
+                header('location: /?action=status&error=' . self::ERROR_IE7);
+                exit;
+            }
         }
     }
 
@@ -119,8 +123,7 @@ class Timetable_Controller extends Main_controller
     }
 
     /**
-     * AJAX
-     * Вывод расписания
+     * AJAX Вывод расписания
      */
     protected function action_main_table()
     {
@@ -198,8 +201,20 @@ class Timetable_Controller extends Main_controller
     }
 
     /**
-     * AJAX
-     * Экспорт расписания
+     * Экспорт в формате JSON
+     */
+    protected function action_json()
+    {
+        $tt = Timetable::all(array('status' => SheduleStatus::STATUS_PUBLIC));
+        foreach ($tt as &$lesson) {
+            $lesson = $lesson->to_array();
+        }
+        $json_encode = json_encode($tt);
+        print_r(Text::json_cyrillic_encode($json_encode));
+    }
+
+    /**
+     * AJAX Экспорт расписания
      */
     protected function action_export()
     {
@@ -217,8 +232,7 @@ class Timetable_Controller extends Main_controller
     }
 
     /**
-     * AJAX
-     * Информация о занятии
+     * AJAX Информация о занятии
      */
     protected function action_lesson_info()
     {

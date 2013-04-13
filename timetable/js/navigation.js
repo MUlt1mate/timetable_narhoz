@@ -16,7 +16,6 @@ $(function () {
             });
             $.week = $('#week_id').val() - 0;
             $.month = $('#month_id').val() - 0;
-            console.log($.week, $.month);
             $.subgroup = 0;
             resetTimetable();
         }
@@ -47,7 +46,6 @@ $(function () {
 
         function LoadTimeTable(grid_id, load_dates) {
             var selector = $('#grid' + grid_id);
-            console.log(grid_id);
             $.interval = '';
             if ('week' == $.mode)
                 $.interval = "&week=" + ($.week + grid_id);

@@ -1,9 +1,5 @@
 body {
-    padding: 45px 10px 0;
-}
-
-#login {
-
+    padding: 45px 10px 100px;
 }
 
 .room {
@@ -15,4 +11,63 @@ body {
     border: 1px #888 solid;
     margin: 2px 0;
     cursor: pointer;
+}
+
+.room_table {
+    display: inline-block;
+    height: 30px;
+    width: 150px;
+    padding: 4px;
+    line-height: 16px;
+    border: 1px #888 solid;
+    margin: -1px 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.shedule {
+    cursor: pointer;
+}
+
+.overhour, .overpair {
+    border: 1px solid RGBA(0, 0, 0, 0.1);
+    padding: 0 3px;
+    color: RGBA(0, 0, 0, 0.2);
+    position: absolute;
+    cursor: pointer;;
+}
+
+.overhour:hover, .overpair:hover {
+    border: 1px solid #000;
+    color: RGBA(0, 0, 0, 1);
+}
+
+.overhour {
+    width: 45%;
+    height: 28px;
+    left: 50%;
+}
+
+.overpair {
+    width: 45%;
+    height: 38px;
+}
+
+#time_table_grid {
+    font-size: 13px;
+}
+
+#time_table_grid tr {
+    height: 22px;
+}
+
+#time_table_grid td, th {
+    padding: 1px 3px;
+}
+
+.tt_lesson {
+    max-width: 300px;
+    overflow: hidden;
+    word-break: break-all;
+    max-height: 22px;
 }

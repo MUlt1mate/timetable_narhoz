@@ -9,9 +9,8 @@ class Admin_controller extends Main_controller
 {
     const TEMPLATE_FOLDER = 'admin';
     private $secure_key = 'e366d105cfd734677897aaccf51e97a3';
-
     private $TimeDate;
-
+    private $params = array();
 
     public function __construct()
     {
@@ -19,6 +18,7 @@ class Admin_controller extends Main_controller
         session_start();
         $this->auth();
         $this->TimeDate = new TimeDate();
+        $this->params = Shedule_params::get_array();
         $this->choose_action();
     }
 
@@ -136,6 +136,103 @@ class Admin_controller extends Main_controller
             ));
         } else
             $this->view->screen(View::A_TEACHERS, array('teachers' => Teachers::get_list()));
+    }
+
+    protected function action_edit()
+    {
+        if (isset($_GET[Shedule_params::PARAM_SHEDULE])) {
+            Shedule_params::set(Shedule_params::PARAM_SHEDULE, $_GET[Shedule_params::PARAM_SHEDULE]);
+            $this->view->screen(View::A_TT_EDIT, array(
+                'params' => $this->params,
+                'faculty' => Lists::$faculty,
+                'types_plan_work' => Lists::$type_plan_work,
+                'groups' => Group::get_list($this->TimeDate->get_study_year()),
+                'teachers' => Teachers::find('all', array('order' => 'fio')),
+                'lessons' => Lessons::all(array('order' => 'namesub')),
+                'types_lessons' => Lists::$lesson_type,
+                'rooms' => Rooms::all(array('order' => 'numbuilding, placecount desc')),
+                'times' => LessonsTimes::get_all_begin_times(),
+            ));
+        }
+    }
+
+    protected function action_busy_table()
+    {
+        $this->view->screen(View::A_TABLE_BUSY_LESSONS, array(
+            'work_days_times' => LessonsTimes::$MN_FR_times,
+            'saturday_times' => LessonsTimes::$ST_times,
+            'days' => TimeDate::$weekdays,
+        ));
+    }
+
+    protected function action_rooms_table()
+    {
+        $this->view->screen(View::A_TABLE_ROOMS, array(
+            'students_count' => 30,
+            'rooms' => RoomsView::all(array(
+                'order' => 'NumBuilding, CodRoomType, PlaceCount DESC',
+                'conditions' => 'codroomstate != ' . Rooms::STATE_NOT_READY,
+            )),
+        ));
+    }
+
+    protected function action_plan_table()
+    {
+        $plans = Plan_work::get(
+            Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+            $this->params[Shedule_params::PARAM_FACULTY],
+            $this->params[Shedule_params::PARAM_COURSE],
+            $this->params[Shedule_params::PARAM_TEACHER],
+            $this->params[Shedule_params::PARAM_GROUP],
+            $this->params[Shedule_params::PARAM_PLAN_WORK]
+        );
+        $this->view->screen(View::A_TABLE_PLAN_WORK, array(
+            'plans' => $plans,
+        ));
+    }
+
+    protected function action_time_table()
+    {
+        $lessons = Timetable::get_by_params(
+            Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+            $this->params[Shedule_params::PARAM_FACULTY],
+            $this->params[Shedule_params::PARAM_COURSE],
+            $this->params[Shedule_params::PARAM_TEACHER],
+            $this->params[Shedule_params::PARAM_GROUP],
+            $this->params[Shedule_params::PARAM_PLAN_WORK]
+        );
+        $this->view->screen(View::A_TABLE_LESSONS, array(
+            'lessons' => $lessons,
+        ));
+    }
+
+    protected function action_list()
+    {
+        if (isset($_GET['list']) && in_array($_GET['list'], array('groups', 'teachers'))) {
+            if ('groups' == $_GET['list']) {
+                $list = Lists::get_groups(
+                    Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+                    $this->params[Shedule_params::PARAM_FACULTY],
+                    $this->params[Shedule_params::PARAM_COURSE],
+                    $this->params[Shedule_params::PARAM_TEACHER]
+                );
+                $this->view->screen('options_list', array(
+                    'list' => $list,
+                    'select' => $this->params[Shedule_params::PARAM_GROUP],
+                ));
+            } elseif ('teachers' == $_GET['list']) {
+                $list = Lists::get_teachers(
+                    Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+                    $this->params[Shedule_params::PARAM_FACULTY],
+                    $this->params[Shedule_params::PARAM_COURSE],
+                    $this->params[Shedule_params::PARAM_GROUP]
+                );
+                $this->view->screen('options_list', array(
+                    'list' => $list,
+                    'select' => $this->params[Shedule_params::PARAM_TEACHER],
+                ));
+            }
+        }
     }
 
     protected function action_current()

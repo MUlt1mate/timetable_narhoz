@@ -27,6 +27,8 @@ class TimeDate
      */
     const WEEK_LEN = 604800;
 
+    const YEAR_LEN = 31536000;
+
     /**
      * @var int Номер недели в году
      */

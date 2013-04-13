@@ -18,7 +18,7 @@ $this->screen(self::TT_HEADER);?>
 
                 <?
                 foreach ($forms_study as $fs_id):?>
-                    <div class="tab-pane fade in<? if ($fs_id == 30) echo ' active'; ?>" id="cf<?= $fs_id ?>">
+                    <div class="tab-pane fade in" id="cf<?= $fs_id ?>">
                         <div class="row-fluid">
                             <div class="span8" style="min-width: 350px;">
                                 <?if (0 != $fs_id): ?>
@@ -42,7 +42,9 @@ $this->screen(self::TT_HEADER);?>
                                                             <? if (isset($y_groups[$year]) && is_array($y_groups[$year]))
                                                                 foreach ($y_groups[$year] as $g):?>
                                                                     <li>
-                                                                        <a href="/?group=<?= $g['codgrup'] ?>" <?if ($g['count'] == 0) echo 'class="muted"';?>>
+                                                                        <a <? echo ($g['count'] == 0)
+                                                                            ? 'class="muted" title="нет расписания"'
+                                                                            : 'href="/?group=' . $g['codgrup'] . '"';   ;?>>
                                                                             <?=$g['namegrup']?>
                                                                         </a>
                                                                     </li>
@@ -64,6 +66,18 @@ $this->screen(self::TT_HEADER);?>
                                             </tr>
                                         <? endforeach;?>
                                     </table>
+                                    <?if (0 == $fs_id): ?>
+                                        <a href="http://raspisaniye-vuzov.ru/" target="_blank">
+                                            <div class="alert alert-info">
+                                                <div>
+                                                    <img src="/img/android_app_icon.png" id="android_app_icon">
+                                                </div>
+                                                <div id="android_app_text">
+                                                    Приложение для устройств<br> на Android и iOS
+                                                </div>
+                                            </div>
+                                        </a>
+                                    <? endif?>
                                 </div>
                             <? endif;?>
                         </div>
@@ -80,7 +94,9 @@ $this->screen(self::TT_HEADER);?>
                                     <ul class="inline">
                                         <?foreach ($teacher_word as $teacher): ?>
                                             <li style="width: 150px;">
-                                                <a href="/?teacher=<?= $teacher->id ?>" <?if ($teacher->count == 0) echo 'class="muted"';?>>
+                                                <a <? echo ($teacher->count == 0)
+                                                    ? 'class="muted" title="нет расписания"'
+                                                    : 'href="/?teacher=' . $teacher->id . '"';   ;?>>
                                                     <?=$teacher->shortfio?>
                                                 </a>
                                             </li>

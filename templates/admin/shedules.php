@@ -33,14 +33,14 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                                 break;
                         }
                         ?>
-                        <tr class="<?= $tr_class ?>">
+                        <tr class="<?= $tr_class ?> shedule" id="<?= $s->id ?>">
                             <td><a href="/?action=edit&tt_id=<?= $s->id ?>"><?=$s->name?></a></td>
                             <td><?=$s->status?></td>
                             <td><?=$s->type?></td>
                             <td><?=$s->formstudy?></td>
                             <td><?=TimeDate::db_to_screen($s->date_begin)?></td>
                             <td><?=TimeDate::db_to_screen($s->date_end)?></td>
-                            <td><label class="icon-edit"></label></td>
+                            <td class="shedule_edit"><label class="icon-edit"></label></td>
                         </tr>
                     <? endforeach;?>
             </table>

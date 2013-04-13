@@ -8,5 +8,7 @@
 
 class Shedules extends ActiveRecord\Model
 {
+    static $table = 'shedules';
+    static $primary_key = 'id';
     const SHEDULES_STATUS_READY = 1;
 }

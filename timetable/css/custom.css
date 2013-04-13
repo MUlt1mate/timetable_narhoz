@@ -175,7 +175,7 @@ body {
     height: 100px;
 }
 
-.month_table_td{
+.month_table_td {
     padding: 2px !important;
 }
 
@@ -258,6 +258,13 @@ section {
     max-width: 400px !important;
 }
 
-#grid_carousel{
-    /*overflow: visible !important;*/
+#android_app_icon {
+    width: 50px;
+    float: left;
+    margin: 0 20px;
+}
+
+#android_app_text {
+    height: 45px;
+    padding-top: 5px;
 }

@@ -1,13 +1,11 @@
 <?php
 /**
  * @author: MUlt1mate
- * Date: 31.03.13
- * Time: 11:36
+ * Date: 12.04.13
+ * Time: 0:53
  */
-$title = 'Аудитории';
-$this->screen(self::A_HEADER, array('title' => $title));?>
-    <h3><?=$title?></h3>
-<? foreach ($rooms as $r):
+
+foreach ($rooms as $r):
     if (Rooms::STATE_NOT_READY == $r->codroomstate) {
         $bg_color = '888';
     } else {
@@ -25,15 +23,22 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                 $bg_color = 'FFF';
         }
     }
+
+    $diff = $r->placecount - $students_count;
+
+    if (0 < $diff) {
+        $badge = '<span class="badge badge-success" style="position: absolute; top: 2px; right: 2px;">+';
+    } elseif ($diff < 0) {
+        $badge = '<span class="badge badge-important" style="position: absolute; top: 2px; right: 2px;">';
+    } else {
+        $badge = '<span class="badge badge-info" style="position: absolute; top: 2px; right: 2px;">';
+    }
     ?>
-    <div class="room" id="<?= $r->codroom ?>" style=" background-color: #<?= $bg_color ?>;">
+    <div class="room_table" id="room_<?= $r->codroom ?>" style=" background-color: #<?= $bg_color ?>;">
         <strong><?=Rooms::$build_aliases[$r->numbuilding] . $r->number?></strong> (<?=$r->placecount?>)
+        <?= $badge . $diff ?></span></br>
         <div>
             <small><?=$r->roomtype?></small>
         </div>
-        <div>
-            <small><?=$r->roomstate?></small>
-        </div>
     </div>
-<? endforeach; ?>
-<? $this->screen(self::A_FOOTER);
+<? endforeach;

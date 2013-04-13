@@ -9,10 +9,11 @@
 class Timetable extends ActiveRecord\Model
 {
     static public $all_types = array('group', 'teacher', 'room', 'subgroup');
-    const TIMETABLE_VIEW = 'sh_SheduleView';
     static $table = 'TimeGridView';
     static $primary_key = 'id';
+    const TIMETABLE_VIEW = 'sh_SheduleView';
     const TIMETABLE_REMOVE = 'sh_SheduleDeleteView';
+    const TIMETABLE_PARAM = 'sh_SheduleParam';
     const AGENDA_DAYS = 30;
     const AGENDA_LESSONS = 50;
 
@@ -24,24 +25,32 @@ class Timetable extends ActiveRecord\Model
      */
     public function init($types)
     {
-        //@todo не выводить инфу, если нет пар
-        if (isset($types['group'])) {
-            $info = Group::get_info($types['group']);
-            if (0 < $info->subgroup)
-                $this->show_subgroups = true;
-            $this->timetable_title = 'Группа: ' . $info->namegrup;
-            return;
+        try {
+            if (isset($types['group'])) {
+                $info = Group::get_info($types['group']);
+                if (0 < $info->subgroup)
+                    $this->show_subgroups = true;
+                $this->timetable_title = 'Группа: ' . $info->namegrup;
+                if (0 < $info->lessons_count)
+                    return true;
+                return false;
+            }
+            if (isset($types['teacher'])) {
+                $info = Teachers::find($types['teacher']);
+                $this->timetable_title = $info->fio;
+                if (0 < $info->count)
+                    return true;
+                return false;
+            }
+            if (isset($types['room'])) {
+                $info = Rooms::find($types['room']);
+                $this->timetable_title = 'Аудитория: ' . $info->number;
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
         }
-        if (isset($types['teacher'])) {
-            $info = Teachers::find($types['teacher']);
-            $this->timetable_title = $info->fio;
-            return;
-        }
-        if (isset($types['room'])) {
-            $info = Rooms::find($types['room']);
-            $this->timetable_title = 'Аудитория: ' . $info->number;
-            return;
-        }
+        return false;
     }
 
     public function getShowSubgroups()
@@ -96,6 +105,27 @@ class Timetable extends ActiveRecord\Model
                     $remove_ids[$row['TimeGrid_id_remove']][] = $row['lesson_date'];
             return $remove_ids;
         }
+    }
+
+    static public function get_by_params($shedule, $faculty, $course, $teacher, $group, $plan_work)
+    {
+        if ((null == $group) && (null == $teacher))
+            return false;
+        $faculty = (null == $faculty) ? 'null' : (int)$faculty;
+        $course = (null == $course) ? 'null' : (int)$course;
+        $teacher = (null == $teacher) ? 'null' : (int)$teacher;
+        $plan_work = (null == $plan_work) ? 'null' : (int)$plan_work;
+        $group = (null == $group) ? 'null' : (int)$group;
+        $sql = self::TIMETABLE_PARAM . '
+        @shedule_id = ' . (int)$shedule->id . ',
+		@CodPlanWork = ' . $plan_work . ',
+		@CodFaculty = ' . $faculty . ',
+		@Course = ' . $course . ',
+		@CodPrep = ' . $teacher . ',
+		@Grup = ' . $group;
+
+        $query = self::query($sql);
+        return $query->fetchAll();
     }
 
     /**
