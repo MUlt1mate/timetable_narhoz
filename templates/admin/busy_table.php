@@ -29,7 +29,18 @@ $last_hour = 22;
             </div>
         </td>
 
-        <?for ($i = 1; $i <= 7; $i++): ?>
+        <?for ($i = 1; $i <= 7; $i++):
+            switch ($i) {
+                case 7:
+                    $tops = array();
+                    break;
+                case 6:
+                    $tops = $saturday_times;
+                    break;
+                default:
+                    $tops = $work_days_times;
+                    break;
+            }?>
             <td style="border-left: 1px solid #DDD; vertical-align: top; padding:0; background: #fff url(/img/halfhour.png) repeat;">
                 <div style="height: 100%; position: relative;">
                     <div id="new_lesson<?= $i ?>"
@@ -40,20 +51,8 @@ $last_hour = 22;
                         <div class="overhour" style="top:<?= (($j - 1) * 30) ?>px;">
                             <?= ($j + 7)?>:00 <?= ($j + 8)?>:00
                         </div>
-                    <? endfor;?>
+                    <? endfor;
 
-                    <?
-                    switch ($i) {
-                        case 7:
-                            $tops = array();
-                            break;
-                        case 6:
-                            $tops = $saturday_times;
-                            break;
-                        default:
-                            $tops = $work_days_times;
-                            break;
-                    }
                     foreach ($tops as $key => $t): ?>
                         <div class="overpair" style="top:<?= $key ?>px;"
                              onclick="add_new(<?= $key ?>,40,<?= $i ?>,<?= substr($t, 0, 5) ?>,<?= substr($t, -5) ?>)"><?=$t?>

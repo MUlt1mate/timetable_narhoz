@@ -8,7 +8,7 @@
 
 class Group extends ActiveRecord\Model
 {
-    static protected $table = 'grup';
+    static $table = 'grup';
     static public $primary_key = 'codgrup';
     static private $proc_name = 'sh_GroupList';
 
@@ -41,6 +41,19 @@ class Group extends ActiveRecord\Model
             'group' => 'CodGrup, NameGrup',
         );
         return self::find_by_pk($group_id, $params);
+    }
+
+    static public function get_students_count($group_id)
+    {
+        $params = array(
+            'select' => 'count(CodStudent) as count',
+            'from' => self::$table,
+            'joins' => 'LEFT JOIN Student as s on s.CodGrup=' . self::$table . '.CodGrup',
+            'group' => 's.CodGrup',
+            'limit' => 1,
+        );
+        $info = self::find_by_pk($group_id, $params);
+        return $info->count;
     }
 
     /**

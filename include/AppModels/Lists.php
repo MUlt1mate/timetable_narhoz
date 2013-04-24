@@ -56,7 +56,7 @@ class Lists
     }
 
     /**
-     * @param Shedules $shedule
+     * @param Shedule $shedule
      * @param int $faculty
      * @param int $course
      * @param int $group

@@ -31,4 +31,9 @@ class DB
         return ActiveRecord\Connection::instance()->query($sql, $values);
     }
 
+    static public function escape($value)
+    {
+        return ActiveRecord\Connection::instance()->escape($value);
+    }
+
 }

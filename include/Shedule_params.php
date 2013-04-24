@@ -15,6 +15,14 @@ class Shedule_params
     const PARAM_TEACHER = 'teacher';
     const PARAM_COURSE = 'course';
     const PARAM_PLAN_WORK = 'plan_work';
+    const PARAM_FLOW = 'flow';
+    const PARAM_WEEKDAY_ID = 'weekday';
+    const PARAM_WEEK_ODD = 'week_odd';
+    const PARAM_SUBGROUP = 'subgroup';
+    const PARAM_DATE_BEGIN = 'date_begin';
+    const PARAM_DATE_END = 'date_end';
+    const PARAM_TIME_BEGIN = 'time_begin';
+    const PARAM_TIME_END = 'time_end';
 
     private static $all_params = array(
         self::PARAM_SHEDULE,
@@ -23,6 +31,14 @@ class Shedule_params
         self::PARAM_TEACHER,
         self::PARAM_COURSE,
         self::PARAM_PLAN_WORK,
+        self::PARAM_FLOW,
+        self::PARAM_WEEKDAY_ID,
+        self::PARAM_WEEK_ODD,
+        self::PARAM_SUBGROUP,
+        self::PARAM_DATE_BEGIN,
+        self::PARAM_DATE_END,
+        self::PARAM_TIME_BEGIN,
+        self::PARAM_TIME_END,
     );
 
     static public function get_array()

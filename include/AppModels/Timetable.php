@@ -80,7 +80,7 @@ class Timetable extends ActiveRecord\Model
     {
         $sql = ($remove) ? self::TIMETABLE_REMOVE : self::TIMETABLE_VIEW;
         if (!$remove)
-            $sql .= ' @status=' . (int)Shedules::SHEDULES_STATUS_READY . ', ';
+            $sql .= ' @status=' . (int)Shedule::SHEDULE_STATUS_READY . ', ';
         $sql .= ' @begin=' . self::escape(TimeDate::ts_to_db($date_begin)) . ' ,
         @end=' . self::escape(TimeDate::ts_to_db($date_end));
         foreach (self::$all_types as $type)

@@ -17,10 +17,17 @@ class Timetable_Controller extends Main_controller
     const ERROR_IE6 = 'IE6';
     const ERROR_IE7 = 'IE7';
 
+    const VK_APP_ID = '3523526';
+
     public function __construct()
     {
         parent::__construct();
         $this->browser_version_control();
+
+        if (isset($_GET['api_id']) && (self::VK_APP_ID == $_GET['api_id'])) {
+            header('location: /?ref=vk_app');
+            exit();
+        }
 
         if (isset($_GET['mode'])) {
             setcookie('mode', $_GET['mode'], time() + 60 * 60 * 24 * 365, '/');

@@ -6,7 +6,7 @@
  */
 $this->screen(self::A_HEADER);
 ?>
-    <div class="top2">
+    <div class="top2" id="shedule_panel">
         <form name="planwork" class="form-inline top2form">
             <table>
                 <tr>
@@ -171,22 +171,12 @@ $this->screen(self::A_HEADER);
                 <table style="margin:auto;" class="table-condensed">
                     <tr>
                         <td id="date_begin_picker" style="">
-                            <button class="btn btn-inverse">
-                                <i class="icon-remove icon-white"></i>
-                            </button>
-                            <input style="margin:5px 0 0;" class="inputDate span1" id="lesson_date_begin_edit">
-                            <button id="copy_button" class="btn">
-                                <i class="icon-arrow-right"></i>
-                            </button>
+                            <input style="margin:5px 0 0;" class="inputDate span2" id="lesson_date_begin_edit"
+                                   type="date">
                         </td>
                         <td id="date_end_picker">
-                            <button class="btn">
-                                <i class="icon-arrow-left"></i>
-                            </button>
-                            <input style="margin:5px 0 0;" class="inputDate span1" id="lesson_date_end_edit">
-                            <button class="btn btn-inverse">
-                                <i class="icon-remove icon-white"></i>
-                            </button>
+                            <input style="margin:5px 0 0;" class="inputDate span2" id="lesson_date_end_edit"
+                                   type="date">
                         </td>
                         <td>
                             <div class="btn-group" data-toggle="buttons-radio">

@@ -25,7 +25,7 @@
                 <td><?=$p['fio']?></td>
                 <td><?=$p['namesub']?></td>
                 <td><?=$p['worktype']?></td>
-                <td><?=$p['hours']?></td>
+                <td><?=round($p['hours'], 2)?></td>
             </tr>
         <? endforeach;?>
 </table>

@@ -6,10 +6,10 @@
  */
 
 foreach ($rooms as $r):
-    if (Rooms::STATE_NOT_READY == $r->codroomstate) {
+    if (0 < $r['roombusy']) {
         $bg_color = '888';
     } else {
-        switch ($r->codroomtype) {
+        switch ($r['codroomtype']) {
             case Rooms::TYPE_LESSON:
                 $bg_color = 'CFC';
                 break;
@@ -24,21 +24,19 @@ foreach ($rooms as $r):
         }
     }
 
-    $diff = $r->placecount - $students_count;
-
-    if (0 < $diff) {
+    if (0 < $r['difference']) {
         $badge = '<span class="badge badge-success" style="position: absolute; top: 2px; right: 2px;">+';
-    } elseif ($diff < 0) {
+    } elseif ($r['difference'] < 0) {
         $badge = '<span class="badge badge-important" style="position: absolute; top: 2px; right: 2px;">';
     } else {
         $badge = '<span class="badge badge-info" style="position: absolute; top: 2px; right: 2px;">';
     }
     ?>
-    <div class="room_table" id="room_<?= $r->codroom ?>" style=" background-color: #<?= $bg_color ?>;">
-        <strong><?=Rooms::$build_aliases[$r->numbuilding] . $r->number?></strong> (<?=$r->placecount?>)
-        <?= $badge . $diff ?></span></br>
+    <div class="room_table" id="room_<?= $r['codroom'] ?>" style=" background-color: #<?= $bg_color ?>;">
+        <strong><?=Rooms::$build_aliases[$r['numbuilding']] . $r['number']?></strong> (<?=$r['placecount']?>)
+        <?= $badge . $r['difference'] ?></span></br>
         <div>
-            <small><?=$r->roomtype?></small>
+            <small><?=$r['roomtype']?></small>
         </div>
     </div>
 <? endforeach;

@@ -38,6 +38,32 @@ class Admin_controller extends Main_controller
 
     protected function action_default()
     {
+        if (isset($_POST['name'])) {
+            if (isset($_POST['id']) && (0 < $_POST['id'])) {
+                $shedule = Shedule::find($_POST['id']);
+                $shedule->edit(
+                    $_POST['name'],
+                    $_POST['type'],
+                    $_POST['status'],
+                    $_POST['formstudy'],
+                    $_POST['year'],
+                    $_POST['numterm'],
+                    $_POST['date_begin'],
+                    $_POST['date_end']
+                );
+            } else {
+                Shedule::add(
+                    $_POST['name'],
+                    $_POST['type'],
+                    $_POST['status'],
+                    $_POST['formstudy'],
+                    $_POST['year'],
+                    $_POST['numterm'],
+                    $_POST['date_begin'],
+                    $_POST['date_end']
+                );
+            }
+        }
         $this->view->screen(View::A_SHEDULES, array(
             'shedules' => ShedulesView::all(),
             'shedule_status' => SheduleStatus::all(),
@@ -158,7 +184,16 @@ class Admin_controller extends Main_controller
 
     protected function action_busy_table()
     {
+        $lessons = Timetable::get_by_params(
+            Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
+            $this->params[Shedule_params::PARAM_FACULTY],
+            $this->params[Shedule_params::PARAM_COURSE],
+            $this->params[Shedule_params::PARAM_TEACHER],
+            $this->params[Shedule_params::PARAM_GROUP],
+            $this->params[Shedule_params::PARAM_PLAN_WORK]
+        );
         $this->view->screen(View::A_TABLE_BUSY_LESSONS, array(
+            'lessons' => $lessons,
             'work_days_times' => LessonsTimes::$MN_FR_times,
             'saturday_times' => LessonsTimes::$ST_times,
             'days' => TimeDate::$weekdays,
@@ -168,18 +203,25 @@ class Admin_controller extends Main_controller
     protected function action_rooms_table()
     {
         $this->view->screen(View::A_TABLE_ROOMS, array(
-            'students_count' => 30,
-            'rooms' => RoomsView::all(array(
-                'order' => 'NumBuilding, CodRoomType, PlaceCount DESC',
-                'conditions' => 'codroomstate != ' . Rooms::STATE_NOT_READY,
-            )),
+            'rooms' => Rooms::get_busy(
+                Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
+                $this->params[Shedule_params::PARAM_GROUP],
+                $this->params[Shedule_params::PARAM_FLOW],
+                $this->params[Shedule_params::PARAM_TIME_BEGIN],
+                $this->params[Shedule_params::PARAM_TIME_END],
+                $this->params[Shedule_params::PARAM_WEEKDAY_ID],
+                $this->params[Shedule_params::PARAM_WEEK_ODD],
+                $this->params[Shedule_params::PARAM_SUBGROUP],
+                $this->params[Shedule_params::PARAM_DATE_BEGIN],
+                $this->params[Shedule_params::PARAM_DATE_END]
+            ),
         ));
     }
 
     protected function action_plan_table()
     {
         $plans = Plan_work::get(
-            Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+            Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
             $this->params[Shedule_params::PARAM_FACULTY],
             $this->params[Shedule_params::PARAM_COURSE],
             $this->params[Shedule_params::PARAM_TEACHER],
@@ -188,13 +230,14 @@ class Admin_controller extends Main_controller
         );
         $this->view->screen(View::A_TABLE_PLAN_WORK, array(
             'plans' => $plans,
+            'hours' => 0,
         ));
     }
 
     protected function action_time_table()
     {
         $lessons = Timetable::get_by_params(
-            Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+            Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
             $this->params[Shedule_params::PARAM_FACULTY],
             $this->params[Shedule_params::PARAM_COURSE],
             $this->params[Shedule_params::PARAM_TEACHER],
@@ -203,6 +246,7 @@ class Admin_controller extends Main_controller
         );
         $this->view->screen(View::A_TABLE_LESSONS, array(
             'lessons' => $lessons,
+            'hours' => 0,
         ));
     }
 
@@ -211,7 +255,7 @@ class Admin_controller extends Main_controller
         if (isset($_GET['list']) && in_array($_GET['list'], array('groups', 'teachers'))) {
             if ('groups' == $_GET['list']) {
                 $list = Lists::get_groups(
-                    Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+                    Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
                     $this->params[Shedule_params::PARAM_FACULTY],
                     $this->params[Shedule_params::PARAM_COURSE],
                     $this->params[Shedule_params::PARAM_TEACHER]
@@ -222,7 +266,7 @@ class Admin_controller extends Main_controller
                 ));
             } elseif ('teachers' == $_GET['list']) {
                 $list = Lists::get_teachers(
-                    Shedules::find($this->params[Shedule_params::PARAM_SHEDULE]),
+                    Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
                     $this->params[Shedule_params::PARAM_FACULTY],
                     $this->params[Shedule_params::PARAM_COURSE],
                     $this->params[Shedule_params::PARAM_GROUP]

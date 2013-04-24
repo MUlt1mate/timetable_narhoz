@@ -33,8 +33,12 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                                 break;
                         }
                         ?>
-                        <tr class="<?= $tr_class ?> shedule" id="<?= $s->id ?>">
-                            <td><a href="/?action=edit&tt_id=<?= $s->id ?>"><?=$s->name?></a></td>
+                        <tr class="<?= $tr_class ?> shedule" shedule_id="<?= $s->id ?>"
+                            title="<?= $s->name ?>" status_id="<?= $s->status_id ?>"
+                            type_id="<?= $s->type_id ?>" formstudy_id="<?= $s->formstudy_id ?>"
+                            date_begin="<?= $s->date_begin ?>" date_end="<?= $s->date_end ?>"
+                            year="<?= $s->year ?>" numterm="<?= $s->numterm ?>">
+                            <td><?=$s->name?></td>
                             <td><?=$s->status?></td>
                             <td><?=$s->type?></td>
                             <td><?=$s->formstudy?></td>
@@ -47,20 +51,20 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
         </div>
 
         <div class="span4">
-            <h3>Новое расписание</h3>
+            <h3 id="new_shedule_title">Новое расписание</h3>
 
             <form method="POST">
                 <table class="table table-condensed">
                     <tr>
                         <td>Название</td>
                         <td>
-                            <input type="text" name="name" required="required" autofocus="autofocus">
+                            <input type="text" name="name" required="required" autofocus="autofocus" id="shedule_name">
                         </td>
                     </tr>
                     <tr>
                         <td>Статус</td>
                         <td>
-                            <select name="status">
+                            <select name="status" id="shedule_status">
                                 <? foreach ($shedule_status as $status): ?>
                                     <option value="<?= $status->id ?>"><?=$status->name?></option>
                                 <? endforeach;?>
@@ -70,7 +74,7 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                     <tr>
                         <td>Тип</td>
                         <td>
-                            <select name="type">
+                            <select name="type" id="shedule_type">
                                 <? foreach ($shedule_types as $type): ?>
                                     <option value="<?= $type->id ?>"><?=$type->name?></option>
                                 <? endforeach;?>
@@ -80,7 +84,7 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                     <tr>
                         <td>Форма обучения</td>
                         <td>
-                            <select name="formstudy">
+                            <select name="formstudy" id="shedule_formstudy">
                                 <? foreach ($form_study as $form): ?>
                                     <option value="<?= $form->codformstudy ?>"><?=$form->formstudy?></option>
                                 <? endforeach;?>
@@ -88,15 +92,15 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                         </td>
                     </tr>
                     <tr>
-                        <td>Год</td>
+                        <td>Учебный год</td>
                         <td>
-                            <input type="number" name="year" value="<?= $study_year ?>" min="2010">
+                            <input type="number" name="year" value="<?= $study_year ?>" min="2010" id="shedule_year">
                         </td>
                     </tr>
                     <tr>
                         <td>Семестр</td>
                         <td>
-                            <select name="numterm">
+                            <select name="numterm" id="shedule_numterm">
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -106,24 +110,24 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                     <tr>
                         <td>Дата начала</td>
                         <td>
-                            <input class="inputDate span6" type="date" name="date_begin" id="date_begin"
+                            <input class="inputDate span6" type="date" name="date_begin" id="shedule_date_begin"
                                    required="required">
                         </td>
                     </tr>
                     <tr>
                         <td>Дата окончания</td>
                         <td>
-                            <input class="inputDate span6" type="date" name="date_end" id="date_end"
+                            <input class="inputDate span6" type="date" name="date_end" id="shedule_date_end"
                                    required="required">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input class="btn" type="reset" value="Сброс">
+                            <input class="btn" type="reset" value="Сброс" id="reset_shedule_btn">
                         </td>
                         <td>
-                            <input type="hidden" name="id"/>
-                            <input class="btn btn-primary" type="submit" value="Добавить">
+                            <input type="hidden" name="id" id="shedule_id"/>
+                            <input class="btn btn-primary" type="submit" value="Добавить" id="add_edit_shedule_btn">
                         </td>
                     </tr>
                 </table>
