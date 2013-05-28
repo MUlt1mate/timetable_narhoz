@@ -28,6 +28,98 @@ $(function () {
             window.location = '/?action=timetable&room=' + $(this).attr('id');
         });
 
+        //Timetable edit begin ============================================
+
+        $('#edit_button').click(function () {
+            if ('none' == $('#labels').css('display')) {
+                $('#labels').css('display', '');
+                $('#selects').css('display', 'none');
+            } else {
+                $('#labels').css('display', 'none');
+                $('#selects').css('display', '');
+            }
+        });
+
+        $('#PlanTable').on('click', '.plan_table_row', function () {
+            $('#labels').css('display', '');
+            $('#selects').css('display', 'none');
+            $('#timegrid_id').val('');
+            $('#button_add').removeClass('btn-success').addClass('btn-primary')
+                .html('<i class="icon-plus icon-white"></i> Добавить');
+
+            $('#CodGrup_edit').val($(this).attr('group_flow_id'));
+            $('#is_flow').val($(this).attr('is_flow'));
+            $('#CodPrep_edit').val($(this).attr('teacher_id'));
+            $('#CodSubs_edit').val($(this).attr('lesson_id'));
+            $('#TypeLesson_edit').val($(this).attr('lesson_type_id'));
+
+            $('#CodGrup_name').text($($('td', this)[0]).text());
+            $('#CodPrep_name').text($($('td', this)[1]).text());
+            $('#CodSubs_name').text($($('td', this)[2]).text());
+            $('#TypeLesson_name').text($($('td', this)[3]).text());
+
+            if (0 == $(this).attr('is_flow'))
+                set_param('group', $(this).attr('group_flow_id'));
+            else
+                set_param('flow', $(this).attr('group_flow_id'));
+            set_param('is_flow', $(this).attr('is_flow'));
+            set_param('teacher', $(this).attr('teacher_id'));
+            set_param('lesson', $(this).attr('lesson_id'));
+            set_param('lesson_type', $(this).attr('lesson_type_id'));
+            select_subgroup($(this).attr('subgroup'));
+        });
+
+        $('#TimeTable').on('click', '.time_table_row', function () {
+            $('#labels').css('display', 'none');
+            $('#selects').css('display', '');
+            $('#timegrid_id').val($(this).attr('timegrid_id'));
+            $('#button_add').removeClass('btn-primary').addClass('btn-success')
+                .html('<i class="icon-ok icon-white"></i> Изменить');
+
+            $('#CodGrup_edit').val($(this).attr('group_flow_id'));
+            $('#is_flow').val($(this).attr('is_flow'));
+            $('#CodPrep_edit').val($(this).attr('teacher_id'));
+            $('#CodSubs_edit').val($(this).attr('lesson_id'));
+            $('#TypeLesson_edit').val($(this).attr('lesson_type_id'));
+            $('#CodRoom_edit').val($(this).attr('room_id'));
+            $('#CodTime_begin_edit').val($(this).attr('time_id'));
+            $('#lesson_date_begin_edit').val($(this).attr('date_begin'));
+            $('#lesson_date_end_edit').val($(this).attr('date_end'));
+            if (0 == $(this).attr('is_flow'))
+                set_param('group', $(this).attr('group_flow_id'));
+            else
+                set_param('flow', $(this).attr('group_flow_id'));
+            set_param('is_flow', $(this).attr('is_flow'));
+            set_param('teacher', $(this).attr('teacher_id'));
+            set_param('lesson', $(this).attr('lesson_id'));
+            set_param('room', $(this).attr('room_id'));
+            set_param('lesson_type', $(this).attr('lesson_type_id'));
+            set_param('time', $(this).attr('time_id'));
+            select_subgroup($(this).attr('subgroup'));
+            select_week($(this).attr('week'));
+            select_weekday($(this).attr('weekday_id'));
+        });
+
+        function select_subgroup(subgroup) {
+            $('.subgroup').removeClass('btn-success').addClass('btn-primary');
+            $('#subgroup' + subgroup).button('toggle').removeClass('btn-primary').addClass('btn-success');
+            $('#subgroup').val(subgroup);
+            set_param('subgroup', subgroup);
+        }
+
+        function select_weekday(weekday_id) {
+            $('#weekday' + weekday_id).button('toggle');
+            $('#weekday_id').val(weekday_id);
+            set_param('weekday', weekday_id);
+        }
+
+        function select_week(week) {
+            $('.week').removeClass('btn-danger').addClass('btn-warning');
+            $('#week' + week).button('toggle').removeClass('btn-warning').addClass('btn-danger');
+            $('#week').val(week);
+            set_param('week_odd', week);
+        }
+
         $('#faculty').change(function () {
             set_param('faculty', $(this).val());
             load_groups_list();
@@ -64,6 +156,66 @@ $(function () {
             Load_time_table();
         });
 
+        $('#CodGrup_edit').change(function(){
+           set_param('group',$(this).val());
+        });
+
+        $('#CodPrep_edit').change(function(){
+            set_param('teacher',$(this).val());
+        });
+
+        $('#CodSubs_edit').change(function(){
+            set_param('lesson',$(this).val());
+        });
+
+        $('#TypeLesson_edit').change(function(){
+            set_param('lesson_type',$(this).val());
+        });
+
+        $('#CodRoom_edit').change(function(){
+            set_param('room',$(this).val());
+        });
+
+        $('#CodTime_begin_edit').change(function(){
+            set_param('time',$(this).val());
+        });
+
+
+
+        $('#copy_left_date').click(function () {
+            $('#lesson_date_end_edit').val($('#lesson_date_begin_edit').val());
+        });
+
+        $('#copy_right_date').click(function () {
+            $('#lesson_date_begin_edit').val($('#lesson_date_end_edit').val());
+        });
+
+        $('#remove_left_date').click(function () {
+            $('#lesson_date_begin_edit').val('');
+        });
+
+        $('#remove_right_date').click(function () {
+            $('#lesson_date_end_edit').val('');
+        });
+
+        $('#subgroup_button_edit button').click(function () {
+            select_subgroup($(this).attr('value'));
+            Load_busy_table();
+            Load_rooms_table();
+        });
+
+        $('#week_button_edit button').click(function () {
+            select_week($(this).attr('value'));
+            Load_busy_table();
+            Load_rooms_table();
+        });
+
+        $('#weekday_button_edit button').click(function () {
+            select_weekday($(this).attr('value'));
+            Load_busy_table();
+            Load_rooms_table();
+        });
+
         function set_param(param_name, param_value) {
             $.cookie('param_' + param_name, param_value);
         }
@@ -97,13 +249,85 @@ $(function () {
         function Load_time_table() {
             $.get('/?action=time_table', function (data) {
                 $('#TimeTable').html(data);
+                $('#timetable_hours_label').text($('#timetable_hours_value').val());
             });
         }
 
         function Load_plan_table() {
             $.get('/?action=plan_table', function (data) {
                 $('#PlanTable').html(data);
+                $('#planwork_hours_label').text($('#planwork_hours_value').val());
             });
+        }
+
+        $('#RoomTable').on('click', '.room_table', function () {
+            $('#CodRoom_edit').val($(this).attr('number'));
+            $('#CodRoom_name').text($(this).find('.room_name').text());
+            set_param('room', $(this).attr('number'));
+            Load_busy_table();
+        });
+
+        $('#BusyTable').on('click', '.overpair, .overhour', function () {
+            var time = $(this).text().trim();
+            add_new(
+                $(this).attr('top'),
+                $(this).attr('duration'),
+                $(this).parent().parent().attr('weekday_id'),
+                time.substr(0, 5),
+                time.substr(-5));
+            set_param('time_begin', time.substr(0, 5));
+            set_param('time_end', time.substr(-5));
+            Load_rooms_table();
+        });
+
+        $('#button_add').click(function () {
+            if ('' == $('#timegrid_id').val()) {
+                $.get('/?action=add_new_lesson', function (data) {
+                    console.log(data);
+                    Load_busy_table();
+                    Load_rooms_table();
+                    Load_time_table();
+                });
+            } else {
+                $.get('/?action=edit_lesson&id=' + $('#timegrid_id').val(), function (data) {
+                    console.log(data);
+                    Load_busy_table();
+                    Load_rooms_table();
+                    Load_time_table();
+                });
+            }
+
+        });
+
+        function add_new(offset, duration, weekday, begin, end) {
+            if (undefined != $.new_lesson) {
+                $.new_lesson.css('display', 'none');
+            }
+            $.new_lesson = $('#new_lesson' + weekday);
+            $.new_lesson.html('<div class="time">' + begin + ' - ' + end + '</div>');
+            $.new_lesson.css('background', "rgba(50, 50, 50, 0.3)");
+            $.new_lesson.css('display', '');
+            $.new_lesson.css('top', offset + 'px');
+            $.new_lesson.css('height', duration + 'px');
+            $.new_lesson.weekday = weekday;
+            $.new_lesson.offset = offset;
+            $.new_lesson.duration = duration;
+            $.new_lesson.begin = begin;
+            $.new_lesson.end = end;
+            $('#CodTime_begin_name').text(begin + ' - ' + end);
+            var time_value = $('#CodTime_begin_edit option[time_value="' + begin + ' - ' + end + '"]').attr('value');
+            $('#CodTime_begin_edit').val(time_value);
+            check_time_correct();
+            select_weekday(weekday);
+        }
+
+        function check_time_correct() {
+            if (0 < $('#CodTime_begin_edit').val()) {
+                $('#CodTime_begin_name').css('color', 'green');
+                set_param('time', $('#CodTime_begin_edit').val());
+            } else {
+                $('#CodTime_begin_name').css('color', 'red');
+            }
         }
 
         if ($('#shedule_panel').length) {

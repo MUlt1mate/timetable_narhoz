@@ -40,7 +40,7 @@ class Group extends ActiveRecord\Model
             'limit' => 1,
             'group' => 'CodGrup, NameGrup',
         );
-        return self::find_by_pk($group_id, $params);
+        return self::find_by_pk(array($group_id), $params);
     }
 
     static public function get_students_count($group_id)

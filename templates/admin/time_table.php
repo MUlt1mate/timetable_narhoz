@@ -5,7 +5,7 @@
  * Time: 15:47
  */
 ?>
-<input type="hidden" name="timetable_hours_value" value="<?= $hours ?>">
+<input type="hidden" id="timetable_hours_value" value="<?= $hours ?>">
 <table id="time_table_grid" class="table table-bordered table-condensed tablegrid">
     <tr>
         <th>Группа</th>
@@ -24,7 +24,7 @@
     </tr>
     <? if (is_array($lessons))
         foreach ($lessons as $l) :?>
-            <tr id="TimeTable<?= $l['id'] ?>" style="background-color: #<?= $l['subcolor'] ?>;">
+            <tr style="background-color: #<?= $l['subcolor'] ?>;">
                 <td style="max-width:300px;">
                     <div style="height:19px;  overflow:hidden;">
                         <?=$l['grupflowname']?>
@@ -44,7 +44,21 @@
                 <td><?=$l['lesson_date_begin']?></td>
                 <td><?=$l['lesson_date_end']?></td>
                 <td><?=$l['hours']?></td>
-                <td>
+                <td class="time_table_row"
+                    timegrid_id="<?= $l['id'] ?>"
+                    group_flow_id="<?= $l['group_flow_id'] ?>"
+                    is_flow="<?= $l['is_flow'] ?>"
+                    teacher_id="<?= $l['teacher_id'] ?>"
+                    lesson_id="<?= $l['lesson_id'] ?>"
+                    room_id="<?= $l['room_id'] ?>"
+                    lesson_type_id="<?= $l['typelessonid'] ?>"
+                    weekday_id="<?= $l['weekday_id'] ?>"
+                    week="<?= $l['week'] ?>"
+                    time_id="<?= $l['time_id'] ?>"
+                    date_begin="<?= $l['lesson_date_begin'] ?>"
+                    date_end="<?= $l['lesson_date_end'] ?>"
+                    subgroup="<?= $l['subgroup'] ?>"
+                    >
                     <a data-toggle="modal" href="#" href="">
                         <label class="icon-edit"></label>
                     </a>

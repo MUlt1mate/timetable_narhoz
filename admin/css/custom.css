@@ -1,5 +1,5 @@
 body {
-    padding: 45px 10px 100px;
+    padding: 45px 10px 110px;
 }
 
 .room {
@@ -20,7 +20,7 @@ body {
     padding: 4px;
     line-height: 16px;
     border: 1px #888 solid;
-    margin: -1px 0;
+    margin: 1px -1px;
     cursor: pointer;
     position: relative;
 }
@@ -40,6 +40,14 @@ body {
 .overhour:hover, .overpair:hover {
     border: 1px solid #000;
     color: RGBA(0, 0, 0, 1);
+    background-color: RGBA(255, 255, 255, 0.7);
+    /*z-index: 3;*/
+}
+
+.time {
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    padding: 0 3px;
 }
 
 .overhour {
@@ -53,15 +61,19 @@ body {
     height: 38px;
 }
 
-#time_table_grid {
+#time_table_grid, #plan_table_grid {
     font-size: 13px;
 }
 
-#time_table_grid tr {
+#time_table_grid tr, #plan_table_grid tr {
     height: 22px;
 }
 
 #time_table_grid td, th {
+    padding: 1px 3px;
+}
+
+#plan_table_grid td, th {
     padding: 1px 3px;
 }
 
@@ -70,4 +82,22 @@ body {
     overflow: hidden;
     word-break: break-all;
     max-height: 22px;
+}
+
+.plan_table_row {
+    cursor: pointer;
+}
+
+.hours_label {
+    font-size: 18px;
+    padding: 0 10px;
+}
+
+.busy_lesson {
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #000;
+    padding: 0;
+    width: 31%;
+    /*z-index: 2;*/
 }

@@ -16,11 +16,16 @@ class Shedule_params
     const PARAM_COURSE = 'course';
     const PARAM_PLAN_WORK = 'plan_work';
     const PARAM_FLOW = 'flow';
+    const PARAM_IS_FLOW = 'is_flow';
+    const PARAM_ROOM = 'room';
+    const PARAM_LESSON = 'lesson';
+    const PARAM_LESSON_TYPE = 'lesson_type';
     const PARAM_WEEKDAY_ID = 'weekday';
     const PARAM_WEEK_ODD = 'week_odd';
     const PARAM_SUBGROUP = 'subgroup';
     const PARAM_DATE_BEGIN = 'date_begin';
     const PARAM_DATE_END = 'date_end';
+    const PARAM_TIME = 'time';
     const PARAM_TIME_BEGIN = 'time_begin';
     const PARAM_TIME_END = 'time_end';
 
@@ -32,6 +37,10 @@ class Shedule_params
         self::PARAM_COURSE,
         self::PARAM_PLAN_WORK,
         self::PARAM_FLOW,
+        self::PARAM_IS_FLOW,
+        self::PARAM_ROOM,
+        self::PARAM_LESSON,
+        self::PARAM_LESSON_TYPE,
         self::PARAM_WEEKDAY_ID,
         self::PARAM_WEEK_ODD,
         self::PARAM_SUBGROUP,

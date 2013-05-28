@@ -177,25 +177,29 @@ class Admin_controller extends Main_controller
                 'lessons' => Lessons::all(array('order' => 'namesub')),
                 'types_lessons' => Lists::$lesson_type,
                 'rooms' => Rooms::all(array('order' => 'numbuilding, placecount desc')),
-                'times' => LessonsTimes::get_all_begin_times(),
+                'times' => LessonsTimes::all(array('order' => 'time_begin',)),
             ));
         }
     }
 
     protected function action_busy_table()
     {
-        $lessons = Timetable::get_by_params(
-            Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
-            $this->params[Shedule_params::PARAM_FACULTY],
-            $this->params[Shedule_params::PARAM_COURSE],
-            $this->params[Shedule_params::PARAM_TEACHER],
+        $lessons = Timetable::get_busytable(
+            $this->params[Shedule_params::PARAM_SHEDULE],
+            $this->params[Shedule_params::PARAM_WEEK_ODD],
             $this->params[Shedule_params::PARAM_GROUP],
-            $this->params[Shedule_params::PARAM_PLAN_WORK]
+            $this->params[Shedule_params::PARAM_SUBGROUP],
+            $this->params[Shedule_params::PARAM_IS_FLOW],
+            $this->params[Shedule_params::PARAM_TEACHER],
+            $this->params[Shedule_params::PARAM_ROOM],
+            $this->params[Shedule_params::PARAM_DATE_BEGIN],
+            $this->params[Shedule_params::PARAM_DATE_END]
         );
         $this->view->screen(View::A_TABLE_BUSY_LESSONS, array(
             'lessons' => $lessons,
             'work_days_times' => LessonsTimes::$MN_FR_times,
             'saturday_times' => LessonsTimes::$ST_times,
+            'sunday_times' => LessonsTimes::$MN_FR_times,
             'days' => TimeDate::$weekdays,
         ));
     }
@@ -222,15 +226,17 @@ class Admin_controller extends Main_controller
     {
         $plans = Plan_work::get(
             Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
-            $this->params[Shedule_params::PARAM_FACULTY],
             $this->params[Shedule_params::PARAM_COURSE],
             $this->params[Shedule_params::PARAM_TEACHER],
             $this->params[Shedule_params::PARAM_GROUP],
             $this->params[Shedule_params::PARAM_PLAN_WORK]
         );
+        $hours = 0;
+        foreach ($plans as $p)
+            $hours += $p['hours'];
         $this->view->screen(View::A_TABLE_PLAN_WORK, array(
             'plans' => $plans,
-            'hours' => 0,
+            'hours' => $hours,
         ));
     }
 
@@ -238,7 +244,6 @@ class Admin_controller extends Main_controller
     {
         $lessons = Timetable::get_by_params(
             Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
-            $this->params[Shedule_params::PARAM_FACULTY],
             $this->params[Shedule_params::PARAM_COURSE],
             $this->params[Shedule_params::PARAM_TEACHER],
             $this->params[Shedule_params::PARAM_GROUP],
@@ -246,7 +251,7 @@ class Admin_controller extends Main_controller
         );
         $this->view->screen(View::A_TABLE_LESSONS, array(
             'lessons' => $lessons,
-            'hours' => 0,
+            'hours' => Timetable::calculate_hours($lessons),
         ));
     }
 
@@ -277,6 +282,50 @@ class Admin_controller extends Main_controller
                 ));
             }
         }
+    }
+
+    protected function action_add_new_lesson()
+    {
+        $result = Timetable::add(
+            $this->params[Shedule_params::PARAM_SHEDULE],
+            $this->params[Shedule_params::PARAM_GROUP],
+            $this->params[Shedule_params::PARAM_FLOW],
+            $this->params[Shedule_params::PARAM_IS_FLOW],
+            $this->params[Shedule_params::PARAM_SUBGROUP],
+            $this->params[Shedule_params::PARAM_TEACHER],
+            $this->params[Shedule_params::PARAM_LESSON],
+            $this->params[Shedule_params::PARAM_LESSON_TYPE],
+            $this->params[Shedule_params::PARAM_TIME],
+            $this->params[Shedule_params::PARAM_ROOM],
+            $this->params[Shedule_params::PARAM_WEEK_ODD],
+            $this->params[Shedule_params::PARAM_WEEKDAY_ID],
+            $this->params[Shedule_params::PARAM_DATE_BEGIN],
+            $this->params[Shedule_params::PARAM_DATE_END]
+        );
+        print_r($result);
+    }
+
+    protected function action_edit_lesson()
+    {
+        if (isset($_GET['id']))
+            $result = Timetable::edit(
+                $_GET['id'],
+                $this->params[Shedule_params::PARAM_SHEDULE],
+                $this->params[Shedule_params::PARAM_GROUP],
+                $this->params[Shedule_params::PARAM_FLOW],
+                $this->params[Shedule_params::PARAM_IS_FLOW],
+                $this->params[Shedule_params::PARAM_SUBGROUP],
+                $this->params[Shedule_params::PARAM_TEACHER],
+                $this->params[Shedule_params::PARAM_LESSON],
+                $this->params[Shedule_params::PARAM_LESSON_TYPE],
+                $this->params[Shedule_params::PARAM_TIME],
+                $this->params[Shedule_params::PARAM_ROOM],
+                $this->params[Shedule_params::PARAM_WEEK_ODD],
+                $this->params[Shedule_params::PARAM_WEEKDAY_ID],
+                $this->params[Shedule_params::PARAM_DATE_BEGIN],
+                $this->params[Shedule_params::PARAM_DATE_END]
+            );
+        print_r($result);
     }
 
     protected function action_current()

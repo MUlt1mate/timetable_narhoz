@@ -10,7 +10,7 @@ class LessonsTimes extends ActiveRecord\Model
     static $table = 'LessonsTimes';
     static $primary_key = 'id';
 
-    static $MN_FR_times = array(
+    static $ST_times = array(
         '0' => '08:00 09:20',
         '45' => '09:30 10:50',
         '90' => '11:00 12:20',
@@ -21,7 +21,7 @@ class LessonsTimes extends ActiveRecord\Model
         '315' => '18:30 19:50'
     );
 
-    static $ST_times = array(
+    static $MN_FR_times = array(
         '0' => '08:00 09:20',
         '45' => '09:30 10:50',
         '90' => '11:00 12:20',

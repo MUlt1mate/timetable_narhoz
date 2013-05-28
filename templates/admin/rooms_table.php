@@ -32,8 +32,9 @@ foreach ($rooms as $r):
         $badge = '<span class="badge badge-info" style="position: absolute; top: 2px; right: 2px;">';
     }
     ?>
-    <div class="room_table" id="room_<?= $r['codroom'] ?>" style=" background-color: #<?= $bg_color ?>;">
-        <strong><?=Rooms::$build_aliases[$r['numbuilding']] . $r['number']?></strong> (<?=$r['placecount']?>)
+    <div class="room_table" number="<?= $r['codroom'] ?>" style=" background-color: #<?= $bg_color ?>;">
+        <strong class="room_name"><?=Rooms::$build_aliases[$r['numbuilding']] . $r['number']?></strong>
+        (<?=$r['placecount']?>)
         <?= $badge . $r['difference'] ?></span></br>
         <div>
             <small><?=$r['roomtype']?></small>

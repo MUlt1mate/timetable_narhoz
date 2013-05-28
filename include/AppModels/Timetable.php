@@ -11,11 +11,18 @@ class Timetable extends ActiveRecord\Model
     static public $all_types = array('group', 'teacher', 'room', 'subgroup');
     static $table = 'TimeGridView';
     static $primary_key = 'id';
+    const TIMEGRID_TABLE = 'TimeGrid';
     const TIMETABLE_VIEW = 'sh_SheduleView';
     const TIMETABLE_REMOVE = 'sh_SheduleDeleteView';
     const TIMETABLE_PARAM = 'sh_SheduleParam';
+    const TIMETABLE_BUSY = 'sh_TimeGridBusyView';
     const AGENDA_DAYS = 30;
     const AGENDA_LESSONS = 50;
+    const LESSON_TYPE_TEACHER = 'teacher';
+    const LESSON_TYPE_GROUP = 'group';
+    const LESSON_TYPE_ROOM = 'room';
+    const BUSY_PARAMETER_NOT_GROUP = 1;
+    const BUSY_PARAMETER_GROUP = 2;
 
     private $show_subgroups = false;
     private $timetable_title;
@@ -53,11 +60,17 @@ class Timetable extends ActiveRecord\Model
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getShowSubgroups()
     {
         return $this->show_subgroups;
     }
 
+    /**
+     * @return string
+     */
     public function getTimetableTitle()
     {
         return $this->timetable_title;
@@ -107,11 +120,19 @@ class Timetable extends ActiveRecord\Model
         }
     }
 
-    static public function get_by_params($shedule, $faculty, $course, $teacher, $group, $plan_work)
+    /**
+     * Получение расписания по указанным параметрам
+     * @param $shedule
+     * @param $course
+     * @param $teacher
+     * @param $group
+     * @param $plan_work
+     * @return array
+     */
+    static public function get_by_params($shedule, $course, $teacher, $group, $plan_work)
     {
         if ((null == $group) && (null == $teacher))
             return false;
-        $faculty = (null == $faculty) ? 'null' : (int)$faculty;
         $course = (null == $course) ? 'null' : (int)$course;
         $teacher = (null == $teacher) ? 'null' : (int)$teacher;
         $plan_work = (null == $plan_work) ? 'null' : (int)$plan_work;
@@ -119,13 +140,23 @@ class Timetable extends ActiveRecord\Model
         $sql = self::TIMETABLE_PARAM . '
         @shedule_id = ' . (int)$shedule->id . ',
 		@CodPlanWork = ' . $plan_work . ',
-		@CodFaculty = ' . $faculty . ',
 		@Course = ' . $course . ',
 		@CodPrep = ' . $teacher . ',
 		@Grup = ' . $group;
 
         $query = self::query($sql);
-        return $query->fetchAll();
+        $result = $query->fetchAll();
+        foreach ($result as &$row) {
+            if ((null == $row['group_id'])) {
+                $row['is_flow'] = '1';
+                $row['group_flow_id'] = $row['flow_id'];
+            } else {
+                $row['is_flow'] = '0';
+                $row['group_flow_id'] = $row['group_id'];
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -282,6 +313,11 @@ class Timetable extends ActiveRecord\Model
         );
     }
 
+    /**
+     * Группирует занятия по дням недели
+     * @param $lessons
+     * @return array
+     */
     static public function build_all_by_weekdays($lessons)
     {
         $by_weekday = array();
@@ -300,5 +336,207 @@ class Timetable extends ActiveRecord\Model
         }
 
         return $by_weekday;
+    }
+
+    /**
+     * Определяет плановое количество фактических часов занятий для расписания
+     * @param array $lessons
+     * @return int
+     */
+    static public function calculate_hours($lessons)
+    {
+        $hours = 0;
+        foreach ($lessons as $l) {
+            $weeks = ceil($l['days'] / 7);
+            if ((1 == $weeks % 2) && (2 == $l['week'])) {
+                $multiply = floor($weeks / 2);
+            } elseif (0 < $l['week']) {
+                $multiply = ceil($weeks / 2);
+            } else
+                $multiply = $weeks;
+
+            $hours += ($l['hours'] * $multiply);
+        }
+        return $hours;
+    }
+
+    /**
+     * Получает таблицу занятости для группы, преподавателя и аудитории
+     * @param int $shedule_id
+     * @param int $week
+     * @param int $group
+     * @param int $subgroup
+     * @param int $is_flow
+     * @param int $teacher
+     * @param int $room
+     * @param string $date_begin
+     * @param string $date_end
+     * @return array
+     */
+    static public function get_busytable($shedule_id, $week, $group, $subgroup, $is_flow, $teacher, $room, $date_begin, $date_end)
+    {
+        $week = (null == $week) ? 'null' : (int)$week;
+        $group = (null == $group) ? 'null' : (int)$group;
+        $subgroup = (null == $subgroup) ? 'null' : (int)$subgroup;
+        $is_flow = (null == $is_flow) ? 'null' : (int)$is_flow;
+        $teacher = (null == $teacher) ? 'null' : (int)$teacher;
+        $room = (null == $room) ? 'null' : (int)$room;
+        $date_begin = (null == $date_begin) ? 'null' : self::escape(TimeDate::ts_to_db($date_begin));
+        $date_end = (null == $date_end) ? 'null' : self::escape(TimeDate::ts_to_db($date_end));
+        $sql = self::TIMETABLE_BUSY . ' @shedule=' . (int)$shedule_id;
+        $sql .= ' ,@week=' . $week;
+        $sql .= ' ,@group=' . $group;
+        $sql .= ' ,@subgroup=' . $subgroup;
+        $sql .= ' ,@isFlow=' . $is_flow;
+        $sql .= ' ,@teacher=' . $teacher;
+        $sql .= ' ,@room=' . $room;
+        $sql .= ' ,@begin=' . $date_begin;
+        $sql .= ' ,@end=' . $date_end;
+        $query = self::query($sql);
+        $lessons = $query->fetchAll();
+
+        $new_array = array();
+        foreach ($lessons as $row) {
+            if (($row['teacher_id'] == $teacher) && self::BUSY_PARAMETER_NOT_GROUP == $row['par']) {
+                $row['busy_type'] = self::LESSON_TYPE_TEACHER;
+                $new_array[$row['weekday_id']][] = new Lesson($row);
+            }
+            if (($row['room_id'] == $room) && self::BUSY_PARAMETER_NOT_GROUP == $row['par']) {
+                $row['busy_type'] = self::LESSON_TYPE_ROOM;
+                $new_array[$row['weekday_id']][] = new Lesson($row);
+            }
+            if (self::BUSY_PARAMETER_GROUP == $row['par']) {
+                $row['busy_type'] = self::LESSON_TYPE_GROUP;
+                $new_array[$row['weekday_id']][] = new Lesson($row);
+            }
+        }
+        return $new_array;
+    }
+
+    /**
+     * Добавляет новое занятие в расписание
+     * @param int $shedule_id
+     * @param int $group_id
+     * @param int $flow_id
+     * @param int $is_flow
+     * @param int $subgroup
+     * @param int $teacher_id
+     * @param int $lesson_id
+     * @param int $type_lesson_id
+     * @param int $time_id
+     * @param int $room_id
+     * @param int $week
+     * @param int $weekday_id
+     * @param string $lesson_date_begin
+     * @param string $lesson_date_end
+     * @return PDOStatement
+     */
+    static public function add(
+        $shedule_id,
+        $group_id,
+        $flow_id,
+        $is_flow,
+        $subgroup,
+        $teacher_id,
+        $lesson_id,
+        $type_lesson_id,
+        $time_id,
+        $room_id,
+        $week,
+        $weekday_id,
+        $lesson_date_begin,
+        $lesson_date_end
+    )
+    {
+        if (0 == $is_flow)
+            $flow_id = 'null';
+        else {
+            $group_id = 'null';
+            $subgroup = 0;
+        }
+
+        if ('' == $lesson_date_begin)
+            $lesson_date_begin = 'null';
+        if ('' == $lesson_date_end)
+            $lesson_date_end = 'null';
+
+        $sql = 'INSERT INTO ' . self::TIMEGRID_TABLE . '
+           ([lesson_id]
+           ,[group_id]
+           ,[flow_id]
+           ,[room_id]
+           ,[teacher_id]
+           ,[time_id]
+           ,[week]
+           ,[subgroup]
+           ,[weekday_id]
+           ,[shedule_id]
+           ,[lesson_type]
+           ,[lesson_date_begin]
+           ,[lesson_date_end])
+           VALUES (' .
+            $lesson_id . ',' .
+            $group_id . ',' .
+            $flow_id . ',' .
+            $room_id . ',' .
+            $teacher_id . ',' .
+            $time_id . ',' .
+            $week . ',' .
+            $subgroup . ',' .
+            $weekday_id . ',' .
+            $shedule_id . ',' .
+            $type_lesson_id . ',' .
+            $lesson_date_begin . ',' .
+            $lesson_date_end . ')';
+        return self::query($sql);
+    }
+
+    static public function edit(
+        $edit_lesson_id,
+        $shedule_id,
+        $group_id,
+        $flow_id,
+        $is_flow,
+        $subgroup,
+        $teacher_id,
+        $lesson_id,
+        $type_lesson_id,
+        $time_id,
+        $room_id,
+        $week,
+        $weekday_id,
+        $lesson_date_begin,
+        $lesson_date_end
+    )
+    {
+        if (0 == $is_flow)
+            $flow_id = 'null';
+        else {
+            $group_id = 'null';
+            $subgroup = 0;
+        }
+
+        if ('' == $lesson_date_begin)
+            $lesson_date_begin = 'null';
+        if ('' == $lesson_date_end)
+            $lesson_date_end = 'null';
+
+        $sql = '
+        UPDATE ' . self::TIMEGRID_TABLE . '
+        SET [lesson_id]=' . $lesson_id . '
+        ,[group_id]  =' . $group_id . '
+        ,[flow_id] =' . $flow_id . '
+        ,[room_id] =' . $room_id . '
+        ,[teacher_id]=' . $teacher_id . '
+        ,[time_id]=' . $time_id . '
+        ,[week] =' . $week . '
+        ,[subgroup] =' . $subgroup . '
+        ,[weekday_id] =' . $weekday_id . '
+        ,[shedule_id] =' . $shedule_id . '
+        ,[lesson_type] =' . $type_lesson_id . '
+        ,[lesson_date_begin] =' . $lesson_date_begin . '
+        ,[lesson_date_end] =' . $lesson_date_end . '
+         WHERE id='.$edit_lesson_id;
+        return self::query($sql);
     }
 }

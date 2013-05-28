@@ -4,25 +4,26 @@
  * Date: 17.04.13
  * Time: 20:37
  */
-switch ($lesson->type) {
-    case 1:
+//print_r($lesson);die();
+switch ($lesson->busy_type) {
+    case Timetable::LESSON_TYPE_GROUP:
         $left = 0;
-        $back = 'FAA';
+        $color = 'FAA';
         break;
-    case 2:
+    case Timetable::LESSON_TYPE_TEACHER:
         $left = 33;
-        $back = 'AFA';
+        $color = 'AFA';
         break;
-    case 3:
+    case Timetable::LESSON_TYPE_ROOM:
         $left = 66;
-        $back = 'AAF';
+        $color = 'AAF';
         break;
 }
 ?>
-<div id="ls'.$this->id.'" class="lesson" style="
-    top: <?= $lesson->TimeOffset() ?>px;
+<div class="busy_lesson" style="
+    top: <?= ($lesson->TimeOffset() / 2) ?>px;
     height:<?= (($lesson->duration) / 2 - 2) ?>px;
-    background: #<?= $back ?>;
+    background: #<?= $color ?>;
     left:<?= $left ?>%;">
     <div class="time">
         <?=$lesson->get_time_begin()?> <?=$lesson->get_time_end()?>
