@@ -37,6 +37,7 @@ class Text
             $urlstr = self::translitIt($str);
             return preg_replace('/[^A-Za-z0-9_\-]/', '', $urlstr);
         }
+        return '';
     }
 
     static public function json_cyrillic_encode($json_str)

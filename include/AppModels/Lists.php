@@ -34,6 +34,14 @@ class Lists
         6 => 'консультация',
     );
 
+    /**
+     * Возвращает спискок групп
+     * @param Shedule $shedule
+     * @param int $faculty
+     * @param int $course
+     * @param int $teacher
+     * @return mixed
+     */
     public static function get_groups($shedule, $faculty, $course, $teacher)
     {
         $faculty = (null == $faculty) ? 'null' : (int)$faculty;
@@ -56,6 +64,7 @@ class Lists
     }
 
     /**
+     * Возвращает список преподавателей
      * @param Shedule $shedule
      * @param int $faculty
      * @param int $course

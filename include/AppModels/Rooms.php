@@ -4,6 +4,15 @@
  * @author: MUlt1mate
  * Date: 18.03.13
  * Time: 22:29
+ *
+ * @property int $codroom
+ * @property int $codroomstate
+ * @property int $codroomtype
+ * @property int $numbuilding
+ * @property int $placecount
+ * @property string $number
+ * @property string $roomtype
+ * @property string $roomstate
  */
 
 class Rooms extends ActiveRecord\Model
@@ -20,12 +29,30 @@ class Rooms extends ActiveRecord\Model
 
     static $primary_key = 'codroom';
 
+    /**
+     * Псевдонимы для корпусов
+     * @var array
+     */
     static public $build_aliases = array(
         1 => 'I-',
         2 => 'II-',
         3 => '',
     );
 
+    /**
+     * Возвращает список всех доступных аудиторий с указателем доступности в выбранный момент времени
+     * @param Shedule $shedule
+     * @param int $group
+     * @param int $flow
+     * @param string $time_begin
+     * @param string $time_end
+     * @param int $weekday_id
+     * @param int $week
+     * @param int $subgroup
+     * @param int $date_begin
+     * @param int $date_end
+     * @return array
+     */
     static function get_busy($shedule, $group, $flow, $time_begin, $time_end, $weekday_id, $week, $subgroup, $date_begin, $date_end)
     {
         $group = (null == $group) ? 'null' : (int)$group;

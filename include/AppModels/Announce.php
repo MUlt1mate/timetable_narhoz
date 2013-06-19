@@ -9,6 +9,7 @@
 class Announce extends ActiveRecord\Model
 {
     static $table = 'sh_announce';
+    static $pk = 'id';
 
     /**
      * Группировка дат по форме обучения
@@ -17,11 +18,31 @@ class Announce extends ActiveRecord\Model
     public static function group_by_cod_form_study()
     {
         $list = array();
-        $rows = self::find('all', array('order'=>'value asc'));
+        $rows = self::find('all', array(
+            'conditions' => 'value>=\'' . TimeDate::get_current_day_db() . "'",
+            'order' => 'value asc'
+        ));
         if (is_array($rows))
             foreach ($rows as $row) {
                 $list[$row->codformstudy][] = $row;
             }
         return $list;
+    }
+
+    /**
+     * Добавление нового события
+     * @param string $event
+     * @param string $date
+     * @param int $form_study
+     * @return bool
+     */
+    public static function add($event, $date, $form_study)
+    {
+        $event = new self(array(
+            'name' => $event,
+            'value' => $date,
+            'codformstudy' => $form_study,
+        ), false);
+        return $event->save();
     }
 }

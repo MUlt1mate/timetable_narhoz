@@ -3,11 +3,17 @@
  * @author: MUlt1mate
  * Date: 31.03.13
  * Time: 11:36
+ *
+ * @var View $this
+ * @var array $rooms
  */
 $title = 'Аудитории';
-$this->screen(self::A_HEADER, array('title' => $title));?>
+$this->screen(View::A_HEADER, array('title' => $title));?>
     <h3><?=$title?></h3>
 <? foreach ($rooms as $r):
+    /**
+     * @var Rooms $r
+     */
     if (Rooms::STATE_NOT_READY == $r->codroomstate) {
         $bg_color = '888';
     } else {
@@ -36,4 +42,4 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
         </div>
     </div>
 <? endforeach; ?>
-<? $this->screen(self::A_FOOTER);
+<? $this->screen(View::A_FOOTER);

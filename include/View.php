@@ -8,6 +8,9 @@
 
 class View
 {
+    /**
+     * Путь к папке с шаблонами
+     */
     const view_path = "../templates/";
 
     const TT_INDEX = 'index';
@@ -25,6 +28,7 @@ class View
     const TT_HEADER = 'header';
     const TT_FOOTER = 'footer';
 
+    const A_INDEX = 'index';
     const A_HEADER = 'header';
     const A_FOOTER = 'footer';
     const A_SHEDULES = 'shedules';
@@ -41,6 +45,14 @@ class View
     const A_TABLE_BUSY_LESSONS = 'busy_table';
     const A_TABLE_PLAN_WORK = 'plan_table';
     const A_TABLE_LESSONS = 'time_table';
+    const A_TABLE_ANNOUNCE = 'announce';
+    const A_TABLE_HEADER = 'tables_header';
+    const A_GRID_PARAMS = 'grid_params';
+    const A_GRID_WEEK = 'grid_week';
+    const A_GRID_MONTH = 'grid_month';
+    const A_GRID_AGENDA = 'grid_agenda';
+    const A_LESSON_INFO = 'lesson_info';
+    const A_SETTINGS = 'settings';
 
     private $folder;
 

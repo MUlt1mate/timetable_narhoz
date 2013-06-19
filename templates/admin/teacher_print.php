@@ -3,6 +3,9 @@
  * @author: MUlt1mate
  * Date: 06.04.13
  * Time: 0:37
+ *
+ * @var Teachers $teacher
+ * @var array $weekdays
  */
 ?>
 <h4 style="margin:0 0 10px 20px;"><?=$teacher->fio?></h4>

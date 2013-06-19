@@ -3,9 +3,13 @@
  * @author: MUlt1mate
  * Date: 31.03.13
  * Time: 11:35
+ *
+ * @var View $this
+ * @var array $lessons
  */
 $title = 'Предметы';
-$this->screen(self::A_HEADER, array('title' => $title));?>
+$this->screen(View::A_HEADER, array('title' => $title));
+$this->screen(View::A_TABLE_HEADER);?>
     <div class="row-fluid">
         <div class="span9">
             <h3><?=$title?></h3>
@@ -16,6 +20,9 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                     <th></th>
                 </tr>
                 <?if (is_array($lessons))
+                    /**
+                     * @var Lessons $l
+                     */
                     foreach ($lessons as $l):?>
                         <tr style="background-color: #<?= $l->color ?>;">
                             <td><?=$l->namesub?></td>
@@ -27,7 +34,7 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
         </div>
         <div class="span3">
             <h3>Настройки</h3>
-            <a href="/?action=lessons&refresh" class="btn btn-danger">Изменить все цвета</a>
+            <a href="/?action=lessons&refresh" class="btn btn-danger disabled">Изменить все цвета</a>
         </div>
     </div>
-<? $this->screen(self::A_FOOTER);
+<? $this->screen(View::A_FOOTER);

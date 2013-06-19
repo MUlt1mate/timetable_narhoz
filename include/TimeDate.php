@@ -17,6 +17,9 @@ class TimeDate
         7 => "Воскресенье",
     );
 
+    /**
+     * Временная зона для сайта
+     */
     const TIMEZONE = 'Asia/Yakutsk';
     /**
      * Количество секунд в сутках
@@ -27,6 +30,9 @@ class TimeDate
      */
     const WEEK_LEN = 604800;
 
+    /**
+     * Количество секунд в году
+     */
     const YEAR_LEN = 31536000;
 
     /**
@@ -167,6 +173,7 @@ class TimeDate
                 $finish = $start + (Timetable::AGENDA_DAYS * self::DAY_LEN);
                 break;
             case 'week':
+            default:
                 $start = $this->year_begin + ($this->week_id - $this->week_correct_begin) * self::WEEK_LEN;
                 $finish = $start + self::WEEK_LEN - self::DAY_LEN;
                 $this->week_count = 1;
@@ -319,6 +326,11 @@ class TimeDate
         return mktime($hour, $minutes, 0, $date_array['month'], $date_array['day'], $date_array['year']);
     }
 
+    /**
+     * Конвертирует дату и время из формата БД в количество секунд
+     * @param string $db_timedate
+     * @return int
+     */
     static public function db_timedate_to_ts($db_timedate)
     {
         $ts_array = date_parse_from_format('Y-m-d H:i:s', $db_timedate);
@@ -327,6 +339,11 @@ class TimeDate
         return mktime($ts_array['hour'], $ts_array['minute'], $ts_array['second'], $ts_array['month'], $ts_array['day'], $ts_array['year']);
     }
 
+    /**
+     * Конвертирует дату и время из формата БД в время для отображения
+     * @param string $db_timedate
+     * @return string
+     */
     static public function db_timedate_to_screen_time($db_timedate)
     {
         $ts = self::db_timedate_to_ts($db_timedate);
@@ -454,6 +471,15 @@ class TimeDate
     static public function get_current_day_ts()
     {
         return mktime(0, 0, 0);
+    }
+
+    /**
+     * Возвращает текущую дату в формате БД
+     * @return string 2000-12-31
+     */
+    static public function get_current_day_db()
+    {
+        return date('Y-m-d');
     }
 
 }

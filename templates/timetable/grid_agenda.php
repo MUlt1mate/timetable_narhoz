@@ -4,6 +4,14 @@
  * @author: MUlt1mate
  * Date: 20.03.13
  * Time: 22:27
+ *
+ * @var View $this
+ * @var string $begin_date
+ * @var bool $teacher_visible
+ * @var bool $group_visible
+ * @var bool $is_all_subgroups
+ * @var array $grid
+ * @var array $days_date
  */
 $current_date = $begin_date;
 ?>

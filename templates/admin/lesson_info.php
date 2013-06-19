@@ -1,9 +1,8 @@
 <?php
 /**
- * Подробная информация о занятии
  * @author: MUlt1mate
- * Date: 24.03.13
- * Time: 13:48
+ * Date: 18.06.13
+ * Time: 1:28
  *
  * @var Lesson $lesson
  */

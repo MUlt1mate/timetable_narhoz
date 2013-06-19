@@ -3,8 +3,9 @@
  * @author: MUlt1mate
  * Date: 17.04.13
  * Time: 20:37
+ *
+ * @var Lesson $lesson
  */
-//print_r($lesson);die();
 switch ($lesson->busy_type) {
     case Timetable::LESSON_TYPE_GROUP:
         $left = 0;

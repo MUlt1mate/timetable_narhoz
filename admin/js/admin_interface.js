@@ -67,6 +67,8 @@ $(function () {
             set_param('lesson', $(this).attr('lesson_id'));
             set_param('lesson_type', $(this).attr('lesson_type_id'));
             select_subgroup($(this).attr('subgroup'));
+            Load_busy_table();
+            Load_rooms_table();
         });
 
         $('#TimeTable').on('click', '.time_table_row', function () {
@@ -98,6 +100,8 @@ $(function () {
             select_subgroup($(this).attr('subgroup'));
             select_week($(this).attr('week'));
             select_weekday($(this).attr('weekday_id'));
+            Load_busy_table();
+            Load_rooms_table();
         });
 
         function select_subgroup(subgroup) {
@@ -130,6 +134,7 @@ $(function () {
             set_param('plan_work', $(this).val());
             load_groups_list();
             load_teachers_list();
+            Load_plan_table();
         });
 
         $('#course').change(function () {
@@ -139,7 +144,7 @@ $(function () {
         });
 
         $('#CodGrup').change(function () {
-            set_param('group', $(this).val());
+            set_param('group_list', $(this).val());
             load_teachers_list();
             Load_busy_table();
             Load_plan_table();
@@ -148,7 +153,7 @@ $(function () {
         });
 
         $('#CodPrep').change(function () {
-            set_param('teacher', $(this).val());
+            set_param('teacher_list', $(this).val());
             load_groups_list();
             Load_busy_table();
             Load_plan_table();
@@ -156,30 +161,29 @@ $(function () {
             Load_time_table();
         });
 
-        $('#CodGrup_edit').change(function(){
-           set_param('group',$(this).val());
+        $('#CodGrup_edit').change(function () {
+            set_param('group', $(this).val());
         });
 
-        $('#CodPrep_edit').change(function(){
-            set_param('teacher',$(this).val());
+        $('#CodPrep_edit').change(function () {
+            set_param('teacher', $(this).val());
         });
 
-        $('#CodSubs_edit').change(function(){
-            set_param('lesson',$(this).val());
+        $('#CodSubs_edit').change(function () {
+            set_param('lesson', $(this).val());
         });
 
-        $('#TypeLesson_edit').change(function(){
-            set_param('lesson_type',$(this).val());
+        $('#TypeLesson_edit').change(function () {
+            set_param('lesson_type', $(this).val());
         });
 
-        $('#CodRoom_edit').change(function(){
-            set_param('room',$(this).val());
+        $('#CodRoom_edit').change(function () {
+            set_param('room', $(this).val());
         });
 
-        $('#CodTime_begin_edit').change(function(){
-            set_param('time',$(this).val());
+        $('#CodTime_begin_edit').change(function () {
+            set_param('time', $(this).val());
         });
-
 
 
         $('#copy_left_date').click(function () {
@@ -237,6 +241,7 @@ $(function () {
         function Load_busy_table() {
             $.get('/?action=busy_table', function (data) {
                 $('#BusyTable').html(data);
+                new_lesson_refresh();
             });
         }
 
@@ -261,6 +266,8 @@ $(function () {
         }
 
         $('#RoomTable').on('click', '.room_table', function () {
+            $('.room_table_active').removeClass('room_table_active');
+            $(this).addClass('room_table_active');
             $('#CodRoom_edit').val($(this).attr('number'));
             $('#CodRoom_name').text($(this).find('.room_name').text());
             set_param('room', $(this).attr('number'));
@@ -283,25 +290,61 @@ $(function () {
         $('#button_add').click(function () {
             if ('' == $('#timegrid_id').val()) {
                 $.get('/?action=add_new_lesson', function (data) {
-                    console.log(data);
                     Load_busy_table();
                     Load_rooms_table();
                     Load_time_table();
+                    if ('success' != data)
+                        alert('Ошибка при создании');
                 });
             } else {
                 $.get('/?action=edit_lesson&id=' + $('#timegrid_id').val(), function (data) {
-                    console.log(data);
                     Load_busy_table();
                     Load_rooms_table();
                     Load_time_table();
+                    $('#labels').css('display', '');
+                    $('#selects').css('display', 'none');
+                    $('#timegrid_id').val('');
+                    $('#button_add').removeClass('btn-success').addClass('btn-primary')
+                        .html('<i class="icon-plus icon-white"></i> Добавить');
+                    if ('success' != data)
+                        alert('Ошибка при редактировании');
                 });
             }
+        });
 
+        $('#TimeTable').on('click', '.delete_prepare', function () {
+            $.to_delete = $(this).attr('timegrid_id');
+        });
+
+        $('#delete_button').click(function () {
+            $.post('/?action=delete_lesson', 'lesson_id=' + $.to_delete, function (data) {
+                if ('success' != data)
+                    alert('Ошибка при удалении');
+                else {
+                    $('#lesson' + $.to_delete).remove();
+                    Load_busy_table();
+                    Load_rooms_table();
+                }
+            })
         });
 
         function add_new(offset, duration, weekday, begin, end) {
             if (undefined != $.new_lesson) {
                 $.new_lesson.css('display', 'none');
+            }
+            $.old_lesson = $.new_lesson;
+            if ($.composite_time) {
+                if ($.old_lesson.weekday == weekday) {
+                    if ($.old_lesson.offset < offset) {
+                        duration = (duration - 0) + (offset - 0) - $.old_lesson.offset;
+                        offset = $.old_lesson.offset;
+                        begin = $.old_lesson.begin;
+                    } else {
+                        duration = $.old_lesson.duration + $.old_lesson.offset - offset;
+                        end = $.old_lesson.end;
+                    }
+                }
+                $.composite_time = false;
             }
             $.new_lesson = $('#new_lesson' + weekday);
             $.new_lesson.html('<div class="time">' + begin + ' - ' + end + '</div>');
@@ -309,9 +352,9 @@ $(function () {
             $.new_lesson.css('display', '');
             $.new_lesson.css('top', offset + 'px');
             $.new_lesson.css('height', duration + 'px');
-            $.new_lesson.weekday = weekday;
-            $.new_lesson.offset = offset;
-            $.new_lesson.duration = duration;
+            $.new_lesson.weekday = weekday - 0;
+            $.new_lesson.offset = offset - 0;
+            $.new_lesson.duration = duration - 0;
             $.new_lesson.begin = begin;
             $.new_lesson.end = end;
             $('#CodTime_begin_name').text(begin + ' - ' + end);
@@ -319,6 +362,12 @@ $(function () {
             $('#CodTime_begin_edit').val(time_value);
             check_time_correct();
             select_weekday(weekday);
+        }
+
+        function new_lesson_refresh() {
+            if (undefined != $.new_lesson) {
+                add_new($.new_lesson.offset, $.new_lesson.duration, $.new_lesson.weekday, $.new_lesson.begin, $.new_lesson.end);
+            }
         }
 
         function check_time_correct() {
@@ -330,6 +379,34 @@ $(function () {
             }
         }
 
+        function compose_time() {
+            if (undefined != $.new_lesson) {
+                $.new_lesson.css('background', "rgba(50, 100, 100, 0.3)");
+                $.composite_time = true;
+            }
+        }
+
+        //быстрый переход между таблицами. Составное занятие
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 16:
+                    compose_time();
+                    break;
+                case 49:
+                    window.location.href = '#top';
+                    break;
+                case 50:
+                    window.location.href = '#PlanTable';
+                    break;
+                case 51:
+                    window.location.href = '#BusyTable';
+                    break;
+                case 52:
+                    window.location.href = '#RoomTable';
+                    break;
+            }
+        });
+
         if ($('#shedule_panel').length) {
             Load_busy_table();
             Load_plan_table();
@@ -337,6 +414,7 @@ $(function () {
             Load_time_table();
             load_groups_list();
             load_teachers_list();
+            $.composite_time = false;
         }
     }
 );

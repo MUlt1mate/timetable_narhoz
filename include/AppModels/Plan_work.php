@@ -8,8 +8,19 @@
 class Plan_work extends ActiveRecord\Model
 {
     static $table = '';
+    const OLD_ZACHET = 7;
+    const NEW_ZACHET = 4;
     const DB_PLAN_WORK = 'sh_PlanWork';
 
+    /**
+     * Получение учебного плана
+     * @param Shedule $shedule
+     * @param int $course
+     * @param int $teacher
+     * @param int $group
+     * @param int $plan_work
+     * @return array|bool
+     */
     static public function get($shedule, $course, $teacher, $group, $plan_work)
     {
         if ((null == $group) && (null == $teacher))
@@ -44,6 +55,9 @@ class Plan_work extends ActiveRecord\Model
                 $row['subgroup'] = substr($row['grupflowname'], -1);
             else
                 $row['subgroup'] = 0;
+
+            if (self::OLD_ZACHET == $row['codworktype'])
+                $row['codworktype'] = self::NEW_ZACHET;
         }
 
         return $result;

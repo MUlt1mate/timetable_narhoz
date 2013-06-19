@@ -4,6 +4,10 @@
  * @author: MUlt1mate
  * Date: 18.03.13
  * Time: 22:18
+ *
+ * @property int $subgroup
+ * @property string $namegrup
+ * @property int $lessons_count
  */
 
 class Group extends ActiveRecord\Model
@@ -29,7 +33,7 @@ class Group extends ActiveRecord\Model
     /**
      * Получение информации об учебной группе
      * @param int $group_id
-     * @return \ActiveRecord\Model
+     * @return self
      */
     static public function get_info($group_id)
     {
@@ -43,6 +47,11 @@ class Group extends ActiveRecord\Model
         return self::find_by_pk(array($group_id), $params);
     }
 
+    /**
+     * Возвращает количество студентов в заданной группе
+     * @param $group_id
+     * @return mixed
+     */
     static public function get_students_count($group_id)
     {
         $params = array(

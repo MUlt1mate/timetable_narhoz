@@ -3,6 +3,9 @@
  * @author: MUlt1mate
  * Date: 31.03.13
  * Time: 2:28
+ *
+ * @property int $id
+ * @property string $name
  */
 
 class SheduleStatus extends ActiveRecord\Model

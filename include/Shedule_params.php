@@ -1,5 +1,6 @@
 <?php
 /**
+ * Класс для хранения параметров в cookie
  * @author: MUlt1mate
  * Date: 13.04.13
  * Time: 19:58
@@ -13,6 +14,8 @@ class Shedule_params
     const PARAM_FACULTY = 'faculty';
     const PARAM_GROUP = 'group';
     const PARAM_TEACHER = 'teacher';
+    const PARAM_TEACHER_LIST = 'teacher_list';
+    const PARAM_GROUP_LIST = 'group_list';
     const PARAM_COURSE = 'course';
     const PARAM_PLAN_WORK = 'plan_work';
     const PARAM_FLOW = 'flow';
@@ -34,6 +37,8 @@ class Shedule_params
         self::PARAM_FACULTY,
         self::PARAM_GROUP,
         self::PARAM_TEACHER,
+        self::PARAM_TEACHER_LIST,
+        self::PARAM_GROUP_LIST,
         self::PARAM_COURSE,
         self::PARAM_PLAN_WORK,
         self::PARAM_FLOW,
@@ -46,10 +51,15 @@ class Shedule_params
         self::PARAM_SUBGROUP,
         self::PARAM_DATE_BEGIN,
         self::PARAM_DATE_END,
+        self::PARAM_TIME,
         self::PARAM_TIME_BEGIN,
         self::PARAM_TIME_END,
     );
 
+    /**
+     * Возвращает все параметры
+     * @return array
+     */
     static public function get_array()
     {
         $param = array();
@@ -66,6 +76,11 @@ class Shedule_params
         return $param;
     }
 
+    /**
+     * Установка параметра
+     * @param string $name
+     * @param string $value
+     */
     static public function set($name, $value)
     {
         if (in_array($name, self::$all_params)) {

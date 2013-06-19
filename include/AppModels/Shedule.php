@@ -4,13 +4,26 @@
  * @author: MUlt1mate
  * Date: 15.03.13
  * Time: 9:43
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $type
+ * @property int $status
+ * @property int $year
+ * @property int $numterm
+ * @property int $formstudy
+ * @property int $weeknum
+ * @property int $status_id
+ * @property int $type_id
+ * @property int $formstudy_id
+ * @property string $date_begin
+ * @property string $date_end
  */
 
 class Shedule extends ActiveRecord\Model
 {
     static $table = 'shedules';
     static $primary_key = 'id';
-    const SHEDULE_STATUS_READY = 1;
 
     public static function add($name, $type, $status, $formstudy, $year, $numterm, $date_begin, $date_end)
     {

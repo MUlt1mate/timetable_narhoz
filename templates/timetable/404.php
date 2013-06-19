@@ -3,8 +3,10 @@
  * @author: MUlt1mate
  * Date: 13.04.13
  * Time: 12:04
+ *
+ * @var View $this
  */
-$this->screen(self::TT_HEADER);?>
+$this->screen(View::TT_HEADER);?>
     <div class="row-fluid">
         <div class="span8 offset2">
             <div class="alert alert-danger">
@@ -14,4 +16,4 @@ $this->screen(self::TT_HEADER);?>
             </div>
         </div>
     </div>
-<? $this->screen(self::TT_FOOTER);
+<? $this->screen(View::TT_FOOTER);

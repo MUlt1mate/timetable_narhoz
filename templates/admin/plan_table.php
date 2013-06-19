@@ -3,6 +3,9 @@
  * @author: MUlt1mate
  * Date: 13.04.13
  * Time: 15:47
+ *
+ * @var float $hours
+ * @var array $plans
  */
 ?>
 <input type="hidden" id="planwork_hours_value" value="<?= $hours ?>">

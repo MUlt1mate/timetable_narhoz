@@ -10,6 +10,7 @@ class DB
 {
 
     /**
+     * Соединение с БД
      * @param string $host
      * @param string $db
      * @param string $user
@@ -26,11 +27,22 @@ class DB
         );
     }
 
+    /**
+     * Выполнение запроса к БД
+     * @param string $sql
+     * @param array $values
+     * @return mixed
+     */
     static public function query($sql, $values = null)
     {
         return ActiveRecord\Connection::instance()->query($sql, $values);
     }
 
+    /**
+     * Экранирование строк
+     * @param string $value
+     * @return string
+     */
     static public function escape($value)
     {
         return ActiveRecord\Connection::instance()->escape($value);

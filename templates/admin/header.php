@@ -5,13 +5,18 @@
  * Time: 20:22
  */
 $menu = array(
-    'lessons' => 'Предметы',
-    'times' => 'Время',
     'rooms' => 'Аудитории',
     'teachers' => 'Преподаватели',
     'current' => 'Текущие',
     'timetable' => 'Расписание',
+    'settings' => 'Настройки',
     'exit' => 'Выход');
+
+$sub_menu = array(
+    'announce' => 'Ближайшие события',
+    'times' => 'Время занятий',
+    'lessons' => 'Предметы',
+);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -36,6 +41,20 @@ $menu = array(
         <ul class="nav">
             <li<?if ($_SERVER['REQUEST_URI'] == '/') echo ' class="active"'?>>
                 <a href="/">Расписания</a>
+            </li>
+            <li class="dropdown<?
+            if (isset($_GET['action']) && array_key_exists($_GET['action'], $sub_menu)) echo ' active';
+            ?>">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Таблицы <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <? foreach ($sub_menu as $link => $title): ?>
+                        <li<?if (isset($_GET['action']) && ($_GET['action'] == $link)) echo ' class="active"'?>>
+                            <a href="/?action=<?= $link ?>">
+                                <?=$title?>
+                            </a>
+                        </li>
+                    <? endforeach;?>
+                </ul>
             </li>
             <? foreach ($menu as $link => $title): ?>
                 <li<?if (isset($_GET['action']) && ($_GET['action'] == $link)) echo ' class="active"'?>>

@@ -1,0 +1,11 @@
+{
+    "name": "narhoz_asu/timetable",
+    "description": "Электронное расписание ЧИ БГУЭП 2.0",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "MUlt1mate",
+            "email": "multimate.abs@gmail.com"
+        }
+    ]
+}

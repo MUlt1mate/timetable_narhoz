@@ -3,6 +3,12 @@
  * @author: MUlt1mate
  * Date: 06.04.13
  * Time: 20:20
+ *
+ * @var View $this
+ * @var array $days
+ * @var array $sunday_times
+ * @var array $saturday_times
+ * @var array $work_days_times
  */
 $first_hour = 8;
 $last_hour = 22;
@@ -12,7 +18,7 @@ $last_hour = 22;
         <th style="width:50px; padding: 0;"></th>
         <? if (is_array($days))
             foreach ($days as $d): ?>
-                <th class="weekday">
+                <th class="weekday_name">
                     <?=$d?>
                 </th>
             <? endforeach;?>
@@ -20,9 +26,11 @@ $last_hour = 22;
 
     <tr>
         <td style="padding:0;">
-            <div style="height:400px; overflow:hidden;">
-                <?for ($i = $first_hour; $i < $last_hour; $i++): ?>
-                    <div style="height: 19px; width:30px; padding: 5px 10px; border-bottom: 1px solid #DDD;">
+            <div id="busy_table_hours">
+                <?for ($i = $first_hour; $i < $last_hour; $i++):
+                    if ($i < 10)
+                        $i = '0' . $i;?>
+                    <div class="busy_table_one_hour">
                         <?=$i?>:00
                     </div>
                 <? endfor;?>
@@ -41,11 +49,10 @@ $last_hour = 22;
                     $tops = $work_days_times;
                     break;
             }?>
-            <td style="border-left: 1px solid #DDD; vertical-align: top; padding:0; background: #fff url(/img/halfhour.png) repeat;"
+            <td class="busy_table_day"
                 weekday_id="<?= $i ?>">
                 <div style="height: 100%; position: relative;">
-                    <div id="new_lesson<?= $i ?>"
-                         style="display:none; background:RGBA(50,50,50,0.3); width:95%; height:40px; top:90px; position:absolute;">
+                    <div id="new_lesson<?= $i ?>" class="busy_new_lesson" style="display: none">
                     </div>
 
 
@@ -55,10 +62,17 @@ $last_hour = 22;
                                 'lesson' => $l,
                             ));
 
-                    for ($j = 1; $j <= 13; $j++):
-                        $top = ($j - 1) * 30;?>
+                    for ($j = 8; $j <= 20; $j++):
+                        $top = ($j - 8) * 30;
+
+                        if ($j < 10)
+                            $j = '0' . $j;
+                        $jj = $j + 1;
+                        if ($jj < 10)
+                            $jj = '0' . $jj;
+                        ?>
                         <div class="overhour" style="top:<?= $top ?>px;" duration="30" top="<?= $top ?>">
-                            <?= ($j + 7)?>:00 <?= ($j + 8)?>:00
+                            <?= $j?>:00 <?= $jj?>:00
                         </div>
                     <? endfor;
 

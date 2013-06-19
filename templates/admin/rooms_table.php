@@ -3,6 +3,10 @@
  * @author: MUlt1mate
  * Date: 12.04.13
  * Time: 0:53
+ *
+ * @var array $rooms
+ * @var Rooms $r
+ * @var int $current_room
  */
 
 foreach ($rooms as $r):
@@ -32,10 +36,12 @@ foreach ($rooms as $r):
         $badge = '<span class="badge badge-info" style="position: absolute; top: 2px; right: 2px;">';
     }
     ?>
-    <div class="room_table" number="<?= $r['codroom'] ?>" style=" background-color: #<?= $bg_color ?>;">
+    <div class="room_table<? if ($current_room == $r['codroom']) echo ' room_table_active'; ?>"
+         number="<?= $r['codroom'] ?>" style=" background-color: #<?= $bg_color ?>;">
         <strong class="room_name"><?=Rooms::$build_aliases[$r['numbuilding']] . $r['number']?></strong>
         (<?=$r['placecount']?>)
-        <?= $badge . $r['difference'] ?></span></br>
+        <?=$badge . $r['difference'];?>
+        </span></br>
         <div>
             <small><?=$r['roomtype']?></small>
         </div>

@@ -3,8 +3,19 @@
  * @author: MUlt1mate
  * Date: 06.04.13
  * Time: 19:19
+ *
+ * @var View $this
+ * @var array $faculty
+ * @var array $params
+ * @var array $types_plan_work
+ * @var array $groups
+ * @var array $teachers
+ * @var array $lessons
+ * @var array $types_lessons
+ * @var array $rooms
+ * @var array $times
  */
-$this->screen(self::A_HEADER);
+$this->screen(View::A_HEADER);
 ?>
     <div class="top2" id="shedule_panel">
         <form name="planwork" class="form-inline top2form">
@@ -206,10 +217,10 @@ $this->screen(self::A_HEADER);
                                     Обе недели
                                 </button>
                                 <button id="week1" class="week btn btn-warning" value="1">
-                                    Верхняя
+                                    Верх.
                                 </button>
                                 <button id="week2" class="week btn btn-warning" value="2">
-                                    Нижняя
+                                    Нижн.
                                 </button>
                             </div>
                         </td>
@@ -254,10 +265,9 @@ $this->screen(self::A_HEADER);
             <p>Вы действительно хотите удалить занятие?</p>
         </div>
         <div class="modal-footer">
-            <input type="hidden" name="DeleteItem" value="0">
-            <a href="#" data-dismiss="modal" class="btn btn-danger">
+            <a href="#" data-dismiss="modal" class="btn btn-danger" id="delete_button">
                 <i class="icon-trash icon-white"></i> Удалить</a>
             <a href="#" data-dismiss="modal" class="btn">Отмена</a>
         </div>
     </div>
-<? $this->screen(self::A_FOOTER);
+<? $this->screen(View::A_FOOTER);

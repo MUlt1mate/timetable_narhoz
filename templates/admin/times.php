@@ -3,9 +3,13 @@
  * @author: MUlt1mate
  * Date: 31.03.13
  * Time: 11:36
+ *
+ * @var View $this
+ * @var array $times
  */
 $title = 'Время занятий';
-$this->screen(self::A_HEADER, array('title' => $title));?>
+$this->screen(View::A_HEADER, array('title' => $title));
+$this->screen(View::A_TABLE_HEADER);?>
     <div class="span4">
         <h3><?=$title?></h3>
         <table class="table table-bordered table-condensed">
@@ -16,7 +20,11 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                 <th>Часы</th>
             </tr>
             <? if (is_array($times))
-                foreach ($times as $t):?>
+                foreach ($times as $t):
+                    /**
+                     * @var LessonsTimes $t
+                     */
+                    ?>
                     <tr>
                         <td><?=TimeDate::db_timedate_to_screen_time($t->time_begin)?></td>
                         <td><?=TimeDate::db_timedate_to_screen_time($t->time_end)?></td>
@@ -60,4 +68,4 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
 
 
     </div>
-<? $this->screen(self::A_FOOTER);
+<? $this->screen(View::A_FOOTER);

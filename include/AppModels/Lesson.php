@@ -4,50 +4,53 @@
  * @author: MUlt1mate
  * Date: 17.03.13
  * Time: 21:14
+ *
+ * @property int $id уникальный ID занятия
+ * @property int $group_id id группы
+ * @property int $flow_id  id потока
+ * @property string $grupflowname Название группы или потока
+ * @property int $teacher_id id преподавателя
+ * @property string $teacher Ф.И.О преподавателя
+ * @property int $lesson_id id предмета
+ * @property string $lesson название предмета
+ * @property string $subcolor цвет занятия
+ * @property int $typelessonid id типа занятия
+ * @property string $typelesson название типа занятия
+ * @property int $room_id id аудитории
+ * @property string $room название аудитории
+ * @property int $numbuilding id здания
+ * @property int $weekday_id номер дня недели
+ * @property string $weekday название дня недели
+ * @property int $week повторение занятия по четности недель
+ * @property int $subgroup подгруппа группы
+ * @property int $time_id id времени
+ * @property string $time_begin время начала занятия
+ * @property string $time_end время окончания занятия
+ * @property int $duration продолжительность занятия в минутах
+ * @property string $lesson_date_begin дата начала занятия. может быть пустым, рекомендуется использовать date_begin
+ * @property string $lesson_date_end дата окончания занятия. может быть пустым, рекомендуется использовать date_end
+ * @property int $shedule_id id расписания
+ * @property int $weeknum указатель чётности первой недели расписания
+ * @property string $shedule_begin дата начала расписания
+ * @property string $shedule_end дата окончания расписания
+ * @property int $status статус расписания
+ * @property string $typelessonabbr аббревиатура типа занятия
+ * @property int $hours количество академических часов
+ * @property string $weekdayabbr аббревиатура дня недели
+ * @property int $codformstudy id формы обучения
+ * @property int $shedule_type id типа расписания
+ * @property int $codfaculty id факультета
+ * @property int $course номер курса группы или потока
+ * @property int $days количество дней между начальной и конечной датой занятия или расписания
+ * @property string $date_begin дата начала занятия, либо расписания
+ * @property string $date_end дата окончания занятия, либо расписания
+ * @property string $GroupFlowPopup Название группы или потока без ";"
+ * @property string GroupFlowName Название группы или "Поток"
+ * @property int busy_type Тип занятости для таблицы занятости
  */
 
 class Lesson
 {
-//поля доступные через __get()
-//[id] => уникальный ID занятия
-//[group_id] => id группы
-//[flow_id] => id потока
-//[grupflowname] => Название группы или потока
-//[teacher_id] => id преподавателя
-//[teacher] => Ф.И.О преподавателя
-//[lesson_id] => id предмета
-//[lesson] => название предмета
-//[subcolor] => цвет занятия
-//[typelessonid] => id типа занятия
-//[typelesson] => название типа занятия
-//[room_id] => id аудитории
-//[room] => название аудитории
-//[numbuilding] => id здания
-//[weekday_id] => номер дня недели
-//[weekday] => название дня недели
-//[week] => повторение занятия по четности недель
-//[subgroup] => подгруппа группы
-//[time_id] => id времени
-//[time_begin] => время начала занятия
-//[time_end] => время окончания занятия
-//[duration] => продолжительность занятия в минутах
-//[lesson_date_begin] => дата начала занятия. может быть пустым, рекомендуется использовать date_begin
-//[lesson_date_end] => дата окончания занятия. может быть пустым, рекомендуется использовать date_end
-//[shedule_id] => id расписания
-//[weeknum] => указатель чётности первой недели расписания
-//[shedule_begin] => дата начала расписания
-//[shedule_end] => дата окончания расписания
-//[status] => статус расписания
-//[typelessonabbr] => аббревиатура типа занятия
-//[hours] => количество академических часов
-//[weekdayabbr] => аббревиатура дня недели
-//[codformstudy] => id формы обучения
-//[shedule_type] => id типа расписания
-//[codfaculty] => id факультета
-//[course] => номер курса группы или потока
-//[days] => количество дней между начальной и конечной датой занятия или расписания
-//[date_begin] => дата начала занятия, либо расписания
-//[date_end] => дата окончания занятия, либо расписания
     private $row = array();
 
     public function __construct($row)
@@ -110,7 +113,7 @@ class Lesson
      */
     public function get_room()
     {
-        switch ($this->NumBuilding) {
+        switch ($this->numbuilding) {
             case 1:
                 $build = 'I-';
                 break;
@@ -216,6 +219,8 @@ class Lesson
             case 7:
                 $WD = 'SU';
                 break;
+            default:
+                $WD = '';
         }
         return array("DAY" => $WD);
     }
@@ -231,7 +236,7 @@ class Lesson
         $summary = $this->lesson;
         //если расписание не для группы, то добавляем название группы к названию
         if (!$for_group)
-            $summary .= ' ' . $this->GrupFlowName;
+            $summary .= ' ' . $this->grupflowname;
         $summary .= $subgroup;
         return $summary;
     }

@@ -7,11 +7,18 @@
 
 abstract class Main_controller
 {
+    /**
+     * Путь к файлу с конфигурацией
+     */
     const CONFIG_INI = '../config.ini';
     protected $config = array();
+    /**
+     * @var View
+     */
     protected $view;
     protected $action = 'default';
     protected $forms_study = array(0, 1, 3);
+    const TEMPLATE_FOLDER = '';
 
     public function __construct()
     {
@@ -27,6 +34,9 @@ abstract class Main_controller
         );
     }
 
+    /**
+     * Выбор метода для выполнения
+     */
     protected function choose_action()
     {
         if (isset($_GET['action']))

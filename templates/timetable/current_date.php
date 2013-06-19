@@ -4,8 +4,14 @@
  * @author: MUlt1mate
  * Date: 16.03.13
  * Time: 12:35
+ *
+ * @var View $this
+ * @var string $mode
+ * @var string $data
+ * @var int $week
+ * @var int $month
  */
-$this->screen(self::TT_HEADER, array('mode' => $mode));?>
+$this->screen(View::TT_HEADER, array('mode' => $mode));?>
     <div class="span6">
         <form method="get" class="">
             <table class="table">
@@ -39,4 +45,4 @@ $this->screen(self::TT_HEADER, array('mode' => $mode));?>
     </div>
     <div class="clearfix"></div>
     <pre><?=$data?></pre>
-<? $this->screen(self::TT_FOOTER);
+<? $this->screen(View::TT_FOOTER);

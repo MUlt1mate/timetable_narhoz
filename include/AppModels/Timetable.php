@@ -4,6 +4,46 @@
  * @author: MUlt1mate
  * Date: 16.03.13
  * Time: 11:45
+ *
+ * @property int $id уникальный ID занятия
+ * @property int $group_id id группы
+ * @property int $flow_id  id потока
+ * @property string $grupflowname Название группы или потока
+ * @property int $teacher_id id преподавателя
+ * @property string $teacher Ф.И.О преподавателя
+ * @property int $lesson_id id предмета
+ * @property string $lesson название предмета
+ * @property string $subcolor цвет занятия
+ * @property int $typelessonid id типа занятия
+ * @property string $typelesson название типа занятия
+ * @property int $room_id id аудитории
+ * @property string $room название аудитории
+ * @property int $numbuilding id здания
+ * @property int $weekday_id номер дня недели
+ * @property string $weekday название дня недели
+ * @property int $week повторение занятия по четности недель
+ * @property int $subgroup подгруппа группы
+ * @property int $time_id id времени
+ * @property string $time_begin время начала занятия
+ * @property string $time_end время окончания занятия
+ * @property int $duration продолжительность занятия в минутах
+ * @property string $lesson_date_begin дата начала занятия. может быть пустым, рекомендуется использовать date_begin
+ * @property string $lesson_date_end дата окончания занятия. может быть пустым, рекомендуется использовать date_end
+ * @property int $shedule_id id расписания
+ * @property int $weeknum указатель чётности первой недели расписания
+ * @property string $shedule_begin дата начала расписания
+ * @property string $shedule_end дата окончания расписания
+ * @property int $status статус расписания
+ * @property string $typelessonabbr аббревиатура типа занятия
+ * @property int $hours количество академических часов
+ * @property string $weekdayabbr аббревиатура дня недели
+ * @property int $codformstudy id формы обучения
+ * @property int $shedule_type id типа расписания
+ * @property int $codfaculty id факультета
+ * @property int $course номер курса группы или потока
+ * @property int $days количество дней между начальной и конечной датой занятия или расписания
+ * @property string $date_begin дата начала занятия, либо расписания
+ * @property string $date_end дата окончания занятия, либо расписания
  */
 
 class Timetable extends ActiveRecord\Model
@@ -16,19 +56,43 @@ class Timetable extends ActiveRecord\Model
     const TIMETABLE_REMOVE = 'sh_SheduleDeleteView';
     const TIMETABLE_PARAM = 'sh_SheduleParam';
     const TIMETABLE_BUSY = 'sh_TimeGridBusyView';
+    /**
+     * Количество дней выводимых в режиме "Ближайшие"
+     */
     const AGENDA_DAYS = 30;
+    /**
+     * Количество занятий выводимых в режиме "Ближайшие"
+     */
     const AGENDA_LESSONS = 50;
     const LESSON_TYPE_TEACHER = 'teacher';
     const LESSON_TYPE_GROUP = 'group';
     const LESSON_TYPE_ROOM = 'room';
+    /**
+     * Поле в таблицы занятости. Указывает что строка не должна быть свзяана с группой
+     */
     const BUSY_PARAMETER_NOT_GROUP = 1;
+    /**
+     * Поле в таблицы занятости. Указывает что строка должна быть свзяана с группой
+     */
     const BUSY_PARAMETER_GROUP = 2;
 
+    /**
+     * @var bool true, если у группы несколько подгрупп
+     */
     private $show_subgroups = false;
+    /**
+     * @var Название расписание для отображения в заголовке
+     */
     private $timetable_title;
+    /**
+     * @var bool true, если разрешено показывать расписание для аудитории
+     */
+    private $show_room = false;
 
     /**
      * Определение названия и заголовка расписания
+     * @param array $types
+     * @return bool
      */
     public function init($types)
     {
@@ -49,9 +113,9 @@ class Timetable extends ActiveRecord\Model
                     return true;
                 return false;
             }
-            if (isset($types['room'])) {
+            if (isset($types['room']) && $this->show_room) {
                 $info = Rooms::find($types['room']);
-                $this->timetable_title = 'Аудитория: ' . $info->number;
+                $this->timetable_title = 'Аудитория: ' . Rooms::$build_aliases[$info->numbuilding] . $info->number;
                 return true;
             }
         } catch (Exception $e) {
@@ -61,6 +125,7 @@ class Timetable extends ActiveRecord\Model
     }
 
     /**
+     * Нужно ли отображать подгруппы
      * @return bool
      */
     public function getShowSubgroups()
@@ -69,6 +134,7 @@ class Timetable extends ActiveRecord\Model
     }
 
     /**
+     * Возвращает заголовок для расписания
      * @return string
      */
     public function getTimetableTitle()
@@ -76,26 +142,22 @@ class Timetable extends ActiveRecord\Model
         return $this->timetable_title;
     }
 
-    static private function  escape($string)
-    {
-        return self::connection()->escape($string);
-    }
-
     /**
      * Возвращает массив с занятиями, либо массив с номерами занятий, у которых есть удаления
-     * @param $date_begin
-     * @param $date_end
-     * @param $parameters параметры расписания: группа, преподаватель и пр.
+     * @param int $date_begin
+     * @param int $date_end
+     * @param array $parameters параметры расписания: группа, преподаватель и пр.
      * @param bool $remove возвращает номера удаленных занятий, если true
+     * @param bool $all вывести все занятия (и старые, и черновики)
      * @return array|bool
      */
-    static public function get_timetable($date_begin, $date_end, $parameters, $remove = false)
+    static public function get_timetable($date_begin, $date_end, $parameters, $remove = false, $all = false)
     {
         $sql = ($remove) ? self::TIMETABLE_REMOVE : self::TIMETABLE_VIEW;
-        if (!$remove)
-            $sql .= ' @status=' . (int)Shedule::SHEDULE_STATUS_READY . ', ';
-        $sql .= ' @begin=' . self::escape(TimeDate::ts_to_db($date_begin)) . ' ,
-        @end=' . self::escape(TimeDate::ts_to_db($date_end));
+        if (!($remove OR $all))
+            $sql .= ' @status=' . (int)SheduleStatus::STATUS_PUBLIC . ', ';
+        $sql .= ' @begin=' . DB::escape(TimeDate::ts_to_db($date_begin)) . ' ,
+        @end=' . DB::escape(TimeDate::ts_to_db($date_end));
         foreach (self::$all_types as $type)
             if (isset($parameters[$type]))
                 $sql .= ', @' . $type . '=' . (int)$parameters[$type];
@@ -122,11 +184,11 @@ class Timetable extends ActiveRecord\Model
 
     /**
      * Получение расписания по указанным параметрам
-     * @param $shedule
-     * @param $course
-     * @param $teacher
-     * @param $group
-     * @param $plan_work
+     * @param Shedule $shedule
+     * @param int $course
+     * @param int $teacher
+     * @param int $group
+     * @param int $plan_work
      * @return array
      */
     static public function get_by_params($shedule, $course, $teacher, $group, $plan_work)
@@ -153,7 +215,18 @@ class Timetable extends ActiveRecord\Model
             } else {
                 $row['is_flow'] = '0';
                 $row['group_flow_id'] = $row['group_id'];
+                if (0 < $row['subgroup'])
+                    $row['grupflowname'] = $row['grupflowname'] . '-' . $row['subgroup'];
             }
+
+            $weeks = ceil($row['days'] / 7);
+            if ((1 == $weeks % 2) && (2 == $row['week'])) {
+                $multiply = floor($weeks / 2);
+            } elseif (0 < $row['week']) {
+                $multiply = ceil($weeks / 2);
+            } else
+                $multiply = $weeks;
+            $row['hours'] *= $multiply;
         }
 
         return $result;
@@ -161,9 +234,9 @@ class Timetable extends ActiveRecord\Model
 
     /**
      * Группирует занятия для недельного режима представления
-     * @param $date_begin
-     * @param $timetable массив с занятиями
-     * @param $remove
+     * @param int $date_begin
+     * @param array $timetable массив с занятиями
+     * @param array $remove
      * @return array [grid,latest_time,days_count]
      */
     static public function build_week($date_begin, $timetable, $remove)
@@ -198,10 +271,10 @@ class Timetable extends ActiveRecord\Model
 
     /**
      * Группирует занятия для месячного режима представления
-     * @param $date_begin
-     * @param $timetable
-     * @param $remove
-     * @param $week_count количество недель в месяце
+     * @param int $date_begin
+     * @param array $timetable
+     * @param array $remove
+     * @param int $week_count количество недель в месяце
      * @return array [grid,days_count]
      */
     static public function build_month($date_begin, $timetable, $remove, $week_count)
@@ -244,9 +317,9 @@ class Timetable extends ActiveRecord\Model
 
     /**
      * Группирует занятия для режима представления ближайших занятий
-     * @param $date_begin
-     * @param $timetable
-     * @param $remove
+     * @param int $date_begin
+     * @param array $timetable
+     * @param array $remove
      * @return array [grid]
      */
     static public function build_agenda($date_begin, $timetable, $remove)
@@ -315,7 +388,7 @@ class Timetable extends ActiveRecord\Model
 
     /**
      * Группирует занятия по дням недели
-     * @param $lessons
+     * @param array $lessons
      * @return array
      */
     static public function build_all_by_weekdays($lessons)
@@ -346,17 +419,8 @@ class Timetable extends ActiveRecord\Model
     static public function calculate_hours($lessons)
     {
         $hours = 0;
-        foreach ($lessons as $l) {
-            $weeks = ceil($l['days'] / 7);
-            if ((1 == $weeks % 2) && (2 == $l['week'])) {
-                $multiply = floor($weeks / 2);
-            } elseif (0 < $l['week']) {
-                $multiply = ceil($weeks / 2);
-            } else
-                $multiply = $weeks;
-
-            $hours += ($l['hours'] * $multiply);
-        }
+        foreach ($lessons as $l)
+            $hours += $l['hours'];
         return $hours;
     }
 
@@ -381,8 +445,8 @@ class Timetable extends ActiveRecord\Model
         $is_flow = (null == $is_flow) ? 'null' : (int)$is_flow;
         $teacher = (null == $teacher) ? 'null' : (int)$teacher;
         $room = (null == $room) ? 'null' : (int)$room;
-        $date_begin = (null == $date_begin) ? 'null' : self::escape(TimeDate::ts_to_db($date_begin));
-        $date_end = (null == $date_end) ? 'null' : self::escape(TimeDate::ts_to_db($date_end));
+        $date_begin = (null == $date_begin) ? 'null' : DB::escape(TimeDate::ts_to_db($date_begin));
+        $date_end = (null == $date_end) ? 'null' : DB::escape(TimeDate::ts_to_db($date_end));
         $sql = self::TIMETABLE_BUSY . ' @shedule=' . (int)$shedule_id;
         $sql .= ' ,@week=' . $week;
         $sql .= ' ,@group=' . $group;
@@ -448,17 +512,23 @@ class Timetable extends ActiveRecord\Model
         $lesson_date_end
     )
     {
-        if (0 == $is_flow)
+        if (0 == $is_flow) {
             $flow_id = 'null';
-        else {
+            $group_id = (int)$group_id;
+        } else {
             $group_id = 'null';
+            $flow_id = (int)$flow_id;
             $subgroup = 0;
         }
 
-        if ('' == $lesson_date_begin)
+        if (empty($lesson_date_begin))
             $lesson_date_begin = 'null';
-        if ('' == $lesson_date_end)
+        else
+            $lesson_date_begin = DB::escape($lesson_date_begin);
+        if (empty($lesson_date_end))
             $lesson_date_end = 'null';
+        else
+            $lesson_date_end = DB::escape($lesson_date_end);
 
         $sql = 'INSERT INTO ' . self::TIMEGRID_TABLE . '
            ([lesson_id]
@@ -475,24 +545,41 @@ class Timetable extends ActiveRecord\Model
            ,[lesson_date_begin]
            ,[lesson_date_end])
            VALUES (' .
-            $lesson_id . ',' .
+            (int)$lesson_id . ',' .
             $group_id . ',' .
             $flow_id . ',' .
-            $room_id . ',' .
-            $teacher_id . ',' .
-            $time_id . ',' .
-            $week . ',' .
-            $subgroup . ',' .
-            $weekday_id . ',' .
-            $shedule_id . ',' .
-            $type_lesson_id . ',' .
+            (int)$room_id . ',' .
+            (int)$teacher_id . ',' .
+            (int)$time_id . ',' .
+            (int)$week . ',' .
+            (int)$subgroup . ',' .
+            (int)$weekday_id . ',' .
+            (int)$shedule_id . ',' .
+            (int)$type_lesson_id . ',' .
             $lesson_date_begin . ',' .
             $lesson_date_end . ')';
         return self::query($sql);
     }
 
-    static public function edit(
-        $edit_lesson_id,
+    /**
+     * Редактирует занятие
+     * @param int $shedule_id
+     * @param int $group_id
+     * @param int $flow_id
+     * @param int $is_flow
+     * @param int $subgroup
+     * @param int $teacher_id
+     * @param int $lesson_id
+     * @param int $type_lesson_id
+     * @param int $time_id
+     * @param int $room_id
+     * @param int $week
+     * @param int $weekday_id
+     * @param string $lesson_date_begin
+     * @param string $lesson_date_end
+     * @return PDOStatement
+     */
+    public function edit(
         $shedule_id,
         $group_id,
         $flow_id,
@@ -509,34 +596,97 @@ class Timetable extends ActiveRecord\Model
         $lesson_date_end
     )
     {
-        if (0 == $is_flow)
+        if (0 == $is_flow) {
             $flow_id = 'null';
-        else {
+            $group_id = (int)$group_id;
+        } else {
             $group_id = 'null';
+            $flow_id = (int)$flow_id;
             $subgroup = 0;
         }
 
-        if ('' == $lesson_date_begin)
+        if (empty($lesson_date_begin))
             $lesson_date_begin = 'null';
-        if ('' == $lesson_date_end)
+        else
+            $lesson_date_begin = DB::escape($lesson_date_begin);
+        if (empty($lesson_date_end))
             $lesson_date_end = 'null';
+        else
+            $lesson_date_end = DB::escape($lesson_date_end);
 
         $sql = '
         UPDATE ' . self::TIMEGRID_TABLE . '
-        SET [lesson_id]=' . $lesson_id . '
+        SET [lesson_id]=' . (int)$lesson_id . '
         ,[group_id]  =' . $group_id . '
         ,[flow_id] =' . $flow_id . '
-        ,[room_id] =' . $room_id . '
-        ,[teacher_id]=' . $teacher_id . '
-        ,[time_id]=' . $time_id . '
-        ,[week] =' . $week . '
-        ,[subgroup] =' . $subgroup . '
-        ,[weekday_id] =' . $weekday_id . '
-        ,[shedule_id] =' . $shedule_id . '
-        ,[lesson_type] =' . $type_lesson_id . '
+        ,[room_id] =' . (int)$room_id . '
+        ,[teacher_id]=' . (int)$teacher_id . '
+        ,[time_id]=' . (int)$time_id . '
+        ,[week] =' . (int)$week . '
+        ,[subgroup] =' . (int)$subgroup . '
+        ,[weekday_id] =' . (int)$weekday_id . '
+        ,[shedule_id] =' . (int)$shedule_id . '
+        ,[lesson_type] =' . (int)$type_lesson_id . '
         ,[lesson_date_begin] =' . $lesson_date_begin . '
         ,[lesson_date_end] =' . $lesson_date_end . '
-         WHERE id='.$edit_lesson_id;
+         WHERE id=' . (int)$this->id;
         return self::query($sql);
+    }
+
+    /**
+     * Удаляет занятие
+     * @return PDOStatement
+     */
+    public function delete()
+    {
+        $sql = 'DELETE FROM ' . self::TIMEGRID_TABLE . ' WHERE id=' . (int)$this->id;
+        return self::query($sql);
+    }
+
+    /**
+     * Возвращает занятие, которые идут в данный момент
+     * @return array
+     */
+    static public function get_current()
+    {
+        $sql = 'declare @time datetime
+        declare @dw int
+        select @time=CONVERT(varchar,GETDATE(),108)
+        select @dw=datepart(dw, getdate())-1
+        SELECT * FROM ' . self::$table . ' WHERE GETDATE() BETWEEN date_begin and date_end
+        AND @time BETWEEN time_begin and time_end
+        AND weekday_id=@dw
+        ORDER BY CodFaculty, course
+        ';
+
+        $query = self::query($sql);
+        $result = $query->fetchAll();
+
+        $grid = array();
+        foreach ($result as $row) {
+            if (($row['week'] == 0) || ($row['week'] == (TimeDate::odd_week(date('W')) + 1))) {
+                $grid[$row['codfaculty']][$row['course']][] = new Lesson($row);
+            }
+        }
+        return $grid;
+    }
+
+    /**
+     * Возвращает объект класса
+     * @param int $id
+     * @return self
+     */
+    static public function get_by_id($id)
+    {
+        return self::find($id);
+    }
+
+    /**
+     * Изменяет параметр для отображения аудиторий
+     * @param $bool
+     */
+    public function show_rooms($bool)
+    {
+        $this->show_room = $bool;
     }
 }

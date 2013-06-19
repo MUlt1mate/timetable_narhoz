@@ -1,9 +1,8 @@
-<?
+<?php
 /**
- * Расписание в режиме "Неделя"
  * @author: MUlt1mate
- * Date: 20.03.13
- * Time: 10:19
+ * Date: 18.06.13
+ * Time: 0:42
  *
  * @var View $this
  * @var int $current_hour
@@ -12,9 +11,9 @@
  * @var int $current_weekday
  * @var array $days_date
  * @var array $days_name
- * @var bool $is_all_subgroup
- * @var bool $teacher_visible
- * @var bool $group_visible
+ * @var bool $is_all_subgroup,
+ * @var bool $teacher_visible,
+ * @var bool $group_visible,
  */
 if ($last_hour < 15)
     $last_hour = 15;

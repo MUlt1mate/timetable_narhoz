@@ -3,6 +3,10 @@
  * @author: MUlt1mate
  * Date: 31.03.13
  * Time: 11:38
+ *
+ * @property string $color
+ * @property string $namesub
+ * @property string $shortnamesub
  */
 
 class Lessons extends ActiveRecord\Model
@@ -39,13 +43,22 @@ class Lessons extends ActiveRecord\Model
     {
         $lessons = self::all();
         foreach ($lessons as $l) {
-            $l->color = self::rgb2hex(
+            $l->change_color(self::rgb2hex(
                 rand(self::MIN_COLOR, self::MAX_COLOR),
                 rand(self::MIN_COLOR, self::MAX_COLOR),
                 rand(self::MIN_COLOR, self::MAX_COLOR)
-            );
-            $l->readonly(false);
-            $l->save();
+            ));
         }
+    }
+
+    /**
+     * Устанавливает выбранный цвет для предмета
+     * @param string $color
+     */
+    private function change_color($color)
+    {
+        $this->color = $color;
+        $this->readonly(false);
+        $this->save();
     }
 }

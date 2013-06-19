@@ -4,8 +4,13 @@
  * @author: MUlt1mate
  * Date: 20.03.13
  * Time: 1:10
+ *
+ * @var View $this
+ * @var array $teachers
+ * @var array $forms_study
+ * @var array $groups_all
  */
-$this->screen(self::TT_HEADER);?>
+$this->screen(View::TT_HEADER);?>
     <div class="row-fluid">
         <div class="span10 offset1" style="margin-top:-20px;">
             <ul id="FormStudyTab" class="nav nav-tabs">
@@ -92,7 +97,11 @@ $this->screen(self::TT_HEADER);?>
 
                                     <h4><?=$word?></h4>
                                     <ul class="inline">
-                                        <?foreach ($teacher_word as $teacher): ?>
+                                        <?foreach ($teacher_word as $teacher):
+                                            /**
+                                             * @var Teachers $teacher
+                                             */
+                                            ?>
                                             <li style="width: 150px;">
                                                 <a <? echo ($teacher->count == 0)
                                                     ? 'class="muted" title="нет расписания"'
@@ -143,4 +152,4 @@ $this->screen(self::TT_HEADER);?>
             </div>
         </div>
     </div>
-<? $this->screen(self::TT_FOOTER);
+<? $this->screen(View::TT_FOOTER);

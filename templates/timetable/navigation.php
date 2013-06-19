@@ -4,8 +4,17 @@
  * @author: MUlt1mate
  * Date: 18.03.13
  * Time: 2:41
+ *
+ * @var View $this
+ * @var string $mode
+ * @var string $body_title
+ * @var string $start_date
+ * @var string $finish_date
+ * @var int $week
+ * @var int $month
+ * @var bool $show_subgroup
  */
-$this->screen(self::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
+$this->screen(View::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
     <div class="content">
         <div class="control">
             <div class="intop"><p class="title"><?=$body_title?></p></div>
@@ -72,4 +81,4 @@ $this->screen(self::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
         <?$this->screen(View::TT_EXPORT_MODAL)?>
         <?$this->screen(View::TT_ABOUT)?>
     </div>
-<? $this->screen(self::TT_FOOTER);
+<? $this->screen(View::TT_FOOTER);

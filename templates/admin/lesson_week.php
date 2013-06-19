@@ -1,14 +1,13 @@
-<?
+<?php
 /**
- * Занятие в режиме "Неделя"
  * @author: MUlt1mate
- * Date: 19.03.13
- * Time: 22:53
+ * Date: 18.06.13
+ * Time: 0:43
  *
- * @var bool $is_all_subgroup
- * @var bool $teacher_visible
- * @var bool $group_visible
  * @var Lesson $lesson
+ * @var bool $is_all_subgroup
+ * @var bool $group_visible
+ * @var bool $teacher_visible
  */
 $width = 95;
 $left = 0;
@@ -24,6 +23,18 @@ if ($is_all_subgroup) {
             break;
     }
 }
+switch ($lesson->status) {
+    case SheduleStatus::STATUS_EDIT:
+        $roof_class = 'roof_red';
+        break;
+    case SheduleStatus::STATUS_RETIRED:
+        $roof_class = 'roof_green';
+        break;
+    case SheduleStatus::STATUS_PUBLIC:
+    default:
+        $roof_class = 'roof';
+        break;
+}
 ?>
 <div class="lesson" lesson_id="<?= $lesson->id ?>" style="
     top: <?= $lesson->TimeOffset() ?>px;
@@ -34,8 +45,8 @@ if ($is_all_subgroup) {
     " onmouseover="FullWidth(this);" onmouseout="NormalWidth(this);"
      data-toggle="popover"
     >
-    <div class="roof">
-        <div class="time">
+    <div class="<?= $roof_class ?>">
+        <div class="lesson_time">
             <?=$lesson->get_time_begin()?> - <?=$lesson->get_time_end()?>
         </div>
         <div class="lesson_type">
@@ -59,7 +70,7 @@ if ($is_all_subgroup) {
             </div>
         <? endif;?>
     </div>
-    <div class="room" style="background:#<?= $lesson->subcolor ?>;">
+    <div class="lesson_room" style="background:#<?= $lesson->subcolor ?>;">
         <?=$lesson->get_room()?>
     </div>
 </div>

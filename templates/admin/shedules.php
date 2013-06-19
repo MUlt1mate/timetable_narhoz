@@ -3,9 +3,16 @@
  * @author: MUlt1mate
  * Date: 30.03.13
  * Time: 20:22
+ *
+ * @var View $this
+ * @var array $shedules
+ * @var array $form_study
+ * @var array $shedule_status
+ * @var array $shedule_types
+ * @var int $study_year
  */
 $title = 'Расписания';
-$this->screen(self::A_HEADER, array('title' => $title));?>
+$this->screen(View::A_HEADER, array('title' => $title));?>
     <div class="row-fluid">
         <div class="span8">
             <h3><?=$title?></h3>
@@ -21,6 +28,9 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                 </tr>
                 <? if (is_array($shedules))
                     foreach ($shedules as $s):
+                        /**
+                         * @var Shedule $s
+                         */
                         switch ($s->status_id) {
                             case SheduleStatus::STATUS_PUBLIC:
                                 $tr_class = 'success';
@@ -33,11 +43,16 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                                 break;
                         }
                         ?>
-                        <tr class="<?= $tr_class ?> shedule" shedule_id="<?= $s->id ?>"
-                            title="<?= $s->name ?>" status_id="<?= $s->status_id ?>"
-                            type_id="<?= $s->type_id ?>" formstudy_id="<?= $s->formstudy_id ?>"
-                            date_begin="<?= $s->date_begin ?>" date_end="<?= $s->date_end ?>"
-                            year="<?= $s->year ?>" numterm="<?= $s->numterm ?>">
+                        <tr class="<?= $tr_class ?> shedule"
+                            shedule_id="<?= $s->id ?>"
+                            title="<?= $s->name ?>"
+                            status_id="<?= $s->status_id ?>"
+                            type_id="<?= $s->type_id ?>"
+                            formstudy_id="<?= $s->formstudy_id ?>"
+                            date_begin="<?= $s->date_begin ?>"
+                            date_end="<?= $s->date_end ?>"
+                            year="<?= $s->year ?>"
+                            numterm="<?= $s->numterm ?>">
                             <td><?=$s->name?></td>
                             <td><?=$s->status?></td>
                             <td><?=$s->type?></td>
@@ -65,7 +80,11 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                         <td>Статус</td>
                         <td>
                             <select name="status" id="shedule_status">
-                                <? foreach ($shedule_status as $status): ?>
+                                <? foreach ($shedule_status as $status):
+                                    /**
+                                     * @var SheduleStatus $status
+                                     */
+                                    ?>
                                     <option value="<?= $status->id ?>"><?=$status->name?></option>
                                 <? endforeach;?>
                             </select>
@@ -75,7 +94,11 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                         <td>Тип</td>
                         <td>
                             <select name="type" id="shedule_type">
-                                <? foreach ($shedule_types as $type): ?>
+                                <? foreach ($shedule_types as $type):
+                                    /**
+                                     * @var SheduleType $type
+                                     */
+                                    ?>
                                     <option value="<?= $type->id ?>"><?=$type->name?></option>
                                 <? endforeach;?>
                             </select>
@@ -85,7 +108,11 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                         <td>Форма обучения</td>
                         <td>
                             <select name="formstudy" id="shedule_formstudy">
-                                <? foreach ($form_study as $form): ?>
+                                <? foreach ($form_study as $form):
+                                    /**
+                                     * @var FormStudy $form
+                                     */
+                                    ?>
                                     <option value="<?= $form->codformstudy ?>"><?=$form->formstudy?></option>
                                 <? endforeach;?>
                             </select>
@@ -110,14 +137,14 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
                     <tr>
                         <td>Дата начала</td>
                         <td>
-                            <input class="inputDate span6" type="date" name="date_begin" id="shedule_date_begin"
+                            <input class="inputDate span8" type="date" name="date_begin" id="shedule_date_begin"
                                    required="required">
                         </td>
                     </tr>
                     <tr>
                         <td>Дата окончания</td>
                         <td>
-                            <input class="inputDate span6" type="date" name="date_end" id="shedule_date_end"
+                            <input class="inputDate span8" type="date" name="date_end" id="shedule_date_end"
                                    required="required">
                         </td>
                     </tr>
@@ -135,4 +162,4 @@ $this->screen(self::A_HEADER, array('title' => $title));?>
         </div>
 
     </div>
-<? $this->screen(self::A_FOOTER);
+<? $this->screen(View::A_FOOTER);

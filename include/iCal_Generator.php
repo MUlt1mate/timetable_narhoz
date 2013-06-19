@@ -12,7 +12,6 @@ class iCal_Generator
     const ICAL_DIRECTORY_PATH = '../timetable/';
     const ICAL_DIRECTORY = 'ical';
 
-    //@todo ical воскресенье
     const DOT_ICS = '.ics';
 
     /**
@@ -52,7 +51,7 @@ class iCal_Generator
                 if ($for_group)
                     $e->setProperty('description', $event->teacher);
                 else
-                    $e->setProperty('description', $event->GrupFlowName);
+                    $e->setProperty('description', $event->grupflowname);
 
                 $e->setProperty('location', $event->room);
                 $e->setProperty('summary', $event->iCalSummary($for_group));

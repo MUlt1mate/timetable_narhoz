@@ -3,6 +3,9 @@
  * @author: MUlt1mate
  * Date: 13.04.13
  * Time: 15:47
+ *
+ * @var float $hours
+ * @var array $lessons
  */
 ?>
 <input type="hidden" id="timetable_hours_value" value="<?= $hours ?>">
@@ -24,7 +27,7 @@
     </tr>
     <? if (is_array($lessons))
         foreach ($lessons as $l) :?>
-            <tr style="background-color: #<?= $l['subcolor'] ?>;">
+            <tr style="background-color: #<?= $l['subcolor'] ?>;" id="lesson<?= $l['id'] ?>">
                 <td style="max-width:300px;">
                     <div style="height:19px;  overflow:hidden;">
                         <?=$l['grupflowname']?>
@@ -63,7 +66,7 @@
                         <label class="icon-edit"></label>
                     </a>
                 </td>
-                <td>
+                <td class="delete_prepare" timegrid_id="<?= $l['id'] ?>">
                     <a data-toggle="modal" href="#DeleteModal">
                         <label class="icon-remove"></label>
                     </a>

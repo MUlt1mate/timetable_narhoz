@@ -3,6 +3,8 @@
  * @author: MUlt1mate
  * Date: 13.04.13
  * Time: 18:14
+ *
+ * @var string $select
  */
 ?>
     <option></option>

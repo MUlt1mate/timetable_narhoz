@@ -7,24 +7,38 @@
  */
 class Timetable_Controller extends Main_controller
 {
+    /**
+     * @var array Все доступные режимы отображения
+     */
     private $modes = array('week', 'month', 'agenda');
+    /**
+     * @var выбранный режим отображения
+     */
     private $mode;
+    /**
+     * @var array массив с параметрами расписания
+     */
     private $type = array();
+    /**
+     * @var TimeDate
+     */
     private $TimeDate;
+    /**
+     * @var Timetable
+     */
     private $timetable;
 
     const TEMPLATE_FOLDER = 'timetable';
     const ERROR_IE6 = 'IE6';
     const ERROR_IE7 = 'IE7';
 
-    const VK_APP_ID = '3523526';
-
     public function __construct()
     {
         parent::__construct();
         $this->browser_version_control();
 
-        if (isset($_GET['api_id']) && (self::VK_APP_ID == $_GET['api_id'])) {
+        //если кто-то пришел из VK, перенапрявляем на определенный адрес. Для нормального отображения статистики
+        if (isset($_GET['api_id']) && ($this->config['VK']['app_id'] == $_GET['api_id'])) {
             header('location: /?ref=vk_app');
             exit();
         }
@@ -88,6 +102,7 @@ class Timetable_Controller extends Main_controller
      */
     protected function action_default()
     {
+        //если параметры не заданы, выводим список групп
         if (0 == count($this->type)) {
             $groups = Group::get_group_list($this->config['HideGroups'], $this->forms_study, $this->TimeDate->get_study_year());
             $all_groups = $groups['groups'];
@@ -209,6 +224,7 @@ class Timetable_Controller extends Main_controller
 
     /**
      * Экспорт в формате JSON
+     * @todo переделать сохранение json в файл, перенести функционал в адм. часть
      */
     protected function action_json()
     {
