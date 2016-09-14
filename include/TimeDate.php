@@ -124,7 +124,9 @@ class TimeDate
                     $shift = 0;
                 }
                 $year_begin = $this->get_year_begin($year);
-                return $year_begin + ($week - 1 - $shift) * self::WEEK_LEN;
+		        //10.01.16 ускакивало на целый год вперед. исходный вариант прилагается 
+                //return $year_begin + ($week - 1 - $shift) * self::WEEK_LEN;
+		        return $year_begin + ($week  - $shift) * self::WEEK_LEN;
                 break;
             case 'month':
                 if (isset($_GET['month'])) {

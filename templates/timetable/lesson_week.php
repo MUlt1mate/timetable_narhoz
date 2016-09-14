@@ -1,4 +1,4 @@
-<?
+﻿<?
 /**
  * Занятие в режиме "Неделя"
  * @author: MUlt1mate
@@ -12,7 +12,31 @@
  */
 $width = 95;
 $left = 0;
-if ($is_all_subgroup) {
+//если есть подгруппы
+if ($is_all_subgroup) 
+{
+ //проверяем сколько подгрупп впринципе ( у Мэ 3 подгруппы на ин-яз
+ if ($subgroup_count==3)
+  {
+    //настраиваем стили т.к блока 3
+    switch ($lesson->subgroup) 
+	{
+      case 1:
+        $width = 31;
+        $left = 0;
+       break;
+      case 2:
+        $width = 31;
+        $left = 33;
+       break;
+      case 3:
+        $width = 31;
+        $left = 66;
+       break;
+    }
+  }
+ else
+ {
     switch ($lesson->subgroup) {
         case 1:
             $width = 45;
@@ -22,7 +46,9 @@ if ($is_all_subgroup) {
             $width = 45;
             $left = 50;
             break;
+	
     }
+ }
 }
 ?>
 <div class="lesson" lesson_id="<?= $lesson->id ?>" style="
@@ -36,7 +62,7 @@ if ($is_all_subgroup) {
     >
     <div class="roof">
         <div class="time">
-            <?=$lesson->get_time_begin()?> - <?=$lesson->get_time_end()?>
+            <?=$lesson->get_time_begin()?> 
         </div>
         <div class="lesson_type">
             <?=$lesson->typelessonabbr?>

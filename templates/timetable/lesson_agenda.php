@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Занятие в режиме "Ближайшие"
  * @author: MUlt1mate
@@ -13,7 +13,7 @@
 ?>
 <tr style="background:#<?= $lesson->subcolor ?>" class="agenda_lesson" lesson_id="<?= $lesson->id ?>">
     <td class="agenda_time">
-        <?=$lesson->get_time_begin()?> - <?=$lesson->get_time_end()?>
+        <?=$lesson->get_time_begin()?> 
     </td>
     <td class="agenda_lesson_name">
         <?echo $lesson->lesson;

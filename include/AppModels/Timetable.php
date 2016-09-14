@@ -397,10 +397,10 @@ class Timetable extends ActiveRecord\Model
         foreach ($lessons as $l) {
             switch ($l['week']) {
                 case 1:
-                    $l['weekday_name'] = 'Верхняя';
+                    $l['weekday_name'] = 'Нижняя';
                     break;
                 case 2:
-                    $l['weekday_name'] = 'Нижняя';
+                    $l['weekday_name'] = 'Верхняя';
                     break;
                 default:
                     $l['weekday_name'] = '';

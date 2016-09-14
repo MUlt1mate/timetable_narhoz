@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Контроллер клиентской части приложения
  * @author: MUlt1mate
@@ -152,9 +152,10 @@ class Timetable_Controller extends Main_controller
         if (0 < count($this->type)) {
             $lessons = Timetable::get_timetable($this->TimeDate->get_date_begin(), $this->TimeDate->get_date_end(), $this->type);
             $lessons_remove = Timetable::get_timetable($this->TimeDate->get_date_begin(), $this->TimeDate->get_date_end(), $this->type, true);
-
+           
             $teacher_visible = (isset($this->type['teacher'])) ? false : true;
             $group_visible = (isset($this->type['group'])) ? false : true;
+			
             $is_all_subgroup = true;
             if (!isset($this->type['group'])OR(isset($this->type['subgroup']) && ($this->type['subgroup'] > 0)))
                 $is_all_subgroup = false;
@@ -162,6 +163,7 @@ class Timetable_Controller extends Main_controller
                 'start_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_begin()),
                 'finish_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_end()),
             ));
+			$subgroup_count = ($group_visible) ? 0 : Group::get_info($this->type['group'])->subgroup ;
             switch ($this->mode) {
                 case 'week':
                     $grid_lessons = Timetable::build_week($this->TimeDate->get_date_begin(), $lessons, $lessons_remove);
@@ -180,6 +182,7 @@ class Timetable_Controller extends Main_controller
                         'teacher_visible' => $teacher_visible,
                         'group_visible' => $group_visible,
                         'last_hour' => $last_hour,
+						'subgroup_count' => $subgroup_count,
                     ));
                     break;
                 case 'month':
@@ -294,7 +297,7 @@ class Timetable_Controller extends Main_controller
         foreach ($groups as $group_id => $days) {
             $group = array(
                 'group_id' => $group_id,
-                'group_name' => $group_list[$group_id]['name'],
+                'group_name' => @$group_list[$group_id]['name'],
                 'days' => array(),
             );
             $all_days = array();
@@ -305,7 +308,7 @@ class Timetable_Controller extends Main_controller
                 );
             }
             $group['days'] = $all_days;
-            $all_groups[$group_list[$group_id]['faculty']][] = $group;
+            $all_groups[@$group_list[$group_id]['faculty']][] = $group;
         }
         $timetable = array();
         foreach (Lists::$faculty as $fac_id => $fac_name)

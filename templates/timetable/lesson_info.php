@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Подробная информация о занятии
  * @author: MUlt1mate
@@ -53,10 +53,6 @@ switch ($lesson->week) {
     <tr>
         <td>Аудитория</td>
         <td><?= $room ?></td>
-    </tr>
-    <tr>
-        <td>Время</td>
-        <td><?= $lesson->time_begin?> - <?= $lesson->time_end?></td>
     </tr>
     <tr>
         <td>Интервал дат</td>

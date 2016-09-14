@@ -204,10 +204,13 @@ $this->screen(View::A_HEADER);
                                     Группа
                                 </button>
                                 <button id="subgroup1" class="subgroup btn btn-primary" value="1">
-                                    Подгр. 1
+                                    П 1
                                 </button>
                                 <button id="subgroup2" class="subgroup btn btn-primary" value="2">
-                                    Подгр. 2
+                                    П 2
+                                </button>
+								<button id="subgroup3" class="subgroup btn btn-primary" value="3">
+                                    П 3
                                 </button>
                             </div>
                         </td>

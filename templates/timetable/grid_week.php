@@ -67,6 +67,7 @@ if ($current_hour * 60 + $current_minutes < $last_hour)
                                     'is_all_subgroup' => $is_all_subgroup,
                                     'teacher_visible' => $teacher_visible,
                                     'group_visible' => $group_visible,
+									'subgroup_count' => $subgroup_count,
                                 ));
                             }
                             ?>

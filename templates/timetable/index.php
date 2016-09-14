@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Список групп и преподавателей
  * @author: MUlt1mate
@@ -34,14 +34,14 @@ $this->screen(View::TT_HEADER);?>
                                 <? endif ?>
                                 <table class="table table-condensed">
                                     <tr>
-                                        <? for ($year = 1; $year <= 6; $year++) : ?>
+                                        <? for ($year = 1; $year <= 5; $year++) : ?>
                                             <th><? echo (isset($group_years[$fs_id][$year])) ? 'Курс ' . $year : '' ?></th>
                                         <? endfor; ?>
                                     </tr>
                                     <? if (is_array($groups_all[$fs_id]))
                                         foreach ($groups_all[$fs_id] as $y_groups) :?>
                                             <tr>
-                                                <? for ($year = 1; $year <= 6; $year++) : ?>
+                                                <? for ($year = 1; $year <= 5; $year++) : ?>
                                                     <td>
                                                         <ul class="unstyled">
                                                             <? if (isset($y_groups[$year]) && is_array($y_groups[$year]))

@@ -5,7 +5,6 @@
  * Date: 23.03.13
  * Time: 14:39
  */
-require_once('iCalcreator.class.php');
 
 class iCal_Generator
 {

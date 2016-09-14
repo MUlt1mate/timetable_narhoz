@@ -1,11 +1,24 @@
 {
-    "name": "narhoz_asu/timetable",
-    "description": "Электронное расписание ЧИ БГУЭП 2.0",
-    "minimum-stability": "dev",
-    "authors": [
-        {
-            "name": "MUlt1mate",
-            "email": "multimate.abs@gmail.com"
-        }
-    ]
+  "name": "mult1mate/timetable_narhoz",
+  "description": "Электронное расписание ЧИ БГУЭП",
+  "license": "proprietary",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "mult1mate",
+      "email": "multimate.abs@gmail.com"
+    }
+  ],
+  "prefer-stable": true,
+  "require": {
+    "php-activerecord/php-activerecord": "dev-feature-sqlsrv",
+    "kigkonsult/icalcreator": "dev-master",
+    "beelab/bowerphp": "^0.4.0"
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/funkjedi/php-activerecord.git",
+      "type": "git"
+    }
+  ]
 }

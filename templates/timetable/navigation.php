@@ -29,6 +29,7 @@ $this->screen(View::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
                             <li><a sub_id="0" class="set_subgroup">Вся группа</a></li>
                             <li><a sub_id="1" class="set_subgroup">Подгруппа 1</a></li>
                             <li><a sub_id="2" class="set_subgroup">Подгруппа 2</a></li>
+							<li><a sub_id="3" class="set_subgroup">Подгруппа 3</a></li>
                         </ul>
                     </div>
                 </div>

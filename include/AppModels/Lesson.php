@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Класс-модель занятия
  * @author: MUlt1mate
@@ -164,9 +164,10 @@ class Lesson
         $begin_date += $days_shift * TimeDate::DAY_LEN;
 
         //если первого занятия не было в первую учебную неделю, то прибавляем еще неделю к началу
-        if ((($this->week == 2) && ($lesson_start_week_day <= $this->weekday_id)) ||
+        if(0!=$this->week)
+        if (!((($this->week == 2) && ($lesson_start_week_day <= $this->weekday_id)) ||
             (($this->week == 1) && ($this->weekday_id < $lesson_start_week_day))
-        )
+        ))
             $begin_date += TimeDate::WEEK_LEN;
         return TimeDate::ts_to_db($begin_date);
     }
