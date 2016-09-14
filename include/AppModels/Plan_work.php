@@ -51,9 +51,12 @@ class Plan_work extends ActiveRecord\Model
                 $row['group_flow_id'] = $row['codgrup'];
             }
 
-            if ('1.0000' == $row['qgrup'])
+            //определяем подгруппу
+            if (('1' == $row['is_flow'])and(false === strstr($row['grupflowname'], ';'))) {
+                $row['is_flow'] = 0;
+                $row['group_flow_id'] = $group;
                 $row['subgroup'] = substr($row['grupflowname'], -1);
-            else
+            } else
                 $row['subgroup'] = 0;
 
             if (self::OLD_ZACHET == $row['codworktype'])

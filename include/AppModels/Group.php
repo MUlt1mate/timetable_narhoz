@@ -95,4 +95,22 @@ class Group extends ActiveRecord\Model
         $result['group_years'] = $group_years;
         return $result;
     }
+
+    /**
+     * Возвращает массив групп, состоящих в заданном потоке
+     * @param int $flow_id
+     * @return array
+     */
+    static public function get_groups_by_flow($flow_id)
+    {
+        $sql = 'SELECT DISTINCT codgrup
+        FROM FlowsGrups
+        WHERE codflow=' . (int)$flow_id;
+        $query = self::query($sql);
+        $result = $query->fetchAll();
+        $groups = array();
+        foreach ($result as $row)
+            $groups[] = $row['codgrup'];
+        return $groups;
+    }
 }

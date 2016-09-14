@@ -72,10 +72,10 @@ $this->screen(View::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
         <div class="clearfix"></div>
         <div id="footer">
             <div class="pull-left">
-                <a class="btn" data-toggle="modal" href="#about">О программе</a>
+                <a class="btn page-button" data-toggle="modal" href="#about">О программе</a>
             </div>
             <div class="pull-right" id="export">
-                <a class="btn btn-primary" data-toggle="modal" href="#ExportModal" id="GetExport">Экспорт</a>
+                <a class="btn btn-primary page-button" data-toggle="modal" href="#ExportModal" id="GetExport">Экспорт</a>
             </div>
         </div>
         <?$this->screen(View::TT_EXPORT_MODAL)?>

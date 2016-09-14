@@ -120,6 +120,9 @@ $(function () {
         });
 
         function mode_change(mode) {
+
+            ga('set', 'dimension1', mode);
+
             $.cookie('mode', mode);
             $.mode = mode;
             if ('agenda' == mode)

@@ -30,6 +30,7 @@ $sub_menu = array(
     <script src="/js/jquery.cookie.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/admin_interface.js"></script>
+    <script type="text/javascript" src="/js/gu_admin.js"></script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top">

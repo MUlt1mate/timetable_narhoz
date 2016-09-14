@@ -236,6 +236,91 @@ class Timetable_Controller extends Main_controller
         print_r(Text::json_cyrillic_encode($json_encode));
     }
 
+    protected function action_json_rv()
+    {
+        $tt = Timetable::all(array('status' => SheduleStatus::STATUS_PUBLIC));
+        foreach ($tt as &$lesson) {
+            $lesson = $lesson->to_array();
+        }
+
+        $groups = array();
+        $group_list = array();
+        foreach ($tt as $l) {
+            $lesson_info = array(
+                "subject" => $l['lesson'],
+                "type" => Lists::$lesson_type_rv[$l['typelessonid']],
+                "time_start" => substr($l['time_begin'], 0, 5),
+                "time_end" => substr($l['time_end'], 0, 5),
+                "parity" => (int)$l['week'],
+                "teachers" => array(
+                    array(
+                        'teacher_name' => $l['teacher']
+                    )
+                ),
+                "auditories" => array(
+                    array(
+                        'auditory_name' => Rooms::$build_aliases[$l['numbuilding']] . $l['room'],
+                        'auditory_address' => null,
+                    )
+                ),
+                'dates' => null,
+                'date_start' => null,
+                'date_end' => null,
+            );
+            if (isset($l['group_id'])) {
+                if (!isset($groups[$l['group_id']]))
+                    $groups[$l['group_id']] = array();
+                if (!isset($groups[$l['group_id']][$l['weekday_id']]))
+                    $groups[$l['group_id']][$l['weekday_id']] = array();
+
+                $groups[$l['group_id']][$l['weekday_id']][] = $lesson_info;
+                if (!isset($group_list[$l['group_id']]))
+                    $group_list[$l['group_id']] = array(
+                        'name' => $l['grupflowname'],
+                        'faculty' => $l['codfaculty'],
+                    );
+            } else {
+                $flow_groups = Group::get_groups_by_flow($l['flow_id']);
+                foreach ($flow_groups as $f_group) {
+                    if (!isset($groups[$f_group]))
+                        $groups[$f_group] = array();
+                    if (!isset($groups[$f_group][$l['weekday_id']]))
+                        $groups[$f_group][$l['weekday_id']] = array();
+                    $groups[$f_group][$l['weekday_id']][] = $lesson_info;
+                }
+            }
+        }
+        $all_groups = array();
+        foreach ($groups as $group_id => $days) {
+            $group = array(
+                'group_id' => $group_id,
+                'group_name' => $group_list[$group_id]['name'],
+                'days' => array(),
+            );
+            $all_days = array();
+            foreach ($days as $weekday_id => $day_lessons) {
+                $all_days[] = array(
+                    'weekday' => $weekday_id,
+                    'lessons' => $day_lessons,
+                );
+            }
+            $group['days'] = $all_days;
+            $all_groups[$group_list[$group_id]['faculty']][] = $group;
+        }
+        $timetable = array();
+        foreach (Lists::$faculty as $fac_id => $fac_name)
+            if (isset($all_groups[$fac_id]))
+                $timetable['faculties'][] = array(
+                    'faculty_id' => $fac_id,
+                    'faculty_name' => $fac_name,
+                    'groups' => $all_groups[$fac_id],
+                    'date_start' => null,
+                    'date_end' => null,
+                );
+        $json_encode = json_encode($timetable);
+        print_r(Text::json_cyrillic_encode($json_encode));
+    }
+
     /**
      * AJAX Экспорт расписания
      */
