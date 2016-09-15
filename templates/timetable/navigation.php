@@ -14,7 +14,7 @@
  * @var int $month
  * @var bool $show_subgroup
  */
-$this->screen(View::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
+$this->screen('header', array('mode' => $mode, 'title' => $title));?>
     <div class="content">
         <div class="control">
             <div class="intop"><p class="title"><?=$body_title?></p></div>
@@ -79,7 +79,7 @@ $this->screen(View::TT_HEADER, array('mode' => $mode, 'title' => $title));?>
                 <a class="btn btn-primary page-button" data-toggle="modal" href="#ExportModal" id="GetExport">Экспорт</a>
             </div>
         </div>
-        <?$this->screen(View::TT_EXPORT_MODAL)?>
-        <?$this->screen(View::TT_ABOUT)?>
+        <?$this->screen('export_modal')?>
+        <?$this->screen('about')?>
     </div>
-<? $this->screen(View::TT_FOOTER);
+<? $this->screen('footer');

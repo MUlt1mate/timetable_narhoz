@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Аудитории
  * @author: MUlt1mate
@@ -14,7 +15,6 @@
  * @property string $roomtype
  * @property string $roomstate
  */
-
 class Rooms extends ActiveRecord\Model
 {
     const  STATE_READY = 1;
@@ -26,14 +26,12 @@ class Rooms extends ActiveRecord\Model
     const TYPE_LAB = 3;
 
     const DB_ROOMS_BUSY = 'sh_shiftRoom';
-
-    static $primary_key = 'codroom';
-
+    public static $primary_key = 'codroom';
     /**
      * Псевдонимы для корпусов
      * @var array
      */
-    static public $build_aliases = array(
+    public static $build_aliases = array(
         1 => 'I-',
         2 => 'II-',
         3 => '',
@@ -53,7 +51,7 @@ class Rooms extends ActiveRecord\Model
      * @param int $date_end
      * @return array
      */
-    static function get_busy($shedule, $group, $flow, $time_begin, $time_end, $weekday_id, $week, $subgroup, $date_begin, $date_end)
+    public static function get_busy($shedule, $group, $flow, $time_begin, $time_end, $weekday_id, $week, $subgroup, $date_begin, $date_end)
     {
         $group = (null == $group) ? 'null' : (int)$group;
         $flow = (null == $flow) ? 'null' : (int)$flow;

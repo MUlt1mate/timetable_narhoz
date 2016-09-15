@@ -1,4 +1,5 @@
 ﻿<?php
+
 /**
  * @author: MUlt1mate
  * Date: 31.03.13
@@ -9,16 +10,15 @@
  * @property int duration
  * @property int hours
  */
-
 class LessonsTimes extends ActiveRecord\Model
 {
-    static $table = 'LessonsTimes';
-    static $primary_key = 'id';
+    public static $table = 'LessonsTimes';
+    public static $primary_key = 'id';
 
     /**
      * @var array Расписание звонков для субботы
      */
-    static $ST_times = array(
+    public static $ST_times = array(
         '0' => '08:00 09:25',
         '45' => '09:35 11:00',
         '90' => '11:10 12:35',
@@ -32,7 +32,7 @@ class LessonsTimes extends ActiveRecord\Model
     /**
      * @var array расписание звонков для будних дней
      */
-    static $MN_FR_times = array(
+    public static $MN_FR_times = array(
         '0' => '08:00 09:25',
         '45' => '09:35 11:00',
         '90' => '11:10 12:35',
@@ -50,7 +50,7 @@ class LessonsTimes extends ActiveRecord\Model
      * @param int $hours
      * @return bool
      */
-    static public function add($time_begin, $time_end, $hours)
+    public static function add($time_begin, $time_end, $hours)
     {
         $duration = intval((substr($time_end, 0, 2) - substr($time_begin, 0, 2))) * 60 +
             intval((substr($time_end, 3, 2) - substr($time_begin, 3, 2)));
@@ -70,7 +70,7 @@ class LessonsTimes extends ActiveRecord\Model
      * Возвращает массив со всеми значениями времени начала занятия
      * @return array
      */
-    static public function get_all_begin_times()
+    public static function get_all_begin_times()
     {
         $params = array(
             'select' => 'id, time_begin',

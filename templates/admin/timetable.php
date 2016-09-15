@@ -13,7 +13,7 @@
  * @var int $week
  * @var int $month
  */
-$this->screen(View::A_HEADER, array('mode' => $mode, 'title' => $title));?>
+$this->screen('header', array('mode' => $mode, 'title' => $title));?>
     <script type="text/javascript" src="/js/navigation.js"></script>
     <div class="content">
         <div class="control">
@@ -73,4 +73,4 @@ $this->screen(View::A_HEADER, array('mode' => $mode, 'title' => $title));?>
         <div id="footer">
         </div>
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

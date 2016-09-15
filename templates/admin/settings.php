@@ -6,7 +6,7 @@
  * @var View $this
  */
 $title = 'Настройки';
-$this->screen(View::A_HEADER, array('title' => $title));?>
+$this->screen('header', array('title' => $title));?>
     <h3><?=$title?></h3>
     <h4>Обновить файлы для экспорта</h4>
     Обновлять после публикации расписания, после изменения расписания.<br>
@@ -38,4 +38,4 @@ $this->screen(View::A_HEADER, array('title' => $title));?>
             })
         });
     </script>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

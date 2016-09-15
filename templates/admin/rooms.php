@@ -8,7 +8,7 @@
  * @var array $rooms
  */
 $title = 'Аудитории';
-$this->screen(View::A_HEADER, array('title' => $title));?>
+$this->screen('header', array('title' => $title));?>
     <h3><?=$title?></h3>
 <? foreach ($rooms as $r):
     /**
@@ -42,4 +42,4 @@ $this->screen(View::A_HEADER, array('title' => $title));?>
         </div>
     </div>
 <? endforeach; ?>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

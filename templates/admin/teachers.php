@@ -8,7 +8,7 @@
  * @var array $teachers
  */
 $title = 'Преподаватели';
-$this->screen(View::A_HEADER, array('title' => $title));?>
+$this->screen('header', array('title' => $title));?>
     <h3><?=$title?></h3>
 <?if (is_array($teachers))
     foreach ($teachers as $word => $teacher_word):?>
@@ -32,4 +32,4 @@ $this->screen(View::A_HEADER, array('title' => $title));?>
             <? endforeach;?>
         </ul>
     <? endforeach; ?>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

@@ -29,8 +29,8 @@ $sub_menu = array(
     <script src="/js/components/jquery/jquery.min.js"></script>
     <script src="/js/components/jquery.cookie/jquery.cookie.js"></script>
     <script src="/js/components/bootstrap/docs/assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/admin_interface.js"></script>
-    <script type="text/javascript" src="/js/gu_admin.js"></script>
+    <script type="text/javascript" src="/js_admin/admin_interface.js"></script>
+    <script type="text/javascript" src="/js_admin/gu_admin.js"></script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top">

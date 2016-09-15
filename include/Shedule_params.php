@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Класс для хранения параметров в cookie
  * @author: MUlt1mate
  * Date: 13.04.13
  * Time: 19:58
  */
-
 class Shedule_params
 {
     const PREFFIX = 'param_';
@@ -60,19 +60,22 @@ class Shedule_params
      * Возвращает все параметры
      * @return array
      */
-    static public function get_array()
+    public static function get_array()
     {
         $param = array();
         foreach ($_COOKIE as $key => $value) {
             if (0 === strpos($key, self::PREFFIX)) {
-                if ('' != $value)
+                if ('' != $value) {
                     $param[substr($key, strlen(self::PREFFIX))] = $value;
+                }
             }
         }
 
-        foreach (self::$all_params as $name_param)
-            if (!isset($param[$name_param]))
+        foreach (self::$all_params as $name_param) {
+            if (!isset($param[$name_param])) {
                 $param[$name_param] = null;
+            }
+        }
         return $param;
     }
 
@@ -81,7 +84,7 @@ class Shedule_params
      * @param string $name
      * @param string $value
      */
-    static public function set($name, $value)
+    public static function set($name, $value)
     {
         if (in_array($name, self::$all_params)) {
             setcookie(self::PREFFIX . $name, $value, time() + TimeDate::YEAR_LEN);

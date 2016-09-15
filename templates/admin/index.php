@@ -9,8 +9,8 @@
  * @var array $groups_all
  * @var array $teachers
  */
-$this->screen(View::A_HEADER);?>
-    <script type="text/javascript" src="/js/navigation.js"></script>
+$this->screen('header');?>
+    <script type="text/javascript" src="/js_admin/navigation.js"></script>
     <div class="row-fluid" style="margin-top: 30px;">
         <div class="span10 offset1" style="margin-top:-20px;">
             <ul id="FormStudyTab" class="nav nav-tabs">
@@ -113,4 +113,4 @@ $this->screen(View::A_HEADER);?>
             </div>
         </div>
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

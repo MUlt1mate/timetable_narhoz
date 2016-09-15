@@ -1,4 +1,5 @@
 ﻿<?php
+
 /**
  * Класс-модель занятия
  * @author: MUlt1mate
@@ -48,7 +49,6 @@
  * @property string GroupFlowName Название группы или "Поток"
  * @property int busy_type Тип занятости для таблицы занятости
  */
-
 class Lesson
 {
     private $row = array();
@@ -133,17 +133,18 @@ class Lesson
      */
     public function iCalDateBegin($date = false)
     {
-        if (false == $date)
+        if (false == $date) {
             $date = $this->iCalLessonDateBegin();
+        }
         $arr_date = getdate(TimeDate::db_to_ts($date, $this->time_begin));
         return array(
-            "year" => $arr_date['year'],
-            "month" => $arr_date['mon'],
-            "day" => $arr_date['mday'],
-            "hour" => $arr_date['hours'],
-            "min" => $arr_date['minutes'],
-            "sec" => 0,
-            "tz" => TimeDate::TIMEZONE,
+            'year' => $arr_date['year'],
+            'month' => $arr_date['mon'],
+            'day' => $arr_date['mday'],
+            'hour' => $arr_date['hours'],
+            'min' => $arr_date['minutes'],
+            'sec' => 0,
+            'tz' => TimeDate::TIMEZONE,
         );
     }
 
@@ -158,17 +159,19 @@ class Lesson
         $lesson_start_week_day = TimeDate::get_weekday_by_ts($begin_date);
         if ($this->weekday_id < $lesson_start_week_day) {
             $days_shift = 7 - ($lesson_start_week_day - $this->weekday_id);
-        } else
+        } else {
             $days_shift = $this->weekday_id - $lesson_start_week_day;
+        }
         // дата начала + смещение до дня недели
         $begin_date += $days_shift * TimeDate::DAY_LEN;
 
         //если первого занятия не было в первую учебную неделю, то прибавляем еще неделю к началу
-        if(0!=$this->week)
-        if (!((($this->week == 2) && ($lesson_start_week_day <= $this->weekday_id)) ||
-            (($this->week == 1) && ($this->weekday_id < $lesson_start_week_day))
-        ))
+        if ((0 != $this->week)
+            && (($this->week != 2 || $lesson_start_week_day > $this->weekday_id)
+                && ($this->week != 1 || $this->weekday_id >= $lesson_start_week_day))
+        ) {
             $begin_date += TimeDate::WEEK_LEN;
+        }
         return TimeDate::ts_to_db($begin_date);
     }
 
@@ -223,7 +226,7 @@ class Lesson
             default:
                 $WD = '';
         }
-        return array("DAY" => $WD);
+        return array('DAY' => $WD);
     }
 
     /**
@@ -236,8 +239,9 @@ class Lesson
         $subgroup = (0 < $this->subgroup) ? '-' . $this->subgroup : '';
         $summary = $this->lesson;
         //если расписание не для группы, то добавляем название группы к названию
-        if (!$for_group)
+        if (!$for_group) {
             $summary .= ' ' . $this->grupflowname;
+        }
         $summary .= $subgroup;
         return $summary;
     }
@@ -248,6 +252,7 @@ class Lesson
      */
     public function iCalUID()
     {
-        return $this->iCalDate($this->iCalLessonDateBegin()) . 'T000000YAKT-0000' . substr(md5($this->id), 0, 8) . '@narhoz_timetable';
+        return $this->iCalDate($this->iCalLessonDateBegin()) . 'T000000YAKT-0000'
+        . substr(md5($this->id), 0, 8) . '@narhoz_timetable';
     }
 }

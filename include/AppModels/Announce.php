@@ -1,15 +1,15 @@
 <?php
+
 /**
  * Даты с событиями учебного плана ( даты начала триместра, сессии)
  * @author: MUlt1mate
  * Date: 24.03.13
  * Time: 1:04
  */
-
 class Announce extends ActiveRecord\Model
 {
-    static $table = 'sh_announce';
-    static $pk = 'id';
+    public static $table = 'sh_announce';
+    public static $pk = 'id';
 
     /**
      * Группировка дат по форме обучения
@@ -22,10 +22,12 @@ class Announce extends ActiveRecord\Model
             'conditions' => 'value>=\'' . TimeDate::get_current_day_db() . "'",
             'order' => 'value asc'
         ));
-        if (is_array($rows))
-            foreach ($rows as $row) {
-                $list[$row->codformstudy][] = $row;
-            }
+        if (!is_array($rows)) {
+            return $list;
+        }
+        foreach ($rows as $row) {
+            $list[$row->codformstudy][] = $row;
+        }
         return $list;
     }
 

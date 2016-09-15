@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Класс для работы с датами
  * @author: MUlt1mate
@@ -7,14 +8,14 @@
  */
 class TimeDate
 {
-    static public $weekdays = array(
-        1 => "Понедельник",
-        2 => "Вторник",
-        3 => "Среда",
-        4 => "Четверг",
-        5 => "Пятница",
-        6 => "Суббота",
-        7 => "Воскресенье",
+    public static $weekdays = array(
+        1 => 'Понедельник',
+        2 => 'Вторник',
+        3 => 'Среда',
+        4 => 'Четверг',
+        5 => 'Пятница',
+        6 => 'Суббота',
+        7 => 'Воскресенье',
     );
 
     /**
@@ -48,15 +49,15 @@ class TimeDate
      */
     private $year_begin;
     /**
-     * @var количество недель в промежутке между начальной и конечной датой
+     * @var string количество недель в промежутке между начальной и конечной датой
      */
     private $week_count;
     /**
-     * @var штамп начальной даты
+     * @var string штамп начальной даты
      */
     private $date_begin;
     /**
-     * @var штамп конечной даты
+     * @var string штамп конечной даты
      */
     private $date_end;
     /**
@@ -68,7 +69,7 @@ class TimeDate
      */
     private $week_correct_end = 0;
 
-    function __construct($mode = 'week')
+    public function __construct($mode = 'week')
     {
         $this->current_date = $this->define_date($mode);
         $this->month_id = date('m', $this->current_date);
@@ -82,11 +83,12 @@ class TimeDate
         }
         $this->year_begin = $this->get_year_begin($this->get_year($this->month_id));
 
-        // Если 1 января относится к 1-ой неделе, то в $week получается одна "лишняя" неделя
-        if (gmdate("W", $this->year_begin) == "01") {
+        // Если 1 января относится к 1-ой неделе, то в $week получается одна 'лишняя' неделя
+        if (gmdate('W', $this->year_begin) == '01') {
             $this->week_correct_begin = 1;
-            if ('month' == $mode)
+            if ('month' == $mode) {
                 $this->week_id--;
+            }
         }
 
         $this->define_begin_end($mode);
@@ -100,7 +102,7 @@ class TimeDate
     private function get_year_begin($year)
     {
         $Jan1 = gmmktime(0, 0, 0, 1, 1, $year);
-        $Jan1WeekdayNum = gmdate("w", $Jan1);
+        $Jan1WeekdayNum = gmdate('w', $Jan1);
         //Если 0, значит воскресенье
         $Jan1WeekdayNum = ($Jan1WeekdayNum == 0) ? 7 : $Jan1WeekdayNum;
         // Определим дату начала недели, к которой относится 1 января
@@ -109,7 +111,7 @@ class TimeDate
 
     /**
      * определение текущей даты относительно заданных номера недели или месяца
-     * @param $mode режим представления расписания
+     * @param $mode string режим представления расписания
      * @return int
      */
     private function define_date($mode)
@@ -124,20 +126,22 @@ class TimeDate
                     $shift = 0;
                 }
                 $year_begin = $this->get_year_begin($year);
-		        //10.01.16 ускакивало на целый год вперед. исходный вариант прилагается 
+                //10.01.16 ускакивало на целый год вперед. исходный вариант прилагается
                 //return $year_begin + ($week - 1 - $shift) * self::WEEK_LEN;
-		        return $year_begin + ($week  - $shift) * self::WEEK_LEN;
+                return $year_begin + ($week - $shift) * self::WEEK_LEN;
                 break;
             case 'month':
                 if (isset($_GET['month'])) {
-                    if (($_GET['month'] < 1)OR(12 < $_GET['month'])) {
+                    if (($_GET['month'] < 1) || (12 < $_GET['month'])) {
                         $year += floor($_GET['month'] / 12);
-                        if (0 == $_GET['month'])
+                        if (0 == $_GET['month']) {
                             --$year;
+                        }
                         if ($_GET['month'] < 1) {
                             $month = 12 - (abs($_GET['month']) % 12);
-                        } else
+                        } else {
                             $month = $_GET['month'] % 12;
+                        }
                     } else {
                         $month = $_GET['month'];
                     }
@@ -231,8 +235,9 @@ class TimeDate
     public function get_today_weekday_id()
     {
         $day = date('w');
-        if ($day == 0)
+        if ($day == 0) {
             $day = 7;
+        }
         return $day;
     }
 
@@ -240,7 +245,7 @@ class TimeDate
      * Возвращает количество часов, прошедшее с начала суток текущего времени
      * @return string
      */
-    static public function get_hour()
+    public static function get_hour()
     {
         return date('H');
     }
@@ -249,7 +254,7 @@ class TimeDate
      * Возвращает количество минут прошедшее с начала часа текущего времени
      * @return string
      */
-    static public function get_minutes()
+    public static function get_minutes()
     {
         return date('i');
     }
@@ -259,14 +264,14 @@ class TimeDate
      * @param null $week
      * @return int
      */
-    static function odd_week($week)
+    public static function odd_week($week)
     {
         return $week % 2;
     }
 
     /**
      * Возвращает количество недель между начальной и конечной датой
-     * @return
+     * @return int
      */
     public function get_week_count()
     {
@@ -279,11 +284,12 @@ class TimeDate
      * когда в начале первой недели есть несколько дней предыдущего года
      * @return int
      */
-    function get_year($month_id)
+    public function get_year($month_id)
     {
         $year_correct = 0;
-        if (($month_id == 1) && (date('m', $this->current_date) == 12))
+        if (($month_id == 1) && (date('m', $this->current_date) == 12)) {
             $year_correct = 1;
+        }
         return date('Y', $this->current_date) + $year_correct;
     }
 
@@ -291,11 +297,12 @@ class TimeDate
      * Возвращает номер учебного года
      * @return int
      */
-    function get_study_year()
+    public function get_study_year()
     {
         $year = date('Y', $this->current_date);
-        if (date('n', $this->current_date) < 8)
+        if (date('n', $this->current_date) < 8) {
             return --$year;
+        }
         return $year;
     }
 
@@ -304,7 +311,7 @@ class TimeDate
      * @param int $ts количество секунд
      * @return string вида 2013-12-22
      */
-    static public function ts_to_db($ts)
+    public static function ts_to_db($ts)
     {
         return date('Y-m-d', $ts);
     }
@@ -315,7 +322,7 @@ class TimeDate
      * @param string|null $db_time часы и минуты. строка вида 08:43:00
      * @return int
      */
-    static public function db_to_ts($db_date, $db_time = null)
+    public static function db_to_ts($db_date, $db_time = null)
     {
         $hour = 0;
         $minutes = 0;
@@ -333,11 +340,12 @@ class TimeDate
      * @param string $db_timedate
      * @return int
      */
-    static public function db_timedate_to_ts($db_timedate)
+    public static function db_timedate_to_ts($db_timedate)
     {
         $ts_array = date_parse_from_format('Y-m-d H:i:s', $db_timedate);
-        if ($ts_array['year'] <= 1970)
+        if ($ts_array['year'] <= 1970) {
             $ts_array['year'] = 2000;
+        }
         return mktime($ts_array['hour'], $ts_array['minute'], $ts_array['second'], $ts_array['month'], $ts_array['day'], $ts_array['year']);
     }
 
@@ -346,7 +354,7 @@ class TimeDate
      * @param string $db_timedate
      * @return string
      */
-    static public function db_timedate_to_screen_time($db_timedate)
+    public static function db_timedate_to_screen_time($db_timedate)
     {
         $ts = self::db_timedate_to_ts($db_timedate);
         return date('H:i', $ts);
@@ -357,7 +365,7 @@ class TimeDate
      * @param int $ts количество секунд
      * @return string вида 25.10.2013
      */
-    static public function ts_to_screen($ts)
+    public static function ts_to_screen($ts)
     {
         return date('d.m.y', $ts);
     }
@@ -367,7 +375,7 @@ class TimeDate
      * @param string $db_date
      * @return string
      */
-    static public function db_to_screen($db_date)
+    public static function db_to_screen($db_date)
     {
         return self::ts_to_screen(self::db_to_ts($db_date));
     }
@@ -391,7 +399,7 @@ class TimeDate
     }
 
     /**
-     * @return
+     * @return string
      */
     public function get_date_begin()
     {
@@ -399,7 +407,7 @@ class TimeDate
     }
 
     /**
-     * @return
+     * @return string
      */
     public function get_date_end()
     {
@@ -430,10 +438,7 @@ class TimeDate
      */
     public function is_current_interval()
     {
-        if (($this->date_begin < time()) && (time() < $this->date_end)) {
-            return true;
-        }
-        return false;
+        return ($this->date_begin < time()) && (time() < $this->date_end);
     }
 
     /**
@@ -441,7 +446,7 @@ class TimeDate
      * @param $ts
      * @return int|string
      */
-    static public function get_weekday_by_ts($ts)
+    public static function get_weekday_by_ts($ts)
     {
         return (date('w', $ts) == 0) ? 7 : (date('w', $ts));
     }
@@ -451,7 +456,7 @@ class TimeDate
      * @param $ts
      * @return string
      */
-    static public function get_weeknum_by_ts($ts)
+    public static function get_weeknum_by_ts($ts)
     {
         return date('W', $ts);
     }
@@ -461,7 +466,7 @@ class TimeDate
      * @param $ts
      * @return string
      */
-    static public function get_year_day_by_ts($ts)
+    public static function get_year_day_by_ts($ts)
     {
         return date('z', $ts);
     }
@@ -470,7 +475,7 @@ class TimeDate
      * Получение штампа текущего дня
      * @return int
      */
-    static public function get_current_day_ts()
+    public static function get_current_day_ts()
     {
         return mktime(0, 0, 0);
     }
@@ -479,9 +484,8 @@ class TimeDate
      * Возвращает текущую дату в формате БД
      * @return string 2000-12-31
      */
-    static public function get_current_day_db()
+    public static function get_current_day_db()
     {
         return date('Y-m-d');
     }
-
 }

@@ -10,7 +10,7 @@
  * @var array $forms_study
  * @var array $groups_all
  */
-$this->screen(View::TT_HEADER); ?>
+$this->screen('header'); ?>
     <div class="row-fluid">
         <div class="span10 offset1" style="margin-top:-20px;">
             <ul id="FormStudyTab" class="nav nav-tabs">
@@ -153,4 +153,4 @@ $this->screen(View::TT_HEADER); ?>
             </div>
         </div>
     </div>
-<? $this->screen(View::TT_FOOTER);
+<? $this->screen('footer');

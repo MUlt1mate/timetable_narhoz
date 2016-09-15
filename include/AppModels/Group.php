@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Академические группы
  * @author: MUlt1mate
@@ -9,12 +10,11 @@
  * @property string $namegrup
  * @property int $lessons_count
  */
-
 class Group extends ActiveRecord\Model
 {
-    static $table = 'grup';
-    static public $primary_key = 'codgrup';
-    static private $proc_name = 'sh_GroupList';
+    public static $table = 'grup';
+    public static $primary_key = 'codgrup';
+    private static $proc_name = 'sh_GroupList';
 
     /**
      * Получение списка групп для заданного учебного года и формы обучения
@@ -22,7 +22,7 @@ class Group extends ActiveRecord\Model
      * @param null|int $form_study_id
      * @return mixed
      */
-    static public function get_list($study_year, $form_study_id = null)
+    public static function get_list($study_year, $form_study_id = null)
     {
         $form_study_id = ($form_study_id == null) ? 'null' : (int)$form_study_id;
         $sql = self::$proc_name . ' @CodFormStudy=' . $form_study_id . ', @ThisYear=' . (int)$study_year;
@@ -35,7 +35,7 @@ class Group extends ActiveRecord\Model
      * @param int $group_id
      * @return self
      */
-    static public function get_info($group_id)
+    public static function get_info($group_id)
     {
         $params = array(
             'select' => 'CodGrup, NameGrup, Count(id) as lessons_count, max(subgroup)as subgroup',
@@ -52,7 +52,7 @@ class Group extends ActiveRecord\Model
      * @param $group_id
      * @return mixed
      */
-    static public function get_students_count($group_id)
+    public static function get_students_count($group_id)
     {
         $params = array(
             'select' => 'count(CodStudent) as count',
@@ -72,7 +72,7 @@ class Group extends ActiveRecord\Model
      * @param int $study_year
      * @return array
      */
-    static public function get_group_list($hide_groups, $forms_study, $study_year)
+    public static function get_group_list($hide_groups, $forms_study, $study_year)
     {
         $groups = self::get_list($study_year);
         foreach ($forms_study as $key => $value) {
@@ -84,10 +84,11 @@ class Group extends ActiveRecord\Model
             if (!in_array($row['codgrup'], $hide_groups)) {
                 $groups_all[$row['codformstudy']][$row['codfaculty']][$study_year - $row['beginyear'] + 1][] = $row;
                 $year = $study_year - $row['beginyear'] + 1;
-                if (isset($group_years[$row['codformstudy']][$year]))
+                if (isset($group_years[$row['codformstudy']][$year])) {
                     $group_years[$row['codformstudy']][$year]++;
-                else
+                } else {
                     $group_years[$row['codformstudy']][$year] = 1;
+                }
             }
         }
 
@@ -101,7 +102,7 @@ class Group extends ActiveRecord\Model
      * @param int $flow_id
      * @return array
      */
-    static public function get_groups_by_flow($flow_id)
+    public static function get_groups_by_flow($flow_id)
     {
         $sql = 'SELECT DISTINCT codgrup
         FROM FlowsGrups
@@ -109,8 +110,9 @@ class Group extends ActiveRecord\Model
         $query = self::query($sql);
         $result = $query->fetchAll();
         $groups = array();
-        foreach ($result as $row)
+        foreach ($result as $row) {
             $groups[] = $row['codgrup'];
+        }
         return $groups;
     }
 }

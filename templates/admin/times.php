@@ -8,8 +8,8 @@
  * @var array $times
  */
 $title = 'Время занятий';
-$this->screen(View::A_HEADER, array('title' => $title));
-$this->screen(View::A_TABLE_HEADER);?>
+$this->screen('header', array('title' => $title));
+$this->screen('tables_header');?>
     <div class="span4">
         <h3><?=$title?></h3>
         <table class="table table-bordered table-condensed">
@@ -68,4 +68,4 @@ $this->screen(View::A_TABLE_HEADER);?>
 
 
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

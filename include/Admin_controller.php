@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author: MUlt1mate
  * Date: 30.03.13
@@ -6,7 +7,6 @@
  *
  * @todo создать возможность смены пароля
  */
-
 class Admin_controller extends Main_controller
 {
     const TEMPLATE_FOLDER = 'admin';
@@ -51,14 +51,15 @@ class Admin_controller extends Main_controller
             }
         }
         $access = false;
-        if (isset($_SESSION['admin_auth']))
+        if (isset($_SESSION['admin_auth'])) {
             $access = true;
-        elseif (isset($_COOKIE['time_hash'])) {
-            if ($_COOKIE['time_hash'] == md5($_COOKIE['now'] . $this->config['admin']['hash']))
+        } elseif (isset($_COOKIE['time_hash'])) {
+            if ($_COOKIE['time_hash'] == md5($_COOKIE['now'] . $this->config['admin']['hash'])) {
                 $access = true;
+            }
         }
         if (!$access) {
-            $this->view->screen(View::A_LOGIN);
+            $this->view->screen('login');
             die();
         }
     }
@@ -94,7 +95,7 @@ class Admin_controller extends Main_controller
                 );
             }
         }
-        $this->view->screen(View::A_SHEDULES, array(
+        $this->view->screen('shedules', array(
             'shedules' => ShedulesView::all(),
             'shedule_status' => SheduleStatus::all(),
             'shedule_types' => SheduleType::all(),
@@ -113,7 +114,7 @@ class Admin_controller extends Main_controller
             //выключено, чтобы не нажать случайно
             //Lessons::change_all_colors();
         }
-        $this->view->screen(View::A_LESSONS, array('lessons' => Lessons::all(array('order' => 'namesub'))));
+        $this->view->screen('lessons', array('lessons' => Lessons::all(array('order' => 'namesub'))));
     }
 
     /**
@@ -124,7 +125,7 @@ class Admin_controller extends Main_controller
         if (isset($_POST['time_begin'])) {
             LessonsTimes::add($_POST['time_begin'], $_POST['time_end'], $_POST['hours']);
         }
-        $this->view->screen(View::A_TIMES, array('times' => LessonsTimes::all(array('order' => 'time_begin'))));
+        $this->view->screen('times', array('times' => LessonsTimes::all(array('order' => 'time_begin'))));
     }
 
     /**
@@ -132,7 +133,8 @@ class Admin_controller extends Main_controller
      */
     protected function action_rooms()
     {
-        $this->view->screen(View::A_ROOMS, array('rooms' => RoomsView::all(array('order' => 'NumBuilding, CodRoomType, PlaceCount DESC'))));
+        $rooms = RoomsView::all(array('order' => 'NumBuilding, CodRoomType, PlaceCount DESC'));
+        $this->view->screen('rooms', array('rooms' => $rooms));
     }
 
     /**
@@ -148,8 +150,9 @@ class Admin_controller extends Main_controller
                 $tt_type = array('group' => $group['codgrup']);
                 $timetable = new Timetable();
                 $timetable->init($tt_type);
-                if ($timetable->getShowSubgroups())
+                if ($timetable->getShowSubgroups()) {
                     $subgroups = array(0, 1, 2);
+                }
                 foreach ($subgroups as $subgroup) {
                     $tt_type = array_merge($tt_type, array('subgroup' => $subgroup));
                     $lessons = Timetable::get_timetable($this->TimeDate->get_study_year_begin(), $this->TimeDate->get_study_year_end(), $tt_type);
@@ -196,15 +199,17 @@ class Admin_controller extends Main_controller
             $lessons = Timetable::get_timetable(
                 $this->TimeDate->get_study_year_begin(),
                 $this->TimeDate->get_study_year_end(),
-                array('teacher' => $_GET['id']));
+                array('teacher' => $_GET['id'])
+            );
             $grid = Timetable::build_all_by_weekdays($lessons);
-            $this->view->screen(View::A_TEACHER_PRINT, array(
+            $this->view->screen('teacher_print', array(
                 'lessons' => $grid,
                 'teacher' => Teachers::find($_GET['id']),
                 'weekdays' => TimeDate::$weekdays,
             ));
-        } else
-            $this->view->screen(View::A_TEACHERS, array('teachers' => Teachers::get_list()));
+        } else {
+            $this->view->screen('teachers', array('teachers' => Teachers::get_list()));
+        }
     }
 
     /**
@@ -214,7 +219,7 @@ class Admin_controller extends Main_controller
     {
         if (isset($_GET[Shedule_params::PARAM_SHEDULE])) {
             Shedule_params::set(Shedule_params::PARAM_SHEDULE, $_GET[Shedule_params::PARAM_SHEDULE]);
-            $this->view->screen(View::A_TT_EDIT, array(
+            $this->view->screen('tt_edit', array(
                 'params' => $this->params,
                 'faculty' => Lists::$faculty,
                 'types_plan_work' => Lists::$type_plan_work,
@@ -244,7 +249,7 @@ class Admin_controller extends Main_controller
             $this->params[Shedule_params::PARAM_DATE_BEGIN],
             $this->params[Shedule_params::PARAM_DATE_END]
         );
-        $this->view->screen(View::A_TABLE_BUSY_LESSONS, array(
+        $this->view->screen('busy_table', array(
             'lessons' => $lessons,
             'work_days_times' => LessonsTimes::$MN_FR_times,
             'saturday_times' => LessonsTimes::$ST_times,
@@ -258,7 +263,7 @@ class Admin_controller extends Main_controller
      */
     protected function action_rooms_table()
     {
-        $this->view->screen(View::A_TABLE_ROOMS, array(
+        $this->view->screen('rooms_table', array(
             'rooms' => Rooms::get_busy(
                 Shedule::find($this->params[Shedule_params::PARAM_SHEDULE]),
                 $this->params[Shedule_params::PARAM_GROUP],
@@ -288,9 +293,10 @@ class Admin_controller extends Main_controller
             $this->params[Shedule_params::PARAM_PLAN_WORK]
         );
         $hours = 0;
-        foreach ($plans as $p)
+        foreach ($plans as $p) {
             $hours += $p['hours'];
-        $this->view->screen(View::A_TABLE_PLAN_WORK, array(
+        }
+        $this->view->screen('plan_table', array(
             'plans' => $plans,
             'hours' => $hours,
         ));
@@ -308,7 +314,7 @@ class Admin_controller extends Main_controller
             $this->params[Shedule_params::PARAM_GROUP_LIST],
             $this->params[Shedule_params::PARAM_PLAN_WORK]
         );
-        $this->view->screen(View::A_TABLE_LESSONS, array(
+        $this->view->screen('time_table', array(
             'lessons' => $lessons,
             'hours' => Timetable::calculate_hours($lessons),
         ));
@@ -367,8 +373,9 @@ class Admin_controller extends Main_controller
             $this->params[Shedule_params::PARAM_DATE_BEGIN],
             $this->params[Shedule_params::PARAM_DATE_END]
         );
-        if ($result)
+        if ($result) {
             echo 'success';
+        }
     }
 
     /**
@@ -394,8 +401,9 @@ class Admin_controller extends Main_controller
                 $this->params[Shedule_params::PARAM_DATE_BEGIN],
                 $this->params[Shedule_params::PARAM_DATE_END]
             );
-            if ($result)
+            if ($result) {
                 echo 'success';
+            }
         }
     }
 
@@ -406,8 +414,9 @@ class Admin_controller extends Main_controller
     {
         if (isset($_POST['lesson_id'])) {
             $lesson = Timetable::get_by_id($_POST['lesson_id']);
-            if ($lesson->delete())
+            if ($lesson->delete()) {
                 echo 'success';
+            }
         }
     }
 
@@ -417,7 +426,7 @@ class Admin_controller extends Main_controller
     protected function action_current()
     {
         $lessons = Timetable::get_current();
-        $this->view->screen(View::A_CURRENT, array(
+        $this->view->screen('current', array(
             'lessons' => $lessons,
         ));
     }
@@ -432,19 +441,22 @@ class Admin_controller extends Main_controller
             $_COOKIE['mode'] = $_GET['mode'];
         }
 
-        if (isset($_COOKIE['mode']) && in_array($_COOKIE['mode'], $this->modes))
+        if (isset($_COOKIE['mode']) && in_array($_COOKIE['mode'], $this->modes)) {
             $this->mode = $_COOKIE['mode'];
-        else
+        } else {
             $this->mode = $this->modes[0];
+        }
 
         $this->TimeDate = new TimeDate($this->mode);
 
         foreach (Timetable::$all_types as $t) {
-            if (isset($_GET[$t]))
+            if (isset($_GET[$t])) {
                 $this->type[$t] = (int)$_GET[$t];
+            }
         }
-        if ((count($this->type) == 1) && isset($this->type['subgroup']))
+        if ((count($this->type) == 1) && isset($this->type['subgroup'])) {
             $this->type = array();
+        }
 
         if (0 < count($this->type)) {
             $this->timetable = new Timetable();
@@ -461,11 +473,15 @@ class Admin_controller extends Main_controller
         $this->timetable_init();
 
         if (0 == count($this->type)) {
-            $groups = Group::get_group_list($this->config['HideGroups'], $this->forms_study, $this->TimeDate->get_study_year());
+            $groups = Group::get_group_list(
+                $this->config['HideGroups'],
+                $this->forms_study,
+                $this->TimeDate->get_study_year()
+            );
             $all_groups = $groups['groups'];
             $group_years = $groups['group_years'];
             $teachers = Teachers::get_list();
-            $this->view->screen(View::A_INDEX, array(
+            $this->view->screen('index', array(
                 'groups_all' => $all_groups,
                 'teachers' => $teachers,
                 'forms_study' => $this->forms_study,
@@ -473,7 +489,7 @@ class Admin_controller extends Main_controller
                 'announce' => Announce::group_by_cod_form_study(),
             ));
         } else {
-            $this->view->screen(View::A_TIMETABLE, array(
+            $this->view->screen('timetable', array(
                 'mode' => $this->mode,
                 'start_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_begin()),
                 'finish_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_end()),
@@ -500,9 +516,10 @@ class Admin_controller extends Main_controller
             $teacher_visible = (isset($this->type['teacher'])) ? false : true;
             $group_visible = (isset($this->type['group'])) ? false : true;
             $is_all_subgroup = true;
-            if (!isset($this->type['group'])OR(isset($this->type['subgroup']) && ($this->type['subgroup'] > 0)))
+            if (!isset($this->type['group']) || (isset($this->type['subgroup']) && ($this->type['subgroup'] > 0))) {
                 $is_all_subgroup = false;
-            $this->view->screen(View::TT_GRID_PARAMS, array(
+            }
+            $this->view->screen('grid_params', array(
                 'start_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_begin()),
                 'finish_date' => TimeDate::ts_to_screen($this->TimeDate->get_date_end()),
             ));
@@ -511,8 +528,12 @@ class Admin_controller extends Main_controller
                     $grid_lessons = Timetable::build_week($this->TimeDate->get_date_begin(), $lessons, $lessons_remove);
                     $last_time = intval(substr($grid_lessons['latest_time'], 0, 2) * 60) + intval(substr($grid_lessons['latest_time'], 3, 2));
                     $last_hour = ceil($last_time / 60);
-                    $current_weekday = ($this->TimeDate->is_current_interval()) ? $this->TimeDate->get_today_weekday_id() : -1;
-                    $this->view->screen(View::TT_GRID_WEEK, array(
+                    if (($this->TimeDate->is_current_interval())) {
+                        $current_weekday = $this->TimeDate->get_today_weekday_id();
+                    } else {
+                        $current_weekday = -1;
+                    }
+                    $this->view->screen('grid_week', array(
                         'grid' => $grid_lessons['grid'],
                         'days_name' => TimeDate::$weekdays,
                         'days_date' => $this->TimeDate->get_dates(),
@@ -527,8 +548,9 @@ class Admin_controller extends Main_controller
                     ));
                     break;
             }
-        } else
-            die('type nsot define');
+        } else {
+            die('type not defined');
+        }
     }
 
     /**
@@ -538,7 +560,7 @@ class Admin_controller extends Main_controller
     {
         if (isset($_GET['id']) && (0 < $_GET['id'])) {
             $lesson = Timetable::find((int)$_GET['id']);
-            $this->view->screen(View::A_LESSON_INFO, array('lesson' => $lesson));
+            $this->view->screen('lesson_info', array('lesson' => $lesson));
         }
     }
 
@@ -570,13 +592,13 @@ class Admin_controller extends Main_controller
             }
         }
         $dates = Announce::group_by_cod_form_study();
-        $this->view->screen(View::A_TABLE_ANNOUNCE, array(
+        $this->view->screen('announce', array(
             'dates' => $dates,
         ));
     }
 
     protected function action_settings()
     {
-        $this->view->screen(View::A_SETTINGS);
+        $this->view->screen('settings');
     }
 }

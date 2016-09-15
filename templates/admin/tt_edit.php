@@ -15,7 +15,7 @@
  * @var array $rooms
  * @var array $times
  */
-$this->screen(View::A_HEADER);
+$this->screen('header');
 ?>
     <div class="top2" id="shedule_panel">
         <form name="planwork" class="form-inline top2form">
@@ -273,4 +273,4 @@ $this->screen(View::A_HEADER);
             <a href="#" data-dismiss="modal" class="btn">Отмена</a>
         </div>
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

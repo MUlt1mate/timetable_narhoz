@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @author: MUlt1mate
  * Date: 30.03.13
  * Time: 15:04
  */
-
 abstract class Main_controller
 {
     /**
@@ -22,7 +22,7 @@ abstract class Main_controller
 
     public function __construct()
     {
-        $this->config = parse_ini_file(self::CONFIG_INI, TRUE);
+        $this->config = parse_ini_file(self::CONFIG_INI, true);
         date_default_timezone_set(TimeDate::TIMEZONE);
         $this->view = new View(static::TEMPLATE_FOLDER);
 
@@ -39,13 +39,15 @@ abstract class Main_controller
      */
     protected function choose_action()
     {
-        if (isset($_GET['action']))
+        if (isset($_GET['action'])) {
             $this->action = $_GET['action'];
+        }
         $method = 'action_' . $this->action;
-        if (method_exists($this, $method))
+        if (method_exists($this, $method)) {
             $this->$method();
-        else
+        } else {
             $this->show_404();
+        }
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author: MUlt1mate
  * Date: 31.03.13
@@ -7,10 +8,9 @@
  * @property int $codformstudy
  * @property string $formstudy
  */
-
 class FormStudy extends ActiveRecord\Model
 {
-    static $table = 'FormStudy';
+    public static $table = 'FormStudy';
 
     public static $all = array(
         0 => 'Очная',

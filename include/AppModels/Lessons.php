@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author: MUlt1mate
  * Date: 31.03.13
@@ -8,14 +9,12 @@
  * @property string $namesub
  * @property string $shortnamesub
  */
-
 class Lessons extends ActiveRecord\Model
 {
     const MIN_COLOR = 150;
     const MAX_COLOR = 250;
-
-    static $table = 'subs';
-    static $primary_key = 'codsub';
+    public static $table = 'subs';
+    public static $primary_key = 'codsub';
 
     /**
      * Перевод rgb в hex
@@ -24,7 +23,7 @@ class Lessons extends ActiveRecord\Model
      * @param int $b blue
      * @return string hex
      */
-    static private function  rgb2hex($r, $g, $b)
+    private static function rgb2hex($r, $g, $b)
     {
         $r = dechex($r < 0 ? 0 : ($r > 255 ? 255 : $r));
         $g = dechex($g < 0 ? 0 : ($g > 255 ? 255 : $g));
@@ -39,7 +38,7 @@ class Lessons extends ActiveRecord\Model
     /**
      * меняет цвета для всех предметов
      */
-    static public function change_all_colors()
+    public static function change_all_colors()
     {
         $lessons = self::all();
         foreach ($lessons as $l) {

@@ -1,14 +1,13 @@
 <?php
+
 /**
  * Настройки подключения к БД
  * @author: MUlt1mate
  * Date: 16.03.13
  * Time: 10:35
  */
-
 class DB
 {
-
     /**
      * Соединение с БД
      * @param string $host
@@ -16,7 +15,7 @@ class DB
      * @param string $user
      * @param string $password
      */
-    static public function connect($host, $db, $user, $password)
+    public static function connect($host, $db, $user, $password)
     {
         $cfg = ActiveRecord\Config::instance();
         $cfg->set_model_directory(__DIR__ . '/AppModels');
@@ -33,7 +32,7 @@ class DB
      * @param array $values
      * @return mixed
      */
-    static public function query($sql, $values = null)
+    public static function query($sql, $values = null)
     {
         return ActiveRecord\Connection::instance()->query($sql, $values);
     }
@@ -43,9 +42,8 @@ class DB
      * @param string $value
      * @return string
      */
-    static public function escape($value)
+    public static function escape($value)
     {
         return ActiveRecord\Connection::instance()->escape($value);
     }
-
 }

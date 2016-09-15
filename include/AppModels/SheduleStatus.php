@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author: MUlt1mate
  * Date: 31.03.13
@@ -7,10 +8,9 @@
  * @property int $id
  * @property string $name
  */
-
 class SheduleStatus extends ActiveRecord\Model
 {
-    static $table = 'SheduleStatus';
+    public static $table = 'SheduleStatus';
     const STATUS_PUBLIC = 1;
     const STATUS_EDIT = 2;
     const STATUS_RETIRED = 3;

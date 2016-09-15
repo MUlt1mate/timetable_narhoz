@@ -6,7 +6,7 @@
  *
  * @var View $this
  */
-$this->screen(View::A_HEADER);?>
+$this->screen('header');?>
     <div class="row-fluid">
         <div class="span4 offset4">
             <div style="padding-top:40%;text-align: center; ">
@@ -22,4 +22,4 @@ $this->screen(View::A_HEADER);?>
             </div>
         </div>
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

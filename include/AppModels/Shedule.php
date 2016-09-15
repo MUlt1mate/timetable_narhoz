@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Расписание
  * @author: MUlt1mate
@@ -19,11 +20,10 @@
  * @property string $date_begin
  * @property string $date_end
  */
-
 class Shedule extends ActiveRecord\Model
 {
-    static $table = 'shedules';
-    static $primary_key = 'id';
+    public static $table = 'shedules';
+    public static $primary_key = 'id';
 
     public static function add($name, $type, $status, $formstudy, $year, $numterm, $date_begin, $date_end)
     {
@@ -36,8 +36,7 @@ class Shedule extends ActiveRecord\Model
             'numterm' => $numterm,
             'date_begin' => $date_begin,
             'date_end' => $date_end,
-            'weeknum' => TimeDate::get_weeknum_by_ts(
-                TimeDate::db_to_ts($date_begin)),
+            'weeknum' => TimeDate::get_weeknum_by_ts(TimeDate::db_to_ts($date_begin)),
         ), false);
         return @$shedule->save();
     }
@@ -52,8 +51,7 @@ class Shedule extends ActiveRecord\Model
         $this->numterm = $numterm;
         $this->date_begin = $date_begin;
         $this->date_end = $date_end;
-        $this->weeknum = TimeDate::get_weeknum_by_ts(
-            TimeDate::db_to_ts($date_begin));
+        $this->weeknum = TimeDate::get_weeknum_by_ts(TimeDate::db_to_ts($date_begin));
         $this->readonly(false);
         $this->save();
     }

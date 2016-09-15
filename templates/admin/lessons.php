@@ -8,8 +8,8 @@
  * @var array $lessons
  */
 $title = 'Предметы';
-$this->screen(View::A_HEADER, array('title' => $title));
-$this->screen(View::A_TABLE_HEADER);?>
+$this->screen('header', array('title' => $title));
+$this->screen('tables_header');?>
     <div class="row-fluid">
         <div class="span9">
             <h3><?=$title?></h3>
@@ -37,4 +37,4 @@ $this->screen(View::A_TABLE_HEADER);?>
             <a href="/?action=lessons&refresh" class="btn btn-danger disabled">Изменить все цвета</a>
         </div>
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

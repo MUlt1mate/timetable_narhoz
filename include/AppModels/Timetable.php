@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Класс-модель для работы с расписаниями занятий
  * @author: MUlt1mate
@@ -45,12 +46,11 @@
  * @property string $date_begin дата начала занятия, либо расписания
  * @property string $date_end дата окончания занятия, либо расписания
  */
-
 class Timetable extends ActiveRecord\Model
 {
-    static public $all_types = array('group', 'teacher', 'room', 'subgroup');
-    static $table = 'TimeGridView';
-    static $primary_key = 'id';
+    public static $all_types = array('group', 'teacher', 'room', 'subgroup');
+    public static $table = 'TimeGridView';
+    public static $primary_key = 'id';
     const TIMEGRID_TABLE = 'TimeGrid';
     const TIMETABLE_VIEW = 'sh_SheduleView';
     const TIMETABLE_REMOVE = 'sh_SheduleDeleteView';
@@ -81,7 +81,7 @@ class Timetable extends ActiveRecord\Model
      */
     private $show_subgroups = false;
     /**
-     * @var Название расписание для отображения в заголовке
+     * @var string Название расписание для отображения в заголовке
      */
     private $timetable_title;
     /**
@@ -99,19 +99,16 @@ class Timetable extends ActiveRecord\Model
         try {
             if (isset($types['group'])) {
                 $info = Group::get_info($types['group']);
-                if (0 < $info->subgroup)
+                if (0 < $info->subgroup) {
                     $this->show_subgroups = true;
+                }
                 $this->timetable_title = 'Группа: ' . $info->namegrup;
-                if (0 < $info->lessons_count)
-                    return true;
-                return false;
+                return (0 < $info->lessons_count);
             }
             if (isset($types['teacher'])) {
                 $info = Teachers::find($types['teacher']);
                 $this->timetable_title = $info->fio;
-                if (0 < $info->count)
-                    return true;
-                return false;
+                return (0 < $info->count);
             }
             if (isset($types['room']) && $this->show_room) {
                 $info = Rooms::find($types['room']);
@@ -151,35 +148,42 @@ class Timetable extends ActiveRecord\Model
      * @param bool $all вывести все занятия (и старые, и черновики)
      * @return array|bool
      */
-    static public function get_timetable($date_begin, $date_end, $parameters, $remove = false, $all = false)
+    public static function get_timetable($date_begin, $date_end, $parameters, $remove = false, $all = false)
     {
         $sql = ($remove) ? self::TIMETABLE_REMOVE : self::TIMETABLE_VIEW;
-        if (!($remove OR $all))
+        if (!$remove && !$all) {
             $sql .= ' @status=' . (int)SheduleStatus::STATUS_PUBLIC . ', ';
+        }
         $sql .= ' @begin=' . DB::escape(TimeDate::ts_to_db($date_begin)) . ' ,
         @end=' . DB::escape(TimeDate::ts_to_db($date_end));
-        foreach (self::$all_types as $type)
-            if (isset($parameters[$type]))
+        foreach (self::$all_types as $type) {
+            if (isset($parameters[$type])) {
                 $sql .= ', @' . $type . '=' . (int)$parameters[$type];
+            }
+        }
         $query = self::query($sql);
         $rows = $query->fetchAll();
 
-        if (!is_array($rows))
+        if (!is_array($rows)) {
             return false;
+        }
         if (!$remove) {
-            foreach ($rows as &$row)
-                //если расписание начинается с нечетной недели, меняем указатели недель местами
+            foreach ($rows as &$row) {//если расписание начинается с нечетной недели, меняем указатели недель местами
                 if (($row['weeknum'] == 0) && ($row['week'] != 0)) {
                     $row['week'] = 3 - $row['week'];
                 }
+            }
             return $rows;
-        } else {
-            $remove_ids = array();
-            if (is_array($rows))
-                foreach ($rows as $row)
-                    $remove_ids[$row['TimeGrid_id_remove']][] = $row['lesson_date'];
+        }
+
+        $remove_ids = array();
+        if (!is_array($rows)) {
             return $remove_ids;
         }
+        foreach ($rows as $row) {
+            $remove_ids[$row['TimeGrid_id_remove']][] = $row['lesson_date'];
+        }
+        return $remove_ids;
     }
 
     /**
@@ -191,10 +195,11 @@ class Timetable extends ActiveRecord\Model
      * @param int $plan_work
      * @return array
      */
-    static public function get_by_params($shedule, $course, $teacher, $group, $plan_work)
+    public static function get_by_params($shedule, $course, $teacher, $group, $plan_work)
     {
-        if ((null == $group) && (null == $teacher))
+        if ((null == $group) && (null == $teacher)) {
             return false;
+        }
         $course = (null == $course) ? 'null' : (int)$course;
         $teacher = (null == $teacher) ? 'null' : (int)$teacher;
         $plan_work = (null == $plan_work) ? 'null' : (int)$plan_work;
@@ -215,8 +220,9 @@ class Timetable extends ActiveRecord\Model
             } else {
                 $row['is_flow'] = '0';
                 $row['group_flow_id'] = $row['group_id'];
-                if (0 < $row['subgroup'])
+                if (0 < $row['subgroup']) {
                     $row['grupflowname'] = $row['grupflowname'] . '-' . $row['subgroup'];
+                }
             }
 
             $weeks = ceil($row['days'] / 7);
@@ -224,8 +230,9 @@ class Timetable extends ActiveRecord\Model
                 $multiply = floor($weeks / 2);
             } elseif (0 < $row['week']) {
                 $multiply = ceil($weeks / 2);
-            } else
+            } else {
                 $multiply = $weeks;
+            }
             $row['hours'] *= $multiply;
         }
 
@@ -239,7 +246,7 @@ class Timetable extends ActiveRecord\Model
      * @param array $remove
      * @return array [grid,latest_time,days_count]
      */
-    static public function build_week($date_begin, $timetable, $remove)
+    public static function build_week($date_begin, $timetable, $remove)
     {
         $latest_time = '08:00:00';
         $grid = array();
@@ -249,8 +256,9 @@ class Timetable extends ActiveRecord\Model
                 //добавляем занятие, если оно идёт по обоим неделям, либо совпадает по чётности
                 if (($row['week'] == 0) || ($row['week'] == (TimeDate::odd_week(date('W', $date_begin)) + 1))) {
                     $grid[$row['weekday_id']][] = new Lesson($row);
-                    if ($latest_time < $row['time_end'])
+                    if ($latest_time < $row['time_end']) {
                         $latest_time = $row['time_end'];
+                    }
                 }
             }
         }
@@ -277,7 +285,7 @@ class Timetable extends ActiveRecord\Model
      * @param int $week_count количество недель в месяце
      * @return array [grid,days_count]
      */
-    static public function build_month($date_begin, $timetable, $remove, $week_count)
+    public static function build_month($date_begin, $timetable, $remove, $week_count)
     {
         $removed = false;
         $grid = array();
@@ -291,12 +299,14 @@ class Timetable extends ActiveRecord\Model
                 ) {
                     if (isset($remove[$row['id']])) {
                         foreach ($remove[$row['id']] as $r) {
-                            if (TimeDate::db_to_ts($r) == $this_date)
+                            if (TimeDate::db_to_ts($r) == $this_date) {
                                 $removed = true;
+                            }
                         }
                     }
-                    if (!$removed)
+                    if (!$removed) {
                         $grid[$row['weekday_id']][$k + 1][] = new Lesson($row);
+                    }
                     $removed = false;
                 }
             }
@@ -322,7 +332,7 @@ class Timetable extends ActiveRecord\Model
      * @param array $remove
      * @return array [grid]
      */
-    static public function build_agenda($date_begin, $timetable, $remove)
+    public static function build_agenda($date_begin, $timetable, $remove)
     {
         $lessons_count = 0;
         $days_count = 0;
@@ -363,7 +373,7 @@ class Timetable extends ActiveRecord\Model
      * @return bool
      * @throws Exception
      */
-    static public function build_export($timetable, $remove, $type, $title, $rewrite = false)
+    public static function build_export($timetable, $remove, $type, $title, $rewrite = false)
     {
         $for_group = (array_key_exists('group', $type)) ? true : false;
         if (array_key_exists('teacher', $type)) {
@@ -373,8 +383,9 @@ class Timetable extends ActiveRecord\Model
             if (array_key_exists('subgroup', $type) && (0 < $type['subgroup'])) {
                 $cal_name .= 's' . $type['subgroup'];
             }
-        } else
+        } else {
             throw(new Exception('type not define'));
+        }
 
         return iCal_Generator::iCalGener(
             $timetable,
@@ -391,7 +402,7 @@ class Timetable extends ActiveRecord\Model
      * @param array $lessons
      * @return array
      */
-    static public function build_all_by_weekdays($lessons)
+    public static function build_all_by_weekdays($lessons)
     {
         $by_weekday = array();
         foreach ($lessons as $l) {
@@ -416,11 +427,12 @@ class Timetable extends ActiveRecord\Model
      * @param array $lessons
      * @return int
      */
-    static public function calculate_hours($lessons)
+    public static function calculate_hours($lessons)
     {
         $hours = 0;
-        foreach ($lessons as $l)
+        foreach ($lessons as $l) {
             $hours += $l['hours'];
+        }
         return $hours;
     }
 
@@ -437,7 +449,7 @@ class Timetable extends ActiveRecord\Model
      * @param string $date_end
      * @return array
      */
-    static public function get_busytable($shedule_id, $week, $group, $subgroup, $is_flow, $teacher, $room, $date_begin, $date_end)
+    public static function get_busytable($shedule_id, $week, $group, $subgroup, $is_flow, $teacher, $room, $date_begin, $date_end)
     {
         $week = (null == $week) ? 'null' : (int)$week;
         $group = (null == $group) ? 'null' : (int)$group;
@@ -495,7 +507,7 @@ class Timetable extends ActiveRecord\Model
      * @param string $lesson_date_end
      * @return PDOStatement
      */
-    static public function add(
+    public static function add(
         $shedule_id,
         $group_id,
         $flow_id,
@@ -521,14 +533,16 @@ class Timetable extends ActiveRecord\Model
             $subgroup = 0;
         }
 
-        if (empty($lesson_date_begin))
+        if (empty($lesson_date_begin)) {
             $lesson_date_begin = 'null';
-        else
+        } else {
             $lesson_date_begin = DB::escape($lesson_date_begin);
-        if (empty($lesson_date_end))
+        }
+        if (empty($lesson_date_end)) {
             $lesson_date_end = 'null';
-        else
+        } else {
             $lesson_date_end = DB::escape($lesson_date_end);
+        }
 
         $sql = 'INSERT INTO ' . self::TIMEGRID_TABLE . '
            ([lesson_id]
@@ -605,14 +619,16 @@ class Timetable extends ActiveRecord\Model
             $subgroup = 0;
         }
 
-        if (empty($lesson_date_begin))
+        if (empty($lesson_date_begin)) {
             $lesson_date_begin = 'null';
-        else
+        } else {
             $lesson_date_begin = DB::escape($lesson_date_begin);
-        if (empty($lesson_date_end))
+        }
+        if (empty($lesson_date_end)) {
             $lesson_date_end = 'null';
-        else
+        } else {
             $lesson_date_end = DB::escape($lesson_date_end);
+        }
 
         $sql = '
         UPDATE ' . self::TIMEGRID_TABLE . '
@@ -647,7 +663,7 @@ class Timetable extends ActiveRecord\Model
      * Возвращает занятие, которые идут в данный момент
      * @return array
      */
-    static public function get_current()
+    public static function get_current()
     {
         $sql = 'declare @time datetime
         declare @dw int
@@ -676,7 +692,7 @@ class Timetable extends ActiveRecord\Model
      * @param int $id
      * @return self
      */
-    static public function get_by_id($id)
+    public static function get_by_id($id)
     {
         return self::find($id);
     }

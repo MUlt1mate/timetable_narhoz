@@ -1,30 +1,28 @@
 <?php
+
 /**
  * @author: MUlt1mate
  * Date: 13.04.13
  * Time: 18:08
  */
-
 class Lists
 {
-    static $table = '';
+    public static $table = '';
 
     const GROUP_LIST_DB = 'sh_shiftGrup';
     const TEACHERS_LIST_DB = 'sh_shiftPrep';
-
-    static $faculty = array(
+    public static $faculty = array(
         80 => 'Финансово-информационный факультет',
         81 => 'Экономический факультет',
         83 => 'Юридический факультет',
         84 => 'Факультативы',
     );
-
-    static $type_plan_work = array(
+    public static $type_plan_work = array(
         1 => 'Занятия',
         2 => 'Зачеты и экзамены',
         3 => 'Прочее'
     );
-    static $lesson_type = array(
+    public static $lesson_type = array(
         0 => 'внеучебное занятие',
         1 => 'лекция',
         2 => 'практическое занятие',
@@ -47,7 +45,7 @@ class Lists
      * 7 - экзамен
      * @var array
      */
-    static public $lesson_type_rv = array(
+    public static $lesson_type_rv = array(
         0 => 5,
         1 => 2,
         2 => 0,

@@ -11,7 +11,7 @@
  * @var int $week
  * @var int $month
  */
-$this->screen(View::TT_HEADER, array('mode' => $mode));?>
+$this->screen('header', array('mode' => $mode));?>
     <div class="span6">
         <form method="get" class="">
             <table class="table">
@@ -45,4 +45,4 @@ $this->screen(View::TT_HEADER, array('mode' => $mode));?>
     </div>
     <div class="clearfix"></div>
     <pre><?=$data?></pre>
-<? $this->screen(View::TT_FOOTER);
+<? $this->screen('footer');

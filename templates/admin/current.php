@@ -8,7 +8,7 @@
  * @var array $lessons
  */
 $title = 'Текущие';
-$this->screen(View::A_HEADER, array('title' => $title));?>
+$this->screen('header', array('title' => $title));?>
     <div class="row-fluid">
         <div class="span12">
             <?if (is_array($lessons))
@@ -26,4 +26,4 @@ $this->screen(View::A_HEADER, array('title' => $title));?>
             ?>
         </div>
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

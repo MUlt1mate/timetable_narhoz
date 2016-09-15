@@ -7,8 +7,8 @@
  * @var View $this
  */
 $title = 'Ближайшие события';
-$this->screen(View::A_HEADER, array('title' => $title));
-$this->screen(View::A_TABLE_HEADER);
+$this->screen('header', array('title' => $title));
+$this->screen('tables_header');
 ?>
     <h3><?=$title?></h3>
     <div class="span6">
@@ -60,4 +60,4 @@ $this->screen(View::A_TABLE_HEADER);
             <input type="submit" class="btn btn-primary inline" value="Добавить">
         </form>
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');

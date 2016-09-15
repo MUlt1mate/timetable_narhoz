@@ -8,7 +8,7 @@
  * @var View $this
  * @var string $error
  */
-$this->screen(View::TT_HEADER);?>
+$this->screen('header');?>
     <div class="row-fluid">
         <div class="span6 offset3">
             <div class="alert alert-danger">
@@ -32,4 +32,4 @@ $this->screen(View::TT_HEADER);?>
             </div>
         </div>
     </div>
-<? $this->screen(View::TT_FOOTER);
+<? $this->screen('footer');

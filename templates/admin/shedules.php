@@ -12,7 +12,7 @@
  * @var int $study_year
  */
 $title = 'Расписания';
-$this->screen(View::A_HEADER, array('title' => $title));?>
+$this->screen('header', array('title' => $title));?>
     <div class="row-fluid">
         <div class="span8">
             <h3><?=$title?></h3>
@@ -162,4 +162,4 @@ $this->screen(View::A_HEADER, array('title' => $title));?>
         </div>
 
     </div>
-<? $this->screen(View::A_FOOTER);
+<? $this->screen('footer');
