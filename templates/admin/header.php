@@ -24,11 +24,11 @@ $sub_menu = array(
     <title><?echo (isset($title)) ? $title . ' - ' : ''; echo  'АРМ Расписание'?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/custom.css"/>
-    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/js/components/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script src="/js/jquery.js"></script>
-    <script src="/js/jquery.cookie.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/components/jquery/jquery.min.js"></script>
+    <script src="/js/components/jquery.cookie/jquery.cookie.js"></script>
+    <script src="/js/components/bootstrap/docs/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/admin_interface.js"></script>
     <script type="text/javascript" src="/js/gu_admin.js"></script>
 </head>

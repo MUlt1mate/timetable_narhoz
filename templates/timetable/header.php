@@ -9,13 +9,13 @@
     <title><?echo (isset($title)) ? $title . ' - ' : ''; echo  'Электронное расписание ЧИ БГУЭП'?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/custom.css"/>
-    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/js/components/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="description" content="Электронное расписание ЧИ БГУЭП"/>
     <meta name="Keywords" content="чи бгуэп, чита, нархоз, расписание, электронное"/>
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="/js/jquery.cookie.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/components/jquery/jquery.min.js"></script>
+    <script src="/js/components/jquery.cookie/jquery.cookie.js"></script>
+    <script src="/js/components/bootstrap/docs/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/navigation.js"></script>
     <script type="text/javascript" src="/js/gu.js"></script>
 </head>

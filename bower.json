@@ -1,0 +1,11 @@
+{
+    "name": "mult1mate\/timetable_narhoz",
+    "authors": [
+        "mult1mate <multimate.abs@gmail.com>"
+    ],
+    "private": true,
+    "dependencies": {
+        "bootstrap": "2",
+        "jquery.cookie": "*"
+    }
+}
