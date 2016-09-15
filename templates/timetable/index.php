@@ -10,7 +10,7 @@
  * @var array $forms_study
  * @var array $groups_all
  */
-$this->screen(View::TT_HEADER);?>
+$this->screen(View::TT_HEADER); ?>
     <div class="row-fluid">
         <div class="span10 offset1" style="margin-top:-20px;">
             <ul id="FormStudyTab" class="nav nav-tabs">
@@ -28,7 +28,8 @@ $this->screen(View::TT_HEADER);?>
                             <div class="span8" style="min-width: 350px;">
                                 <? if (0 != $fs_id): ?>
                                     <div class="alert">
-                                        <a href="http://narhoz-chita.ru/students/rasp" id="timetable_main_site">Расписание находится на основном
+                                        <a href="http://narhoz-chita.ru/students/rasp" id="timetable_main_site">Расписание
+                                            находится на основном
                                             сайте </a>
                                     </div>
                                 <? endif ?>
@@ -38,7 +39,7 @@ $this->screen(View::TT_HEADER);?>
                                             <th><? echo (isset($group_years[$fs_id][$year])) ? 'Курс ' . $year : '' ?></th>
                                         <? endfor; ?>
                                     </tr>
-                                    <? if (is_array($groups_all[$fs_id]))
+                                    <? if (isset($groups_all[$fs_id]) && is_array($groups_all[$fs_id]))
                                         foreach ($groups_all[$fs_id] as $y_groups) :?>
                                             <tr>
                                                 <? for ($year = 1; $year <= 5; $year++) : ?>
@@ -49,7 +50,7 @@ $this->screen(View::TT_HEADER);?>
                                                                     <li>
                                                                         <a <? echo ($g['count'] == 0)
                                                                             ? 'class="muted" title="нет расписания"'
-                                                                            : 'href="/?group=' . $g['codgrup'] . '"';;?>>
+                                                                            : 'href="/?group=' . $g['codgrup'] . '"';; ?>>
                                                                             <?= $g['namegrup'] ?>
                                                                         </a>
                                                                     </li>
@@ -91,13 +92,13 @@ $this->screen(View::TT_HEADER);?>
                 <div class="tab-pane fade in active" id="prep">
                     <div class="row-fluid">
                         <div class="span8">
-                            <?if (is_array($teachers))
+                            <? if (is_array($teachers))
                                 foreach ($teachers as $word => $teacher_word):?>
                                     <section id="<?= Text::translate($word) ?>"></section>
 
                                     <h4><?= $word ?></h4>
                                     <ul class="inline">
-                                        <?foreach ($teacher_word as $teacher):
+                                        <? foreach ($teacher_word as $teacher):
                                             /**
                                              * @var Teachers $teacher
                                              */
@@ -105,7 +106,7 @@ $this->screen(View::TT_HEADER);?>
                                             <li style="width: 150px;">
                                                 <a <? echo ($teacher->count == 0)
                                                     ? 'class="muted" title="нет расписания"'
-                                                    : 'href="/?teacher=' . $teacher->id . '"';;?>>
+                                                    : 'href="/?teacher=' . $teacher->id . '"';; ?>>
                                                     <?= $teacher->shortfio ?>
                                                 </a>
                                             </li>
