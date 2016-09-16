@@ -14,11 +14,11 @@
  * @var int $month
  * @var bool $show_subgroup
  */
-$this->screen('header', array('mode' => $mode, 'title' => $title));?>
+$this->screen('header', array('mode' => $mode, 'title' => $title)); ?>
     <div class="content">
         <div class="control">
-            <div class="intop"><p class="title"><?=$body_title?></p></div>
-            <?if ($show_subgroup): ?>
+            <div class="intop"><p class="title"><?= $body_title ?></p></div>
+            <? if ($show_subgroup): ?>
                 <div class="intop" style="padding: 5px 0 0 0;">
                     <div class="btn-group">
                         <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="" id="SubgroupSelector">
@@ -29,22 +29,20 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
                             <li><a sub_id="0" class="set_subgroup">Вся группа</a></li>
                             <li><a sub_id="1" class="set_subgroup">Подгруппа 1</a></li>
                             <li><a sub_id="2" class="set_subgroup">Подгруппа 2</a></li>
-							<li><a sub_id="3" class="set_subgroup">Подгруппа 3</a></li>
+                            <li><a sub_id="3" class="set_subgroup">Подгруппа 3</a></li>
                         </ul>
                     </div>
                 </div>
-            <? endif;?>
+            <? endif; ?>
             <div class="intop" style="float:right;">
                 <table>
                     <tr>
                         <td>
                             <div class="btn-group">
-                                <button id="GoLeft" class="btn btn-primary" style="width:50px;" href="#MainTable"
-                                        data-slide="prev"><i
-                                        class="icon-arrow-left icon-white"></i>
+                                <button id="GoLeft" class="btn btn-primary" style="width:50px;" href="#MainTable">
+                                    <i class="icon-arrow-left icon-white"></i>
                                 </button>
-                                <button id="GoRight" class="btn btn-primary" style="width:50px;" href="#MainTable"
-                                        data-slide="next">
+                                <button id="GoRight" class="btn btn-primary" style="width:50px;" href="#MainTable">
                                     <i class="icon-arrow-right icon-white"></i>
                                 </button>
                             </div>
@@ -56,7 +54,7 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
                 </table>
             </div>
             <div class="intop" style="float:right;">
-                <p class="title" id="date_interval"><?=$start_date?> - <?=$finish_date?></p>
+                <p class="title" id="date_interval"><?= $start_date ?> - <?= $finish_date ?></p>
             </div>
         </div>
         <input type="hidden" id="week_id" value="<?= $week ?>">
@@ -76,10 +74,11 @@ $this->screen('header', array('mode' => $mode, 'title' => $title));?>
                 <a class="btn page-button" data-toggle="modal" href="#about">О программе</a>
             </div>
             <div class="pull-right" id="export">
-                <a class="btn btn-primary page-button" data-toggle="modal" href="#ExportModal" id="GetExport">Экспорт</a>
+                <a class="btn btn-primary page-button" data-toggle="modal" href="#ExportModal"
+                   id="GetExport">Экспорт</a>
             </div>
         </div>
-        <?$this->screen('export_modal')?>
-        <?$this->screen('about')?>
+        <? $this->screen('export_modal') ?>
+        <? $this->screen('about') ?>
     </div>
 <? $this->screen('footer');

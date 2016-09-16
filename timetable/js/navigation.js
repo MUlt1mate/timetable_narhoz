@@ -92,6 +92,7 @@ $(function () {
                 ++$.grid_num_right;
                 addGrid($.grid_num_right, 'right');
             }
+            $('#MainTable').carousel('next');
         };
 
         var load_prev_period = function () {
@@ -102,6 +103,7 @@ $(function () {
                 --$.grid_num_left;
                 addGrid($.grid_num_left, 'left');
             }
+            $('#MainTable').carousel('prev');
         };
 
         $('#GoRight').click(load_next_period);
