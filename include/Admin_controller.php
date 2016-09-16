@@ -111,8 +111,7 @@ class Admin_controller extends Main_controller
     protected function action_lessons()
     {
         if (isset($_GET['refresh'])) {
-            //выключено, чтобы не нажать случайно
-            //Lessons::change_all_colors();
+            Lessons::color_new();
         }
         $this->view->screen('lessons', array('lessons' => Lessons::all(array('order' => 'namesub'))));
     }

@@ -15,9 +15,9 @@
         <a href="/">
             <h3><img src="/img/favicon.png" alt=""> Электронное расписание ЧИ БГУЭП</h3>
         </a>
-        Использованные компоненты:
+        <h4>Использованные компоненты:</h4>
         <ul>
-            <li><a href="http://kigkonsult.se/iCalcreator/index.php">iCalcreator v2.12</a></li>
+            <li><a href="http://kigkonsult.se/iCalcreator/index.php">iCalcreator</a></li>
             <li><a href="http://jquery.com/">jQuery</a></li>
             <li><a href="https://github.com/twitter/bootstrap">Twitter Bootstrap</a></li>
             <li><a href="https://github.com/funkjedi/php-activerecord">PHP ActiveRecord with MSSQL adapter</a></li>
@@ -25,6 +25,6 @@
 
     </div>
     <div class="modal-footer">
-        <h6>Рыбников Михаил, отдел АСУ ЧИ БГУЭП © 2012-<?=date('Y')?> гг.</h6>
+        <h5>Рыбников Михаил, отдел АСУ ЧИ БГУЭП © 2012-<?= date('Y') ?> гг.</h5>
     </div>
 </div>

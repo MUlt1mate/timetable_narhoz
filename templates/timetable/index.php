@@ -16,7 +16,6 @@ $this->screen('header'); ?>
             <ul id="FormStudyTab" class="nav nav-tabs">
                 <li><a href="#cf0" data-toggle="tab" class="page-tab">Очное</a></li>
                 <li><a href="#cf1" data-toggle="tab" class="page-tab">Заочное</a></li>
-                <li><a href="#cf3" data-toggle="tab" class="page-tab">Сокращенное</a></li>
                 <li class="active"><a href="#prep" data-toggle="tab" class="page-tab">Преподаватели</a></li>
             </ul>
             <div id="FormStudyContent" class="tab-content">
@@ -74,7 +73,7 @@ $this->screen('header'); ?>
                                     </table>
                                 <? endif; ?>
                                 <? if (0 == $fs_id): ?>
-                                    <a href="http://raspisaniye-vuzov.ru/" target="_blank" id="vuzov_app">
+                                    <a href="http://rvuzov.ru/" target="_blank" id="vuzov_app">
                                         <div class="alert alert-info">
                                             <div>
                                                 <img src="/img/android_app_icon.png" id="android_app_icon">
@@ -138,16 +137,6 @@ $this->screen('header'); ?>
                 <div class="span8">
                     <div class="alert alert-info">
                         Группы, выделенные серым цветом, не содержат ни одного добавленного занятия.
-                    </div>
-                    <div class="alert alert-error" id="disclaimer">
-                        <button id="disclaimer_close" type="button" class="close" data-dismiss="alert">&times;</button>
-                        <h4 class="alert-heading">Внимание!</h4>
-                        Система находится в режиме рабочего тестирования. Предоставленная информация может не
-                        соответствовать
-                        действительности.
-                    </div>
-                    <div class="alert alert-block alert-info" id="disclaimer_info" style="display: none">
-                        Данное сообщение больше не появится. Пользуйтесь расписанием на свой риск =)
                     </div>
                 </div>
             </div>

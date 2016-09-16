@@ -5,10 +5,6 @@ $(function () {
             mode_change($.cookie('mode'));
         $('#FormStudyTab a:first').tab('show');
         $.params = get_params();
-        if ($.cookie('hide_alert') == 1) {
-            $('#disclaimer').css('display', 'none');
-        }
-
 
         if ($('#MainTable').length) {
             $('#MainTable').carousel({
@@ -145,11 +141,6 @@ $(function () {
             return param;
         }
 
-        $('#disclaimer_close').click(function () {
-            $('#disclaimer_info').css('display', '');
-            $.cookie('hide_alert', 1);
-        });
-
         $('body').on('slid', function () {
             $('#date_interval').text($('.item.active #date_interval_new').val());
         });
@@ -168,7 +159,8 @@ $(function () {
                     '<button id="popover_close" type="button" class="close" data-dismiss="alert">&times;</button>',
                 placement: pl,
                 html: true,
-                content: $('#popover_default').html()
+                content: $('#popover_default').html(),
+                container: 'body'
             });
             $(this).popover('show');
             $('.arrow').css('top', '15%');

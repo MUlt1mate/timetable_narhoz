@@ -17,7 +17,7 @@ abstract class Main_controller
      */
     protected $view;
     protected $action = 'default';
-    protected $forms_study = array(0, 1, 3);
+    protected $forms_study = array(0, 1);
     const TEMPLATE_FOLDER = '';
 
     public function __construct()

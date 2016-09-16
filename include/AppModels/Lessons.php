@@ -38,9 +38,12 @@ class Lessons extends ActiveRecord\Model
     /**
      * меняет цвета для всех предметов
      */
-    public static function change_all_colors()
+    public static function color_new()
     {
-        $lessons = self::all();
+        $lessons = self::all(array('conditions' => array('color', '')));
+        /**
+         * @var Lessons[] $lessons
+         */
         foreach ($lessons as $l) {
             $l->change_color(self::rgb2hex(
                 rand(self::MIN_COLOR, self::MAX_COLOR),
