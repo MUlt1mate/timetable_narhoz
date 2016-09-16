@@ -84,7 +84,7 @@ $(function () {
             resetTimetable();
         });
 
-        $('#GoRight').click(function () {
+        var load_next_period = function () {
             if ('agenda' == $.mode)
                 return false;
             if ($('.item').index($('.item:last')) ==
@@ -92,9 +92,9 @@ $(function () {
                 ++$.grid_num_right;
                 addGrid($.grid_num_right, 'right');
             }
-        });
+        };
 
-        $('#GoLeft').click(function () {
+        var load_prev_period = function () {
             if ('agenda' == $.mode)
                 return false;
             if ($('.item').index($('.item:first')) ==
@@ -102,7 +102,43 @@ $(function () {
                 --$.grid_num_left;
                 addGrid($.grid_num_left, 'left');
             }
-        });
+        };
+
+        $('#GoRight').click(load_next_period);
+        $('#GoLeft').click(load_prev_period);
+
+        window.onkeydown = function (event) {
+            if (event.keyCode == 37) {
+                load_prev_period();
+            }
+            if (event.keyCode == 39) {
+                load_next_period();
+            }
+        };
+
+        var sq = {};
+        sq.e = document.getElementById("MainTable");
+
+        if (sq.e.addEventListener) {
+            sq.e.addEventListener("mousewheel", MouseWheelHandler, false);
+            sq.e.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+        } else {
+            sq.e.attachEvent("onmousewheel", MouseWheelHandler);
+        }
+
+        function MouseWheelHandler(e) {
+
+            // cross-browser wheel delta
+            var e = window.event || e;
+            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            if (-1 == delta) {
+                load_next_period();
+            } else {
+                load_prev_period();
+            }
+            return false;
+        }
+
 
         $('#LoadCurrent').click(function () {
             if ('agenda' == $.mode)
@@ -143,6 +179,8 @@ $(function () {
 
         $('body').on('slid', function () {
             $('#date_interval').text($('.item.active #date_interval_new').val());
+        }).on('click', '#popover_close', function () {
+            $.lesson.popover('destroy');
         });
 
         $('#MainTable').on('click', '.lesson, .agenda_lesson, .month_lesson', function () {
@@ -156,7 +194,7 @@ $(function () {
                 pl = 'right';
             $.lesson = $(this).popover({
                 title: 'Подробная информация' +
-                    '<button id="popover_close" type="button" class="close" data-dismiss="alert">&times;</button>',
+                '<button id="popover_close" type="button" class="close" data-dismiss="alert">&times;</button>',
                 placement: pl,
                 html: true,
                 content: $('#popover_default').html(),
@@ -169,13 +207,7 @@ $(function () {
             })
 
         });
-
-        $('#MainTable').on('click', '#popover_close', function () {
-            $.lesson.popover('destroy');
-        });
-
     }
-
 )
 ;
 

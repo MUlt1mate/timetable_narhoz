@@ -1,7 +1,7 @@
 {
   "name": "mult1mate/timetable_narhoz",
   "description": "Электронное расписание ЧИ БГУЭП",
-  "license": "proprietary",
+  "license": "Apache-2.0",
   "minimum-stability": "dev",
   "authors": [
     {

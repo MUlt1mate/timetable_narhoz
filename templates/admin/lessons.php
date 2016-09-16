@@ -34,7 +34,7 @@ $this->screen('tables_header');?>
         </div>
         <div class="span3">
             <h3>Настройки</h3>
-            <a href="/?action=lessons&refresh" class="btn btn-danger">Изменить все цвета</a>
+            <a href="/?action=lessons&refresh" class="btn btn-danger">Установить цвета для новых</a>
         </div>
     </div>
 <? $this->screen('footer');

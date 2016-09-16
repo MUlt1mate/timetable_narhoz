@@ -40,11 +40,14 @@ class Lessons extends ActiveRecord\Model
      */
     public static function color_new()
     {
-        $lessons = self::all(array('conditions' => array('color', '')));
+        $lessons = self::all();
         /**
          * @var Lessons[] $lessons
          */
         foreach ($lessons as $l) {
+            if ('' != $l->color) {
+                continue;
+            }
             $l->change_color(self::rgb2hex(
                 rand(self::MIN_COLOR, self::MAX_COLOR),
                 rand(self::MIN_COLOR, self::MAX_COLOR),
